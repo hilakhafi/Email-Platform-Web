@@ -14,7 +14,7 @@ const getUser = (id) => {
 const getUserIDByEmail = (email) => {
   const user = users.find(u => u.mail === email);
   if (!user) {
-    return null; // או שתזרקי שגיאה אם חשוב לדעת שאין כזה יוזר
+    return null; 
   }
   return user.id;
 };

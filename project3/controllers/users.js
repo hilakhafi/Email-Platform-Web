@@ -16,7 +16,7 @@ exports.getUser = (req, res) => {
 
 // Add a new user
 exports.addUser = (req, res) => {
-  const { mail, first_name, last_name, birth_date, gender, password, picture } = req.body;
+  const { mail, first_name, last_name, username, birth_date, gender, password, reWritePass, picture } = req.body;
 
   // בדיקה שכל השדות מלאים
   if (!mail || !first_name || !last_name || !birth_date || !gender || !password) {
@@ -59,7 +59,7 @@ exports.addUser = (req, res) => {
   }
 
   // הוספת המשתמש
-  Users.addUser({ mail, first_name, last_name, birth_date, gender, password, picture });
+  Users.addUser({mail, first_name, last_name, username, birth_date, gender, password, reWritePass, picture });
 
   res.status(201).json({ message: "User added successfully" });
 };
