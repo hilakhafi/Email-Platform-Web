@@ -16,13 +16,13 @@ exports.getUser = (req, res) => {
 
 // Add a new user
 exports.addUser = (req, res) => {
-  const { mail, first_name, last_name, birth_date, gender, password, picture } = req.body;
+  const { mail, first_name, last_name, username, birth_date, gender, password, reWritePass, picture } = req.body;
   // Check if email is already registered
   const existingUser = Users.getUserByMail(mail);
   if (existingUser) {
     return res.status(400).json({ error: "Email already exists" });
   }
   // Add new user to the system
-  Users.addUser({ mail, first_name, last_name, birth_date, gender, password, picture });
+  Users.addUser({mail, first_name, last_name, username, birth_date, gender, password, reWritePass, picture });
   res.status(201).json();
 };
