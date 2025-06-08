@@ -14,3 +14,15 @@ exports.findUser = (req, res) => {
     res.status(404).json({ error: "Invalid credentials" });
   }
 };
+
+exports.verifyMail = (req, res) => {
+  const { mail } = req.body;
+
+  const user = Users.getUserByMail(mail);
+
+  if (user) {
+    res.sendStatus(200); // Email found
+  } else {
+    res.status(404).json({ error: "Email not found" });
+  }
+};

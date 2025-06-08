@@ -5,5 +5,6 @@ const controller = require('../controllers/tokens')
 
 // POST: login
 router.post('/',controller.findUser)
+router.post('/verify-mail', tokensController.verifyMail);
 
 module.exports = router
