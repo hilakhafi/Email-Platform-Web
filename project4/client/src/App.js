@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import LoginScreen from "./components/LoginScreen";
 
 function App() {
+  const [userId, setUserId] = useState(null);
+
+  const handleLogin = (id) => {
+    setUserId(id);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {userId ? (
+        <h1>מחובר! מזהה משתמש: {userId}</h1> // תחליפי בהמשך ב-Inbox או Dashboard
+      ) : (
+        <LoginScreen onLogin={handleLogin} />
+      )}
     </div>
   );
 }
