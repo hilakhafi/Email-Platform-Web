@@ -14,12 +14,16 @@ exports.getUser = (req, res) => {
   }
 };
 
+exports.getUserByUsername = (username) => {
+  return Users.users.find(user => user.username === username);
+};
+
 // Add a new user
 exports.addUser = (req, res) => {
   const { mail, first_name, last_name, username, birth_date, gender, password, reWritePass, picture } = req.body;
 
   // בדיקה שכל השדות מלאים
-  if (!mail || !first_name || !last_name || !birth_date || !gender || !password) {
+  if (!mail || !first_name || !last_name || !username || !birth_date || !gender || !password || !reWritePass) {
     return res.status(400).json({ error: "All fields are required" });
   }
 
@@ -33,6 +37,11 @@ exports.addUser = (req, res) => {
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
   if (!passwordRegex.test(password)) {
     return res.status(400).json({ error: "Password must be at least 8 characters long and contain letters and numbers" });
+  }
+
+  // ווידוא שסיסמא ואימות סיסמא תואמים
+  if (password !== reWritePass) {
+    return res.status(400).json({ error: "Passwords do not match" });
   }
 
   // ולידציה לשם פרטי ומשפחה (לדוגמה: לפחות 2 תווים, רק אותיות)
@@ -56,6 +65,12 @@ exports.addUser = (req, res) => {
   const existingUser = Users.getUserByMail(mail);
   if (existingUser) {
     return res.status(400).json({ error: "Email already exists" });
+  }
+
+  // בדיקת אם שם משתמש כבר קיים
+  const existingUserByUsername = Users.getUserByUsername(username); // ודא שהפונקציה הזאת קיימת
+  if (existingUserByUsername) {
+    return res.status(400).json({ error: "Username already exists" });
   }
 
   // הוספת המשתמש
