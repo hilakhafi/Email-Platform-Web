@@ -7,6 +7,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY controllers ./controllers
+COPY middleware/ middleware/
 COPY routes ./routes
 COPY models ./models
 COPY services ./services

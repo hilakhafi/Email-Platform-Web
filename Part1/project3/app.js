@@ -1,5 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.json());
 
 const usersU = require('./routes/users');
@@ -17,5 +23,4 @@ app.use('/api/blacklist', blacklist);
 app.disable('etag');
 
 app.listen(4000, () => { 
-    console.log();
-});
+console.log("Server running on port 4000");});

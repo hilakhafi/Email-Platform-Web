@@ -11,7 +11,10 @@ services:
       context: ./project3
     container_name: nodeapp
     ports:
-      - "8081:4000"
+      - "4000:4000"
     depends_on:
       - blacklist
 
+networks:
+  shared-net:
+    external: true        # כי את משתמשת ברשת משותפת עם קונטיינרים אחרים

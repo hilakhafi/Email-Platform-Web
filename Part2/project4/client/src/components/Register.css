@@ -7,3 +7,17 @@
   display: block;
   margin: 0.5rem 0;
 }
+
+.register-form {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  max-width: 400px;
+  margin: 2rem auto;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.register-form h2 {
+  text-align: center;
+  color: #333;
+}
