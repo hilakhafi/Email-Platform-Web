@@ -20,10 +20,10 @@ exports.getUserByUsername = (username) => {
 
 // Add a new user
 exports.addUser = (req, res) => {
-  const { mail, first_name, last_name, username, birth_date, gender, password, reWritePass, picture } = req.body;
+  const {first_name, last_name, username, mail, birth_date, gender, password, reWritePass, profileImage } = req.body;
 
   // validating that all fields are provided
-  if (!mail || !first_name || !last_name || !username || !birth_date || !gender || !password || !reWritePass || !picture) {
+  if (!mail || !first_name || !last_name || !username || !birth_date || !gender || !password || !reWritePass || !profileImage) {
     return res.status(400).json({ error: "All fields are required" });
   }
 
@@ -74,10 +74,10 @@ exports.addUser = (req, res) => {
   }
 
 // adding the user
-  if (!picture) { // need to check if picture is provided ------?
-    picture = "https://example.com/default-profile-picture.png"; // תמונה ברירת מחדל אם לא ניתנה
+  if (!profileImage) { // need to check if picture is provided ------?
+    profileImage = "https://example.com/default-profile-picture.png"; // תמונה ברירת מחדל אם לא ניתנה
   }
-  Users.addUser({mail, first_name, last_name, username, birth_date, gender, password, reWritePass, picture });
+  Users.addUser({ first_name, last_name, username, mail, birth_date, gender, password, reWritePass, profileImage });
 
   res.status(201).json({ message: "User added successfully" });
 };
