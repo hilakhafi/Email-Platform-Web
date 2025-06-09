@@ -19,6 +19,12 @@ const getUserIDByEmail = (email) => {
   return user.id;
 };
 
+const getUserByUsername = (username) => {
+  return users.find(user =>
+    user.username.localeCompare(username, undefined, { sensitivity: 'base' }) === 0
+  );
+};
+
 // Adds a new user and assigns a unique ID
 const addUser = (user) => {
   user.id = nextId++;
@@ -46,5 +52,6 @@ module.exports = {
   addUser,
   findUser,
   getUserIDByEmail,
-  getUserByMail
+  getUserByMail,
+  getUserByUsername
 };

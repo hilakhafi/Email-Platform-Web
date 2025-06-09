@@ -21,7 +21,8 @@ exports.getUserByUsername = (username) => {
 // Add a new user
 exports.addUser = (req, res) => {
   
-  const { mail, first_name, last_name, username, birth_date, gender, password, reWritePass, picture } = req.body;
+  const { mail, first_name, last_name, username, birth_date, gender, password, reWritePass } = req.body;
+  let profileImage = req.file ? req.file.path : req.body.profileImage;
   console.log('received user data', req.body);
   console.log('received file', req.file);
   // validating that all fields are provided
