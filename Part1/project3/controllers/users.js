@@ -20,10 +20,11 @@ exports.getUserByUsername = (username) => {
 
 // Add a new user
 exports.addUser = (req, res) => {
+  
   const { mail, first_name, last_name, username, birth_date, gender, password, reWritePass, picture } = req.body;
 
   // validating that all fields are provided
-  if (!mail || !first_name || !last_name || !username || !birth_date || !gender || !password || !reWritePass || !picture) {
+  if (!mail || !first_name || !last_name || !username || !birth_date || !gender || !password || !reWritePass) {
     return res.status(400).json({ error: "All fields are required" });
   }
 
