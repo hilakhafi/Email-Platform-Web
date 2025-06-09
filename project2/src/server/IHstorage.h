@@ -12,7 +12,7 @@ public:
     virtual ~IHstorage() = default; // destructot
     
     virtual void saveBloomFilter(const BloomFilter& bloomFilter) = 0;
-    virtual shared_ptr<BloomFilter> loadBloomFilter(size_t size, vector<shared_ptr<IHFunction>> hashFunctions) = 0;
+    virtual unique_ptr<BloomFilter> loadBloomFilter(size_t size, vector<shared_ptr<IHFunction>> hashFunctions) = 0;
     
     virtual void saveBlacklist(const unordered_set<string>& blacklist) = 0;
     virtual unordered_set<string> loadBlacklist() = 0;

@@ -5,7 +5,7 @@
 
 using namespace std;
 //constructor
-Blacklist::Blacklist(shared_ptr<BloomFilter> bloomFilter)
+Blacklist::Blacklist(unique_ptr<BloomFilter> bloomFilter)
     : bloomFilter(move(bloomFilter)) {
 }
 // add url
@@ -25,7 +25,7 @@ bool Blacklist::isBlacklistedExact(const string& url) const {
 }
 
 // get bloomFilter
-shared_ptr<BloomFilter>& Blacklist::getBloomFilter() {
+unique_ptr<BloomFilter>& Blacklist::getBloomFilter() {
     return bloomFilter;
 }
 

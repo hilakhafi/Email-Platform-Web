@@ -7,7 +7,7 @@ const Register = () => {
 
   const [formData, setFormData] = useState({
     fullName: "",
-    email: "",
+    mail: "",
     password: "",
     confirmPassword: "",
     profileImage: null,
@@ -32,10 +32,10 @@ const Register = () => {
 
   const validate = () => {
     const newErrors = {};
-    const { fullName, email, password, confirmPassword } = formData;
+    const { fullName, mail, password, confirmPassword } = formData;
 
     if (!fullName) newErrors.fullName = "Full name is required";
-    if (!email) newErrors.email = "Email is required";
+    if (!mail) newErrors.mail = "Email is required";
     if (!password) newErrors.password = "Password is required";
     else if (!isStrongPassword(password))
       newErrors.password =
@@ -58,7 +58,7 @@ const Register = () => {
     try {
       const data = new FormData();
       data.append("fullName", formData.fullName);
-      data.append("email", formData.email);
+      data.append("mail", formData.mail);
       data.append("password", formData.password);
       data.append("profileImage", formData.profileImage);
 
@@ -95,10 +95,10 @@ const Register = () => {
           <input
             type="email"
             name="email"
-            value={formData.email}
+            value={formData.mail}
             onChange={handleChange}
           />
-          {errors.email && <p className="error-text">{errors.email}</p>}
+          {errors.mail && <p className="error-text">{errors.mail}</p>}
         </div>
 
         <div>

@@ -3,7 +3,7 @@
 #include <regex>
 using namespace std;
 
-CommandProcessor::CommandProcessor(shared_ptr<Blacklist> blacklist, shared_ptr<Storage> storage)
+CommandProcessor::CommandProcessor(unique_ptr<Blacklist> blacklist, unique_ptr<Storage> storage)
     : blacklist(move(blacklist)), storage(move(storage)) {
 }
 CommandProcessor::~CommandProcessor() = default;
@@ -22,8 +22,6 @@ string CommandProcessor::processCommand(const string& commandLine) {
         commandType = 2;
     } else if (command == "DELETE"){
         commandType = 3;
-    } else if (command == "CHECK") { 
-    commandType = 5;
     } else {
         commandType = 4;
     }
@@ -48,7 +46,6 @@ string CommandProcessor::processCommand(const string& commandLine) {
                     string s2 = exactResult ? "true" : "false";
                     return "200 Ok \n\n" + s1 +" " + s2;
                 }
-                
                 return "200 Ok \n\n" + s1;
                 
             }
@@ -59,11 +56,6 @@ string CommandProcessor::processCommand(const string& commandLine) {
                 return "204 No Content";
             } 
             return "404 Not Found";
-
-        case 5: { // CHECK
-        bool isBlack = blacklist->isBlacklisted(url);
-        return isBlack ? "true" : "false";
-}
             
         default:
             return "400 Bad Request";  // Unknown command

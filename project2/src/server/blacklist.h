@@ -12,17 +12,17 @@ using namespace std;
 
 class Blacklist {
 private:
-    shared_ptr<BloomFilter> bloomFilter;
+    unique_ptr<BloomFilter> bloomFilter;
     unordered_set<string> exactBlacklist; // the real blacklist! contains the url
 
 public:
     // constructor
-    Blacklist(shared_ptr<BloomFilter> bloomFilter);
+    Blacklist(unique_ptr<BloomFilter> bloomFilter);
     void addUrl(const string& url);
     bool isBlacklisted(const string& url) const; // check if a url is in the bloom filter using might contain (bloom filter)
     bool isBlacklistedExact(const string& url) const; // check if a url is in the black list
     void removeUrl(const string& url);
-    shared_ptr<BloomFilter>& getBloomFilter(); // get
+    unique_ptr<BloomFilter>& getBloomFilter(); // get
     const unordered_set<string>& getExactBlacklist() const; // get
     void setExactBlacklist(const unordered_set<string>& blacklist); // set
 };

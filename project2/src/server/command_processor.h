@@ -10,12 +10,12 @@ using namespace std;
 
 class CommandProcessor {
 private:
-    shared_ptr<Blacklist> blacklist;
-    shared_ptr<Storage> storage;
+    unique_ptr<Blacklist> blacklist;
+    unique_ptr<Storage> storage;
 
 public:
     ~CommandProcessor(); // destructor
-    CommandProcessor(shared_ptr<Blacklist> blacklist, shared_ptr<Storage> storage); // constructor
+    CommandProcessor(unique_ptr<Blacklist> blacklist, unique_ptr<Storage> storage); // constructor
     
     string processCommand(const string& commandLine);
 

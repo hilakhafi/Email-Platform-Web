@@ -14,8 +14,6 @@
 #include "HashUtils.h"
 #include "storage.h"
 #include "command_processor.h"
-#include <thread>
-
 
 using namespace std;
 class SocketException : public exception {
@@ -51,7 +49,7 @@ int create_listening_socket(int port) {
     }
 
     // Listen for incoming connections
-    if (listen(sock, 10) < 0) {
+    if (listen(sock, 1) < 0) {
         throw SocketException("Error listening on socket");
         close(sock);
         return -1;
@@ -93,46 +91,85 @@ bool send_response(int client_sock, const string& response) {
     }
     return true;
 }
+
+void handle_client(int client_sock) {
+
+    cout << "Received config line: ";
+    
+
+    // Wait for configuration line first
+    string config_line = receive_line(client_sock);
+    if (config_line.empty()) {
+        return;
+    }
+    
+    // Parse configuration
+    istringstream iss(config_line);
+    size_t arraySize;
+    
+    if (!(iss >> arraySize)) {
+        string error_msg = "error";
+        send_response(client_sock, error_msg);
+        return;
+    }
+    
+    vector<int> hashSpecs;
+    int seed;
+    while (iss >> seed) {
+        hashSpecs.push_back(seed);
+    }
+    
+    if (hashSpecs.empty()) {    // If no hash functions specified
+        string error_msg = "No hash functions specified in configuration";
+        send_response(client_sock, error_msg);
+        return;
+    }
+    
+    // Create Bloom filter and associated objects
+    vector<shared_ptr<IHFunction>> hashObjs = createHashFunctions(hashSpecs);
+    auto bloomFilterPtr = make_unique<BloomFilter>(arraySize, hashObjs);
+    auto storagePtr = make_unique<Storage>("./data/bloom.dat", "./data/blacklist.txt");
+    auto blacklistPtr = make_unique<Blacklist>(move(bloomFilterPtr));
+    CommandProcessor processor(move(blacklistPtr), move(storagePtr));
+    
+    // Send confirmation
+    send_response(client_sock, "Configuration accepted. Ready for commands.");
+    
+    // Process commands
+    while (true) {
+        string command = receive_line(client_sock);
+        if (command.empty()) {
+            break;
+        }
+        string response = processor.processCommand(command);
+        
+        if (!send_response(client_sock, response)) {
+            break;
+        }
+    }
+}
+
 // close socket
 void cleanup(int sock) {
     close(sock);
 }
-void handle_client(int client_sock, shared_ptr<CommandProcessor> processor) {
-    send_response(client_sock, "Ready for commands.");
 
-    while (true) {
-        string command = receive_line(client_sock);
-        if (command.empty()) break;
+int start(int server_port) {
 
-        string response = processor->processCommand(command);
-
-        if (response.find("\n\n") == string::npos)
-            response += "\n\n";
-
-        if (!send_response(client_sock, response)) break;
-    }
-
-    cleanup(client_sock);
-}
-
-int start(int server_port, shared_ptr<CommandProcessor> processor) {
+    // Create listening socket
     int server_sock = create_listening_socket(server_port);
-    if (server_sock < 0) return 1;
-
+    if (server_sock < 0) {
+        return 1;   // Error if socket creation fails
+    }
+    
     while (true) {
-        int client_sock = accept_client(server_sock);
+        int client_sock = accept_client(server_sock); // Accept client connections
         if (client_sock >= 0) {
-            thread client_thread([client_sock, processor]() {
-                try {
-                    handle_client(client_sock, processor);
-                } catch (const exception& e) {
-                    cerr << "Exception in client thread: " << e.what() << endl;
-                }
-                cleanup(client_sock);
-            });
-            client_thread.detach();
+            handle_client(client_sock); // Handle client communication
+            cleanup(client_sock);   // Close client socket
         }
     }
 
+    cleanup(server_sock);   // Close server socket
     return 0;
 }

@@ -18,7 +18,7 @@ public:
     // save the bloom filter to a binary file
     void saveBloomFilter(const BloomFilter& bloomFilter) override;
     // load bloom filter from a file
-    shared_ptr<BloomFilter> loadBloomFilter(size_t size, vector<shared_ptr<IHFunction>> hashFunctions) override;
+    unique_ptr<BloomFilter> loadBloomFilter(size_t size, vector<shared_ptr<IHFunction>> hashFunctions) override;
 
     //save the blacklist to a text file 
     void saveBlacklist(const unordered_set<string>& blacklist) override;

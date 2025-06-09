@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
-#include "../src/command_processor.h"
-#include "../src/blacklist.h"
-#include "../src/bloom_filter.h"
-#include "../src/HashUtils.h"
-#include "../src/IHstorage.h"
+#include "../src/server/command_processor.h"
+#include "../src/server/blacklist.h"
+#include "../src/server/bloom_filter.h"
+#include "../src/server/HashUtils.h"
+#include "../src/server/IHstorage.h"
 #include <memory>
 
 using namespace std;

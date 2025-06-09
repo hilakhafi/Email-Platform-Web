@@ -36,7 +36,7 @@ void Storage::saveBloomFilter(const BloomFilter& bloomFilter) {
     file.write(bytes.data(), bytes.size());
 }
 
-shared_ptr<BloomFilter> Storage::loadBloomFilter(size_t size, vector<shared_ptr<IHFunction>> hashFunctions) {
+unique_ptr<BloomFilter> Storage::loadBloomFilter(size_t size, vector<shared_ptr<IHFunction>> hashFunctions) {
 // load bloom filter from a file, if doesn't exsist, create new one
     ifstream file(bloomFilterFilePath, ios::binary);
     if (!file) {
