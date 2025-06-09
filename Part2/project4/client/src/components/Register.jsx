@@ -21,14 +21,22 @@ function Register() {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.fullName) newErrors.fullName = "Full name is required";
-    if (!formData.mail) newErrors.email = "Email is required";
+    if (!formData.first_name) newErrors.first_name = "First name is required";
+    if (!formData.last_name) newErrors.last_name = "Last name is required";
+    if (!formData.username) newErrors.username = "Username is required";
+    if (!formData.mail) newErrors.mail = "Email is required";
+    if (!formData.birth_date) newErrors.birth_date = "Birth date is required";
+    if (!formData.gender) newErrors.gender = "Gender is required";
     if (!formData.password) newErrors.password = "Password is required";
+    if (!formData.reWritePass) newErrors.reWritePass = "Please confirm your password";
+    if (!formData.profileImage) newErrors.profileImage = "Profile image is required";
+    console.log("Validating...", formData);
     return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("🚀 handleSubmit called"); // << בדיקה
 
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
@@ -41,13 +49,18 @@ function Register() {
       for (const key in formData) {
        data.append(key, formData[key]);
       }
-
-      const response = await fetch("/api/register", {
+      for (let pair of data.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
+      console.log("📦 Sending data:", data);
+      const response = await fetch("http://localhost:4000/api/users/register", {
         method: "POST",
         body: data,
       });
 
       if (!response.ok) {
+        const text = await response.text(); // ← לא json כדי לא להיתקע אם זה טקסט פשוט
+        console.error("Server response error:", text);
         const errorData = await response.json();
         throw new Error(errorData.message || "Registration failed. Try again.");
       }
@@ -68,6 +81,7 @@ function Register() {
         value={formData.first_name}
         onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
       />
+      {errors.first_name && <div className="error-text">{errors.first_name}</div>}
 
       <input
         type="text"
@@ -75,6 +89,7 @@ function Register() {
         value={formData.last_name}
         onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
       />
+      {errors.last_name && <div className="error-text">{errors.last_name}</div>}
 
       <input
         type="text"
@@ -82,6 +97,7 @@ function Register() {
         value={formData.username}
         onChange={(e) => setFormData({ ...formData, username: e.target.value })}
       />
+      {errors.username && <div className="error-text">{errors.username}</div>}
 
       <input
         type="email"
@@ -89,14 +105,16 @@ function Register() {
         value={formData.mail}
         onChange={(e) => setFormData({ ...formData, mail: e.target.value })}
       />
+      {errors.mail && <div className="error-text">{errors.mail}</div>}
 
       <input
         type="date"
         value={formData.birth_date}
         onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
       />
+      {errors.birth_date && <div className="error-text">{errors.birth_date}</div>}
 
-      <select
+     <select
         value={formData.gender}
         onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
       >
@@ -104,6 +122,7 @@ function Register() {
         <option value="male">Male</option>
         <option value="female">Female</option>
       </select>
+      {errors.gender && <div className="error-text">{errors.gender}</div>}
 
       <input
         type="password"
@@ -111,6 +130,7 @@ function Register() {
         value={formData.password}
         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
       />
+      {errors.password && <div className="error-text">{errors.password}</div>}
 
       <input
         type="password"
@@ -118,9 +138,11 @@ function Register() {
         value={formData.reWritePass}
         onChange={(e) => setFormData({ ...formData, reWritePass: e.target.value })}
       />
+      {errors.reWritePass && <div className="error-text">{errors.reWritePass}</div>}
 
       <input
         type="file"
+        name="profileImage"
         accept="image/*"
         onChange={(e) => setFormData({ ...formData, profileImage: e.target.files[0] })}
       />

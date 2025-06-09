@@ -11,7 +11,7 @@ services:
       context: ./project3
     container_name: nodeapp
     ports:
-      - "8081:4000"
+      - "4000:4000"
     depends_on:
       - blacklist
 

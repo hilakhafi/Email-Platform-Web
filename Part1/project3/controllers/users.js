@@ -22,7 +22,8 @@ exports.getUserByUsername = (username) => {
 exports.addUser = (req, res) => {
   
   const { mail, first_name, last_name, username, birth_date, gender, password, reWritePass, picture } = req.body;
-
+  console.log('received user data', req.body);
+  console.log('received file', req.file);
   // validating that all fields are provided
   if (!mail || !first_name || !last_name || !username || !birth_date || !gender || !password || !reWritePass) {
     return res.status(400).json({ error: "All fields are required" });
