@@ -5,11 +5,27 @@ export default function MailHome() {
   const [mails, setMails] = useState([]);
   const [selectedMail, setSelectedMail] = useState(null);
   const [showCompose, setShowCompose] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+console.log("📫 MailHome loaded!");
 
   useEffect(() => {
-    fetch("/mails")
-      .then((res) => res.json())
-      .then(setMails);
+    async function fetchMails() {
+      setLoading(true);
+      setError("");
+      try {
+        const res = await fetch("/mails");
+        if (!res.ok) throw new Error("Failed to fetch mails");
+        const data = await res.json();
+        setMails(data);
+      } catch (err) {
+        setError(err.message || "Unknown error");
+        setMails([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchMails();
   }, []);
 
   return (
@@ -29,7 +45,9 @@ export default function MailHome() {
       </aside>
 
       <main className="mail-list">
-        {mails.map((mail) => (
+        {loading && <p>Loading mails...</p>}
+        {error && <p className="error">Error: {error}</p>}
+        {!loading && !error && mails.map((mail) => (
           <div
             key={mail.id}
             className={`mail-item ${mail.id === selectedMail?.id ? "selected" : ""}`}
@@ -61,7 +79,7 @@ export default function MailHome() {
             <form>
               <input type="email" placeholder="To" required />
               <input type="text" placeholder="Subject" />
-              <textarea placeholder="Body..." rows="8" />
+              <textarea placeholder="Body..." rows={8} />
               <button type="submit">Send</button>
             </form>
             <button onClick={() => setShowCompose(false)}>Close</button>
