@@ -24,9 +24,23 @@ function Register() {
   const validateStep = () => {
     const newErrors = {};
     if (step === 1) {
-      if (!formData.first_name) newErrors.first_name = "First name is required";
-      if (!formData.last_name) newErrors.last_name = "Last name is required";
-      if (!formData.username) newErrors.username = "Username is required";
+      if (!formData.first_name) {
+    newErrors.first_name = "First name is required";
+  } else if (!/^[A-Za-zא-ת]{2,}$/.test(formData.first_name)) {
+    newErrors.first_name = "First name must have at least 2 letters";
+  }
+
+  if (!formData.last_name) {
+    newErrors.last_name = "Last name is required";
+  } else if (!/^[A-Za-zא-ת]{2,}$/.test(formData.last_name)) {
+    newErrors.last_name = "Last name must have at least 2 letters";
+  }
+
+  if (!formData.username) {
+    newErrors.username = "Username is required";
+  } else if (formData.username.length < 3) {
+    newErrors.username = "Username must be at least 3 characters long";
+  }
     } else if (step === 2) {
       if (!formData.birth_date) newErrors.birth_date = "Birth date is required";
       if (!formData.gender) newErrors.gender = "Gender is required";
@@ -90,20 +104,29 @@ function Register() {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
       console.log("📦 Sending data:", data);
-      const response = await fetch("http://localhost:4000/api/users/register", {
+      const response = await fetch("http://172.22.48.1:4000/api/users/register", {
         method: "POST",
         body: data,
       });
+      const result = await response.json(); // ← לקרוא פעם אחת בלבד
 
-      if (!response.ok) {
-        const text = await response.text(); // ← לא json כדי לא להיתקע אם זה טקסט פשוט
-        console.error("Server response error:", text);
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Registration failed. Try again.");
-      }
+    if (!response.ok) {
+      console.error("Server response error:", result);
+      setServerError(result.error || "Registration failed. Try again.");
+      return;
+    }
 
       navigate("/login");
+      // if (!response.ok) {
+      //   const text = await response.text(); // ← לא json כדי לא להיתקע אם זה טקסט פשוט
+      //   console.error("Server response error:", text);
+      //   const errorData = await response.json();
+      //   throw new Error(errorData.message || "Registration failed. Try again.");
+      // }
+
+      // navigate("/login");
     } catch (err) {
+      console.error("❌ Registration error:", err.message);
       setServerError(err.message);
     }
   };
