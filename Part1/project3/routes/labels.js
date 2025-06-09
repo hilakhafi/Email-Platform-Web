@@ -2,16 +2,17 @@ const express = require('express')
 const router = express.Router()
 
 const labelsController = require('../controllers/labels')
+const auth = require('../middleware/auth')
 
-// Get all labels
-router.get('/', labelsController.getAllLabels)
+// Get all labels for a user
+router.get('/', auth, labelsController.getAllLabels)
 // Add a new label
-router.post('/', labelsController.addLabel)
+router.post('/', auth, labelsController.addLabel)
 // Get a label by ID
-router.get('/:id', labelsController.getLabel)
+router.get('/:id', auth, labelsController.getLabel)
 // Edit a label by ID
-router.patch('/:id', labelsController.editLabel)
+router.patch('/:id', auth, labelsController.editLabel)
 // Delete a label by ID
-router.delete('/:id', labelsController.deleteLabel)
+router.delete('/:id', auth, labelsController.deleteLabel)
 
 module.exports = router
