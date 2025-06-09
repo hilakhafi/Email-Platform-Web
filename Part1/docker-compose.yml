@@ -1,0 +1,17 @@
+services:
+  blacklist:
+    build:
+      context: ./project2/src
+    container_name: blacklist
+    ports:
+      - "8080:8080"  # Exposing port 8080 for the blacklist service
+
+  nodeapp:
+    build:
+      context: ./project3
+    container_name: nodeapp
+    ports:
+      - "8081:4000"
+    depends_on:
+      - blacklist
+

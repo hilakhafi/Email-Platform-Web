@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ./project4/client          # נתיב לספרייה שבה נמצא ה-Dockerfile
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:80"       # חיצוני:פנימי - תפתחי בראוזר על http://localhost:3000
+    networks:
+      - shared-net
+
+networks:
+  shared-net:
+    external: true        # כי את משתמשת ברשת משותפת עם קונטיינרים אחרים
