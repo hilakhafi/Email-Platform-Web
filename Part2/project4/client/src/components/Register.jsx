@@ -94,16 +94,18 @@ function Register() {
         method: "POST",
         body: data,
       });
+      console.log("🧾 Raw response:", response);
+
+      const responseBody = await response.json(); // ודא שאתה קורא רק פעם אחת!
+      console.log("📦 Response body:", responseBody);
 
       if (!response.ok) {
-        const text = await response.text(); // ← לא json כדי לא להיתקע אם זה טקסט פשוט
-        console.error("Server response error:", text);
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Registration failed. Try again.");
+        throw new Error(responseBody.message || "Registration failed. Try again.");
       }
 
       navigate("/login");
     } catch (err) {
+      console.error("❌ Error:", err);
       setServerError(err.message);
     }
   };
