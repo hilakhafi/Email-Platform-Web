@@ -1,9 +1,16 @@
 const labelsModel = require('../models/labels');
 
-// Return all labels (even if empty)
+// Return all labels (even if empty) - filtered by userId
 exports.getAllLabels = (req, res) => {
-  res.status(200).json(labelsModel.labels); 
+  const userId = parseInt(req.headers['user-id'], 10);
+  if (isNaN(userId)) {
+    return res.status(400).json({ error: "Missing or invalid user ID" });
+  }
+
+  const userLabels = labelsModel.getAllLabels(userId);
+  res.status(200).json(userLabels); 
 };
+
 
 // Return a specific label by ID
 exports.getLabel = (req, res) => {
@@ -39,19 +46,24 @@ exports.editLabel = (req, res) => {
 };
 // Create a new label
 exports.addLabel = (req, res) => {
+  const userId = parseInt(req.headers['user-id'], 10);
   const { name, color } = req.body;
-  if (!name) {
-    return res.status(400).json({ error: 'Name is required' });
+
+  if (!name || isNaN(userId)) {
+    return res.status(400).json({ error: 'Name and valid user ID are required' });
   }
+
   const newLabel = {
     id: labelsModel.labels.length > 0 ? labelsModel.labels[labelsModel.labels.length - 1].id + 1 : 1,
     name,
-    color
+    color,
+    userId
   };
 
   labelsModel.addLabel(newLabel);
   res.status(201).location(`/api/labels/${newLabel.id}`).json();
 };
+
 
 // Delete label by ID
 exports.deleteLabel = (req, res) => {
