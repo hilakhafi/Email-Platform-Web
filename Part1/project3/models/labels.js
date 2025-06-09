@@ -1,7 +1,7 @@
 let labels = [];
-// Returns all labels
-const getAllLabels = () => {
-    return labels;
+// Returns all labels - filtered by userId
+const getAllLabels = (userId) => {
+    return labels.filter(label => label.userId === userId);
 };
 
 // Adds a new label to the array
