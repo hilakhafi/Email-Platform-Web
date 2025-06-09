@@ -2,10 +2,10 @@ const labelsModel = require('../models/labels');
 
 // Return all labels (even if empty) - filtered by userId
 exports.getAllLabels = (req, res) => {
-  const userId = parseInt(req.headers['user-id'], 10);
-  if (isNaN(userId)) {
-    return res.status(400).json({ error: "Missing or invalid user ID" });
-  }
+  const userId = req.user.id; // using user ID from authentication middleware (token)
+  // if (isNaN(userId)) {
+  //   return res.status(400).json({ error: "Missing or invalid user ID" });
+  // } No longer needed, as userId is set by auth middleware
 
   const userLabels = labelsModel.getAllLabels(userId);
   res.status(200).json(userLabels); 
@@ -18,6 +18,9 @@ exports.getLabel = (req, res) => {
   const label = labelsModel.getLabel(id);
 
   if (label) {
+    if (label.userId !== req.user.id) {
+      return res.status(403).json({ error: "Access denied" });
+    }
       res.status(200).json(label);
   } else {
       res.status(404).json({ error: "Label not found" });
@@ -33,8 +36,10 @@ exports.editLabel = (req, res) => {
   if (!label) {
     return res.status(404).json({ error: "Label not found" });
   }
-
-  // Update allowed fields only  const allowedFields = ['name', 'color'];
+  if (label.userId !== req.user.id) {
+      return res.status(403).json({ error: "Access denied" });
+  }
+  // Update allowed fields only const allowedFields = ['name', 'color']; ----??
   for (const field of allowedFields) {
     if (req.body[field] !== undefined) {
       label[field] = req.body[field];
@@ -46,7 +51,7 @@ exports.editLabel = (req, res) => {
 };
 // Create a new label
 exports.addLabel = (req, res) => {
-  const userId = parseInt(req.headers['user-id'], 10);
+  const userId = req.user.id; // using user ID from authentication middleware (token
   const { name, color } = req.body;
 
   if (!name || isNaN(userId)) {
@@ -74,7 +79,9 @@ exports.deleteLabel = (req, res) => {
   if (!label) {
     return res.status(404).json({ error: "label not found" });
   }
-
+  if (label.userId !== req.user.id) {
+      return res.status(403).json({ error: "Access denied" });
+  }
   //save changes
   labelsModel.deleteLabel(id); 
   res.status(204).json();

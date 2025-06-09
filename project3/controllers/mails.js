@@ -4,8 +4,7 @@ const BlacklistServer = require('../services/BlacklistServer');
 
 // Get the 50 most recent emails related to the user
 exports.get50Emails = (req, res) => {
-  const userId = parseInt(req.headers['user-id'], 10);
-
+  const userId = req.user.id; 
   const relaventEmails = Emails.emails
     .filter(e => e.from === userId || e.to === userId)
     .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
@@ -16,10 +15,12 @@ exports.get50Emails = (req, res) => {
 
 // Get a single email by ID
 exports.getMail = (req, res) => {
-  req.headers['user-id'];
   const id = req.params.id;
   const mail = Emails.getMail(id);
   if (mail) {
+    if (mail.from !== req.user.id && mail.to !== req.user.id) {
+       return res.status(403).json({ error: "Access denied" });
+  }
     res.status(200).json(mail);
   } else {
     res.status(404).json({ error: "Mail not found" });
@@ -29,13 +30,16 @@ exports.getMail = (req, res) => {
 // Update certain fields in a specific email
 exports.patchMail = (req, res) => {
   //header
-  const userId = parseInt(req.headers['user-id'], 10);
+  const userId = req.user.id;
   const id = req.params.id;
   const mail = Emails.getMail(id); 
 
   if (!mail) {
     return res.status(404).json({ error: "Mail not found" });
   }
+  if (mail.from !== userId && mail.to !== userId) {
+  return res.status(403).json({ error: "Access denied" });
+}
 
   // change body
   const allowedFields = ['subject', 'body', 'isRead', 'link'];
@@ -53,13 +57,16 @@ exports.patchMail = (req, res) => {
 // Delete a specific email
 exports.deleteMail = (req, res) => {
   //header
-  const userId = parseInt(req.headers['user-id'], 10);
+  const userId = req.user.id;
   const id = req.params.id;
   const mail = Emails.getMail(id); 
 
   if (!mail) {
     return res.status(404).json({ error: "Mail not found" });
   }
+   if (mail.from !== userId && mail.to !== userId) {
+      return res.status(403).json({ error: "Access denied" });
+    }
 
   //save changes
   Emails.deleteMail(id); 
@@ -70,13 +77,10 @@ exports.deleteMail = (req, res) => {
 // Send a new email
 exports.postMail = async (req, res) => {
   try {
-    const userId = parseInt(req.headers['user-id'], 10); 
+    const userId = req.user.id; 
     const user = Users.getUser(userId);
     const { sendTo, subject, body } = req.body;
 
-    if (!userId || isNaN(userId)) {
-      return res.status(401).json({ error: 'Missing or invalid user-id header' });
-    }
     // check if the user exists    
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -119,11 +123,11 @@ exports.postMail = async (req, res) => {
 
 // Search emails by query string
 exports.searchEmails = (req, res) => {
+  const userId = req.user.id;
   const query = req.params.query;
   if (!query) {
     return res.status(400).json({ error: 'Query parameter is required' });
   }
-
   const results = Emails.search(query);
   res.status(200).json(results);
 };
