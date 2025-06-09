@@ -4,11 +4,17 @@ import "./Register.css";
 
 function Register() {
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    profileImage: null,
+  first_name: "",
+  last_name: "",
+  username: "",
+  mail: "",
+  birth_date: "",
+  gender: "",
+  password: "",
+  reWritePass: "",
+  profileImage: null,
   });
+
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
@@ -32,10 +38,9 @@ function Register() {
 
     try {
       const data = new FormData();
-      data.append("fullName", formData.fullName);
-      data.append("email", formData.email);
-      data.append("password", formData.password);
-      data.append("profileImage", formData.profileImage);
+      for (const key in formData) {
+       data.append(key, formData[key]);
+      }
 
       const response = await fetch("/api/register", {
         method: "POST",
@@ -57,35 +62,68 @@ function Register() {
     <form className="register-form" onSubmit={handleSubmit}>
       <h2>Register</h2>
 
-      <input
-        type="text"
-        placeholder="Full Name"
-        value={formData.fullName}
-        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-      />
-      {errors.fullName && <div className="error-text">{errors.fullName}</div>}
+<input
+  type="text"
+  placeholder="First Name"
+  value={formData.first_name}
+  onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+/>
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-      />
-      {errors.email && <div className="error-text">{errors.email}</div>}
+<input
+  type="text"
+  placeholder="Last Name"
+  value={formData.last_name}
+  onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+/>
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-      />
-      {errors.password && <div className="error-text">{errors.password}</div>}
+<input
+  type="text"
+  placeholder="Username"
+  value={formData.username}
+  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+/>
 
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setFormData({ ...formData, profileImage: e.target.files[0] })}
-      />
+<input
+  type="email"
+  placeholder="Email"
+  value={formData.mail}
+  onChange={(e) => setFormData({ ...formData, mail: e.target.value })}
+/>
+
+<input
+  type="date"
+  value={formData.birth_date}
+  onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
+/>
+
+<select
+  value={formData.gender}
+  onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+>
+  <option value="">Select Gender</option>
+  <option value="male">Male</option>
+  <option value="female">Female</option>
+</select>
+
+<input
+  type="password"
+  placeholder="Password"
+  value={formData.password}
+  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+/>
+
+<input
+  type="password"
+  placeholder="Confirm Password"
+  value={formData.reWritePass}
+  onChange={(e) => setFormData({ ...formData, reWritePass: e.target.value })}
+/>
+
+<input
+  type="file"
+  accept="image/*"
+  onChange={(e) => setFormData({ ...formData, profileImage: e.target.files[0] })}
+/>
 
       <button type="submit">Register</button>
 
