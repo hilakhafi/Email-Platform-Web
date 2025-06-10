@@ -1,9 +1,0 @@
-/* לדוגמה בקובץ index.css או Register.css */
-.error-text {
-  color: red;
-  font-size: 0.9rem;
-}
-.register-form input {
-  display: block;
-  margin: 0.5rem 0;
-}
