@@ -14,12 +14,12 @@ export default function LoginScreen({ onLogin }) {
     setError("");
     //172.20.10.2
     // את יכולה לשנות את זה לפי איך השרת שלך בנוי
-    const res = await fetch("http://172.20.10.2:4000/api/tokens/verify-mail", {
+    const res = await fetch("http://localhost:4000/api/tokens/verify-mail", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ mail }),
     });
-
+    console.log("here");
     if (res.ok) {
       setStep("password");
     } else {
@@ -31,7 +31,7 @@ export default function LoginScreen({ onLogin }) {
     e.preventDefault();
     setError("");
 
-    const res = await fetch("http://172.20.10.2:4000/api/tokens", {
+    const res = await fetch("http://localhost:4000/api/tokens", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ mail, password }),

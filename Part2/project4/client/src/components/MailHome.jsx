@@ -16,7 +16,7 @@ export default function MailHome() {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch("/mails");
+        const res = await fetch("http://localhost:4000/api/mails");
         if (!res.ok) throw new Error("Failed to fetch mails");
         const data = await res.json();
         setMails(data);
