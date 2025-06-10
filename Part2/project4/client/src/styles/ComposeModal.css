@@ -1,0 +1,156 @@
+.compose-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.compose-modal {
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 42rem;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.3s;
+}
+
+.compose-modal.light {
+  background-color: white;
+}
+
+.compose-modal.dark {
+  background-color: #2d2d2d;
+}
+
+.compose-header,
+.compose-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.compose-modal.dark .compose-header,
+.compose-modal.dark .compose-footer {
+  border-color: #374151;
+}
+
+.compose-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.compose-modal.dark .compose-title {
+  color: white;
+}
+
+.icon-button {
+  padding: 0.5rem;
+  border-radius: 9999px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.light .icon-button:hover {
+  background-color: #f3f4f6;
+}
+
+.dark .icon-button:hover {
+  background-color: #4b5563;
+}
+
+.compose-body {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.compose-input,
+.compose-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.compose-textarea {
+  height: 16rem;
+  resize: none;
+}
+
+.compose-modal.dark .compose-input,
+.compose-modal.dark .compose-textarea {
+  background-color: #374151;
+  color: white;
+  border-color: #4b5563;
+}
+
+.compose-modal.dark .compose-input::placeholder,
+.compose-modal.dark .compose-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.compose-footer {
+  border-top: 1px solid #e5e7eb;
+}
+
+.compose-modal.dark .compose-footer {
+  border-color: #374151;
+}
+
+.footer-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cancel-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background: none;
+  color: #374151;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cancel-button:hover {
+  background-color: #f9fafb;
+}
+
+.compose-modal.dark .cancel-button {
+  border-color: #4b5563;
+  color: #d1d5db;
+}
+
+.compose-modal.dark .cancel-button:hover {
+  background-color: #4b5563;
+}
+
+.send-button {
+  padding: 0.5rem 1rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.send-button:hover {
+  background-color: #1d4ed8;
+}

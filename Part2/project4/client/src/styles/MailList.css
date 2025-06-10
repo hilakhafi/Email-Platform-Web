@@ -1,0 +1,322 @@
+/* בסיס */
+.mail-list-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid;
+  transition: background-color 0.3s;
+}
+
+.mail-list-wrapper.light {
+  background-color: white;
+  border-color: #e5e7eb;
+}
+
+.mail-list-wrapper.dark {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+/* מרכז מסך */
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* טעינה ושגיאה */
+.loading-message,
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.loading-message {
+  color: #6b7280;
+}
+
+.dark .loading-message {
+  color: #9ca3af;
+}
+
+.error-message {
+  color: #ef4444;
+}
+
+.error-detail {
+  font-size: 0.875rem;
+}
+
+/* כותרת רשימה */
+.mail-list-header {
+  border-bottom: 1px solid;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mail-list-header.light {
+  border-color: #e5e7eb;
+}
+
+.mail-list-header.dark {
+  border-color: #374151;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.icon-button {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.light .icon-button:hover {
+  background-color: #f3f4f6;
+}
+
+.dark .icon-button:hover {
+  background-color: #374151;
+}
+
+.header-title {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.light .header-title {
+  color: #111827;
+}
+
+.dark .header-title {
+  color: white;
+}
+
+/* מצב ריק */
+.empty-state {
+  flex-direction: column;
+  text-align: center;
+}
+
+.empty-icon {
+  margin-bottom: 1rem;
+  color: #d1d5db;
+}
+
+.dark .empty-icon {
+  color: #4b5563;
+}
+
+.empty-title {
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.light .empty-title {
+  color: #6b7280;
+}
+
+.dark .empty-title {
+  color: #d1d5db;
+}
+
+.empty-text {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+/* רשימת הודעות */
+.mail-list-scroll {
+  overflow-y: auto;
+  height: 100%;
+}
+
+.mail-item {
+  border-bottom: 1px solid #f3f4f6;
+  padding: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.mail-item:hover {
+  background-color: #f9fafb;
+}
+
+.dark .mail-item {
+  border-color: #374151;
+}
+
+.dark .mail-item:hover {
+  background-color: #374151;
+}
+
+.mail-item.selected {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.dark .mail-item.selected {
+  background-color: #374151;
+  border-color: #4b5563;
+}
+
+.mail-item.unread {
+  background-color: #f0f9ff;
+}
+
+.dark .mail-item.unread {
+  background-color: #2d3748;
+}
+
+.mail-item-content {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.mail-item-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.star-button {
+  padding: 0.25rem;
+  border: none;
+  background: transparent;
+  border-radius: 0.25rem;
+}
+
+.light .star-button:hover {
+  background-color: #e5e7eb;
+}
+
+.dark .star-button:hover {
+  background-color: #4b5563;
+}
+
+.star-icon {
+  color: #9ca3af;
+}
+
+.star-icon.starred {
+  color: #facc15;
+  fill: currentColor;
+}
+
+.important-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #facc15;
+  border-radius: 9999px;
+}
+
+.mail-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.mail-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.mail-sender {
+  font-weight: 500;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.mail-date {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.dark .mail-date {
+  color: #9ca3af;
+}
+
+.mail-subject {
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.light .mail-subject {
+  color: #1f2937;
+}
+
+.dark .mail-subject {
+  color: #e5e7eb;
+}
+
+.mail-preview {
+  font-size: 0.875rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dark .mail-preview {
+  color: #9ca3af;
+}
+
+/* קטגוריות */
+.mail-category {
+  margin-top: 0.5rem;
+}
+
+.category-label {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.category-label.work {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.category-label.personal {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.category-label.finance {
+  background-color: #ede9fe;
+  color: #6b21a8;
+}
+
+.category-label.shopping {
+  background-color: #ffedd5;
+  color: #9a3412;
+}
+
+.category-label.default {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+/* אנימציות */
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,215 @@
+/* כללי */
+.mailview-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  transition: background-color 0.3s ease;
+  background-color: white;
+}
+
+.mailview-container.dark {
+  background-color: #1f2937;
+  color: #d1d5db;
+}
+
+/* מצב ללא מייל נבחר */
+.mailview-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  background-color: #f9fafb;
+  color: #6b7280;
+  text-align: center;
+  padding: 2rem;
+}
+
+.mailview-empty.dark {
+  background-color: #111827;
+  color: #9ca3af;
+}
+
+.empty-icon {
+  margin: 0 auto 1rem auto;
+  color: #d1d5db;
+}
+
+.mailview-empty.dark .empty-icon {
+  color: #6b7280;
+}
+
+.empty-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.empty-subtitle {
+  font-size: 0.875rem;
+  color: inherit;
+}
+
+/* כותרת */
+.mailview-header {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1.5rem;
+  transition: border-color 0.3s ease;
+  background-color: inherit;
+}
+
+.mailview-header.dark {
+  border-color: #374151;
+}
+
+.mailview-subject {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: inherit;
+}
+
+/* פעולות ומידע על השולח */
+.mailview-actions-sender {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.icon-btn {
+  padding: 0.5rem;
+  border-radius: 9999px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: inherit;
+}
+
+.icon-btn:hover {
+  background-color: rgba(243, 244, 246, 0.8);
+}
+
+.mailview-container.dark .icon-btn:hover {
+  background-color: #374151;
+}
+
+/* מידע על השולח */
+.sender-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sender-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #2563eb; /* blue-600 */
+  border-radius: 9999px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.sender-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.sender-name {
+  font-weight: 600;
+  color: inherit;
+}
+
+.send-time {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.mailview-container.dark .send-time {
+  color: #9ca3af;
+}
+
+/* גוף המייל */
+.mailview-body {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.mailview-text {
+  line-height: 1.6;
+  color: #1f2937;
+  margin-top: 1rem;
+}
+
+.mailview-text.preview-text {
+  margin-top: 0;
+}
+
+.mailview-container.dark .mailview-text {
+  color: #d1d5db;
+}
+
+/* תחתית עם כפתורים */
+.mailview-footer {
+  border-top: 1px solid #e5e7eb;
+  padding: 1rem 1.5rem;
+  transition: border-color 0.3s ease;
+  background-color: inherit;
+}
+
+.mailview-footer.dark {
+  border-color: #374151;
+}
+
+.footer-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.btn.primary {
+  background-color: #2563eb; /* blue-600 */
+  color: white;
+  border-color: transparent;
+}
+
+.btn.primary:hover {
+  background-color: #1d4ed8; /* blue-700 */
+}
+
+.btn.secondary {
+  background-color: transparent;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.mailview-container.dark .btn.secondary {
+  border-color: #4b5563;
+  color: #d1d5db;
+}
+
+.btn.secondary:hover {
+  background-color: #eff6ff;
+}
+
+.mailview-container.dark .btn.secondary:hover {
+  background-color: #374151;
+}
