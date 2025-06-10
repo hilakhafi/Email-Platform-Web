@@ -27,26 +27,48 @@ export default function MailHome() {
   const [categories, setCategories] = useState(defaultCategories);
   const [labels, setLabels] = useState([]);
 
-  useEffect(() => {
-    const updatedCategories = defaultCategories.map(category => {
-      let count = 0;
-      if (category.name === 'Inbox') {
-        count = mails.filter(mail => !mail.isArchived && !mail.isDeleted).length;
-      } else if (category.name === 'Starred') {
-        count = mails.filter(mail => mail.isStarred).length;
-      } else if (category.name === 'Sent') {
-        count = mails.filter(mail => mail.isSent).length;
-      } else if (category.name === 'Drafts') {
-        count = mails.filter(mail => mail.isDraft).length;
-      } else if (category.name === 'Spam') {
-        count = mails.filter(mail => mail.isSpam).length;
-      } else if (category.name === 'Trash') {
-        count = mails.filter(mail => mail.isDeleted).length;
-      }
-      return { ...category, count };
-    });
-    setCategories(updatedCategories);
-  }, [mails]);
+// fetch mails from the server
+useEffect(() => {
+  async function fetchMails() {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/mails");
+      if (!res.ok) throw new Error("Failed to fetch mails");
+      const data = await res.json();
+      setMails(data);
+    } catch (err) {
+      setError(err.message || "Unknown error");
+      setMails([]);
+    } finally {
+      setLoading(false);
+    }
+  }
+  fetchMails();
+}, []);
+
+// Fetch labels (assuming an endpoint exists)
+useEffect(() => {
+  const updatedCategories = defaultCategories.map(category => {
+    let count = 0;
+    if (category.name === 'Inbox') {
+      count = mails.filter(mail => !mail.isArchived && !mail.isDeleted).length;
+    } else if (category.name === 'Starred') {
+      count = mails.filter(mail => mail.isStarred).length;
+    } else if (category.name === 'Sent') {
+      count = mails.filter(mail => mail.isSent).length;
+    } else if (category.name === 'Drafts') {
+      count = mails.filter(mail => mail.isDraft).length;
+    } else if (category.name === 'Spam') {
+      count = mails.filter(mail => mail.isSpam).length;
+    } else if (category.name === 'Trash') {
+      count = mails.filter(mail => mail.isDeleted).length;
+    }
+    return { ...category, count };
+  });
+  setCategories(updatedCategories);
+}, [mails]);
+
 
   return (
     <div className={`mail-home ${darkMode ? 'dark' : 'light'}`}>
