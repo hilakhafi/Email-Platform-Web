@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./LoginScreen.css";
+import "../styles/LoginScreen.css";
 
 export default function LoginScreen({ onLogin }) {
   const [mail, setMail] = useState("");
