@@ -104,7 +104,7 @@ function Register() {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
       console.log("📦 Sending data:", data);
-      const response = await fetch("http://172.22.48.1:4000/api/users/register", {
+      const response = await fetch("http://localhost:4000/api/users/register", {
         method: "POST",
         body: data,
       });
