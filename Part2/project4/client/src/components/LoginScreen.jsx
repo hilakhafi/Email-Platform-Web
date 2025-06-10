@@ -14,7 +14,7 @@ export default function LoginScreen({ onLogin }) {
     setError("");
 
     // את יכולה לשנות את זה לפי איך השרת שלך בנוי
-    const res = await fetch("http://172.22.48.1:4000/api/tokens/verify-mail", {
+    const res = await fetch("http://localhost:4000/api/tokens/verify-mail", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ mail }),
