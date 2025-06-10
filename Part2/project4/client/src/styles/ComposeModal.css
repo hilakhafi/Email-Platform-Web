@@ -78,15 +78,15 @@
 
 .compose-input,
 .compose-textarea {
-  width: 100%;
-  padding: 0.75rem;
+  width: 95%;
+  padding: 0.60rem;
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
   transition: background-color 0.3s, color 0.3s;
 }
 
 .compose-textarea {
-  height: 16rem;
+  height: 15rem;
   resize: none;
 }
 

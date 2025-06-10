@@ -33,8 +33,22 @@ useEffect(() => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("/mails");
-      if (!res.ok) throw new Error("Failed to fetch mails");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No token found. Please login.");
+        setLoading(false);
+        return;
+      }
+      console.log("Token:", token);
+      console.log("Fetching mails...");
+      const res = await fetch("http://localhost:4000/api/mails", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Response status:", res.status);
+      if (!res.ok) throw new Error(`Failed to fetch mails: ${res.status}`);
+
       const data = await res.json();
       setMails(data);
     } catch (err) {
