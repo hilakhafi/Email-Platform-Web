@@ -1,0 +1,144 @@
+.mail-home {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #f6f8fc;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.sidebar button.compose-btn {
+  background-color: #c2e7ff;
+  color: #1967d2;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s;
+}
+
+.sidebar button.compose-btn:hover {
+  background-color: #a8d8ff;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #202124;
+}
+
+.sidebar li:hover,
+.sidebar li.active {
+  background-color: #e8f0fe;
+}
+
+/* Email List */
+.mail-list {
+  width: 300px;
+  overflow-y: auto;
+  border-right: 1px solid #ddd;
+  background-color: #ffffff;
+}
+
+.mail-item {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.mail-item:hover {
+  background-color: #f1f3f4;
+}
+
+.mail-item .subject {
+  font-weight: bold;
+  color: #202124;
+}
+
+.mail-item .preview {
+  color: #5f6368;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+/* Email Viewer */
+.mail-viewer {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  background-color: #f6f8fc;
+}
+
+.mail-viewer h2 {
+  margin-bottom: 0.5rem;
+  color: #202124;
+}
+
+.mail-viewer .meta {
+  font-size: 0.9rem;
+  color: #5f6368;
+  margin-bottom: 1rem;
+}
+
+.mail-viewer .body {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #202124;
+}
+
+/* Compose Popup */
+.compose-popup {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  width: 400px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 1rem;
+  z-index: 1000;
+}
+
+.compose-popup input,
+.compose-popup textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 0.95rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.compose-popup textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.compose-popup button {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.compose-popup button:hover {
+  background-color: #155ab6;
+}
