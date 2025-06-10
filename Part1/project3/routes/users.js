@@ -15,4 +15,6 @@ router.post('/', controller.addUser);
 // GET: get user by ID
 router.get('/:id', controller.getUser);
 
+router.put('/:id', upload.single('profileImage'), controller.updateUser);
+
 module.exports = router
