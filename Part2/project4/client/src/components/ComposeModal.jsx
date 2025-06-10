@@ -7,6 +7,8 @@ function ComposeModal({ onClose, darkMode }) {
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
 
+
+
   return (
     <div className="compose-overlay">
       <div className={`compose-modal ${darkMode ? 'dark' : 'light'}`}>

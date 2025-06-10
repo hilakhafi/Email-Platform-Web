@@ -4,14 +4,16 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(to right, #f5f7fa, #c3cfe2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #ece9e6, #ffffff);
+  padding: 20px;
 }
 
 .login-container h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #202124;
+  font-size: 2.5rem;
+  margin-bottom: 24px;
+  color: #333;
+  letter-spacing: 1.2px;
 }
 
 form {
