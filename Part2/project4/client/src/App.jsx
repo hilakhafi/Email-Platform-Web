@@ -17,6 +17,7 @@ import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LoginScreen from "./components/LoginScreen";
 import Register from "./components/Register";
+import MailHome from "./components/MailHome";
 
 function App() {
   const [userId, setUserId] = useState(null);
@@ -32,7 +33,10 @@ function App() {
             <Route path="*" element={<Navigate to="/login" />} />
           </>
         ) : (
-          <Route path="*" element={<h1>ברוך הבא, משתמש {userId}!</h1>} />
+       <>
+            <Route path="/mails" element={<MailHome />} />
+            <Route path="*" element={<Navigate to="/mails" replace />} />
+          </>
         )}
       </Routes>
     </Router>

@@ -60,9 +60,11 @@
 
 
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import LoginScreen from "./components/LoginScreen";
 import Register from "./components/Register";
+import MailHome from "./components/MailHome"; 
+
 
 function App() {
   const [userId, setUserId] = useState(null);
@@ -72,13 +74,17 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        {userId ? (
-          <Route path="/" element={<h1>מחובר! מזהה משתמש: {userId}</h1>} />
-        ) : (
+        {!userId ? (
           <>
             <Route path="/login" element={<LoginScreen onLogin={handleLogin} />} />
             <Route path="/register" element={<Register />} />
-            <Route path="*" element={<LoginScreen onLogin={handleLogin} />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<Navigate to="/mails" replace />} />
+            <Route path="/mails" element={<MailHome />} />
+            <Route path="*" element={<Navigate to="/mails" replace />} />
           </>
         )}
       </Routes>
