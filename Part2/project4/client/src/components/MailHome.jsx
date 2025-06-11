@@ -195,7 +195,7 @@ useEffect(() => {
   const updatedCategories = defaultCategories.map(category => {
     let count = 0;
     if (category.name === 'Inbox') {
-      count = mails.filter(mail => !mail.isArchived && !mail.isDeleted).length;
+      count = mails.filter(mail => !mail.isArchived && !mail.isTrash).length;
     } else if (category.name === 'Starred') {
       count = mails.filter(mail => mail.isStarred).length;
     } else if (category.name === 'Sent') {
@@ -205,7 +205,7 @@ useEffect(() => {
     } else if (category.name === 'Spam') {
       count = mails.filter(mail => mail.isSpam).length;
     } else if (category.name === 'Trash') {
-      count = mails.filter(mail => mail.isDeleted).length;
+      count = mails.filter(mail => mail.isTrash).length;
     }
     return { ...category, count };
   });
@@ -231,8 +231,9 @@ function filterMailsByCategory() {
   
   switch (selectedCategory) {
     case 'Inbox':
-      //filtered = mails.filter(mail => mail.to === userId && !mail.isDeleted && !mail.isSpam );
-      filtered = mails.filter(mail => mail.to === userId && !mail.isDeleted && !mail.isSpam && mail.isInbox);
+      //filtered = mails.filter(mail => mail.to === userId && !mail.isTrash && !mail.isSpam );
+      filtered = mails.filter(mail => mail.to === userId && !mail.isTrash && !mail.isSpam 
+      && mail.isInbox && mail.isStarred);
 
       break;
     case 'Starred':
@@ -250,7 +251,7 @@ function filterMailsByCategory() {
       filtered = mails.filter(mail => mail.isSpam);
       break;
     case 'Trash':
-      filtered = mails.filter(mail => mail.isDeleted);
+      filtered = mails.filter(mail => mail.isTrash);
       break;
     default:
       filtered = mails;
