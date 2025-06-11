@@ -9,6 +9,8 @@ router.post('/', blacklistController.addToBlackList);
 router.delete('/:id', blacklistController.removeFromBlackList);
 // Check if an email is spam based on subject and body 
 router.post('/url', blacklistController.checkEmailForSpam);
+// Mark an email as spam
+router.post('/mark-spam', blacklistController.markMailAsSpam);
 
 
 module.exports = router;
