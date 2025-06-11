@@ -42,7 +42,7 @@ exports.patchMail = (req, res) => {
 }
 
   // change body
-  const allowedFields = ['subject', 'body', 'isRead', 'link'];
+  const allowedFields = ['subject', 'body', 'isRead', 'link', 'isTrash', 'isStarred'];
   for (const field of allowedFields) {
     if (req.body[field] !== undefined) {
       mail[field] = req.body[field];

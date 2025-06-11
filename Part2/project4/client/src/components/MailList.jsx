@@ -89,14 +89,32 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
               >
                 <div className="mail-item-content">
                   <div className="mail-item-meta">
-                    <button className="star-button">
-                      <Star
-                        size={16}
-                        className={`star-icon ${mail.isStarred ? 'starred' : ''}`}
-                      />
-                    </button>
-                    {mail.isImportant && <div className="important-dot"></div>}
-                  </div>
+                <button 
+                  className="star-button"
+                  onClick={(e) => {
+                    e.stopPropagation(); // כדי שלא יבחר את המייל כשהכפתור נלחץ
+                    toggleStar(mail.id, mail.isStarred);
+                  }}
+                >
+                  <Star
+                    size={16}
+                    className={`star-icon ${mail.isStarred ? 'starred' : ''}`}
+                  />
+                </button>
+
+                <button
+                  className="trash-button"
+                  onClick={(e) => {
+                    e.stopPropagation(); // מונע בחירת מייל כשמוחקים אותו
+                    moveToTrash(mail.id);
+                  }}
+                >
+                  🗑️
+                </button>
+
+                {mail.isImportant && <div className="important-dot"></div>}
+              </div>
+
 
                   <div className="mail-details">
                     <div className="mail-header">

@@ -339,3 +339,15 @@
   font-size: 0.8rem;
   color: gray;
 }
+
+.trash-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none; /* מסיר את קו הפוקוס הכחול */
+}
+
+.trash-button:focus {
+  outline: none; /* מונע קו פוקוס גם אחרי לחיצה */
+}
