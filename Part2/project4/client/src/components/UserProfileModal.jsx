@@ -14,21 +14,25 @@ const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState(userInfo.avatar || null);
 
   useEffect(() => {
     if (userInfo) {
+      console.log("Raw avatar path:", userInfo.avatar);
+      const fixedAvatarUrl = userInfo.avatar ? `http://localhost:4000/${userInfo.avatar.replace(/\\/g, '/')}` : null;
+      console.log("Fixed avatar URL:", fixedAvatarUrl);
+      setImagePreview(fixedAvatarUrl);
       const nameParts = userInfo.name.split(' ');
       setFormData({
         first_name: nameParts[0] || '',
         last_name: nameParts.slice(1).join(' ') || '',
         username: userInfo.username || '',
-        mail: userInfo.email || '',
+        mail: userInfo.mail || '',
         birth_date: userInfo.birthDate ? userInfo.birthDate.split('T')[0] : '',
         gender: userInfo.gender || '',
         profileImage: null
       });
-      setImagePreview(userInfo.avatar);
+    //setImagePreview(userInfo.avatar || null);
     }
   }, [userInfo]);
 
@@ -101,8 +105,8 @@ const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
       if (onUserUpdate) {
         onUserUpdate({
           name: `${formData.first_name} ${formData.last_name}`,
-          email: formData.mail,
-          avatar: imagePreview,
+          mail: formData.mail,
+          avatar: updatedUser.avatar || imagePreview,
           username: formData.username,
           birthDate: formData.birth_date,
           gender: formData.gender
@@ -193,7 +197,7 @@ const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
             <div className="form-group">
               <label>Email</label>
               <input
-                type="email"
+                type="mail"
                 name="mail"
                 value={formData.mail}
                 onChange={handleInputChange}

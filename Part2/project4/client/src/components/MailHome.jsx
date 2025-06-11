@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, Mail, Settings, Menu, Sun, Moon, Inbox, Star, SendHorizontal, FileText, AlertCircle, Trash2, User, LogOut, UserCircle } from 'lucide-react';
 import Sidebar from './Sidebar';
@@ -110,13 +108,19 @@ export default function MailHome() {
 
         if (res.ok) {
           const userData = await res.json();
+          console.log('User data from server:', userData);
+          console.log('Profile image:', userData.profileImage);
+          const profileImagePath = userData.profileImage ? userData.profileImage.replace(/\\/g, '/') : null;
+            const avatarUrl = profileImagePath ? `http://localhost:4000/${profileImagePath}` : null;
+
+            console.log('Profile image URL:', avatarUrl);
           setUserInfo({
             // name: `${userData.first_name} ${userData.last_name}` || "User",
             name: userData.first_name && userData.last_name
             ? `${userData.first_name} ${userData.last_name}`
             : "User",
             email: userData.mail || "user@example.com",
-            avatar: userData.profileImage,
+            avatar: userData.profileImage ? `http://localhost:4000/${userData.profileImage.replace(/\\/g, '/')}` : null,
             username: userData.username,
             birthDate: userData.birth_date,
             gender: userData.gender
@@ -295,13 +299,6 @@ function filterMailsByCategory() {
               {showUserMenu && (
                 <div className="user-dropdown">
                   <div className="user-info">
-                    <div className="user-avatar-large">
-                      {userInfo.avatar ? (
-                        <img src={userInfo.avatar} alt="User Avatar" />
-                      ) : (
-                        <UserCircle size={48} />
-                      )}
-                    </div>
                     <div className="user-details">
                       <h3>{userInfo.name}</h3>
                       <p>{userInfo.email}</p>

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const path = require('path');
 
 app.use(cors({
   origin: 'http://localhost:3000',
@@ -23,6 +24,7 @@ app.use('/api/mails', mails);
 app.use('/api/labels', labels);
 app.use('/api/blacklist', blacklist);
 app.disable('etag');
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(4000, () => { 
 console.log("Server running on port 4000");

@@ -41,7 +41,6 @@ export default function LoginScreen({ onLogin }) {
       const data = await res.json();
       localStorage.setItem("token", data.token);
       localStorage.setItem("userId", data.userId);
-
       onLogin(data.userId);
     } else {
       setError("Incorrect password");

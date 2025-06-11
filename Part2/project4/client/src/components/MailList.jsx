@@ -1,4 +1,3 @@
-// MailList.jsx
 import React from 'react';
 import { Mail, Star, RefreshCw, MoreHorizontal } from 'lucide-react';
 import '../styles/MailList.css';
@@ -81,10 +80,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
             <div
               key={mail.id}
               onClick={() => onSelect(mail)}
-              className={`mail-item 
-                ${isSelected ? 'selected' : ''} 
-                ${isUnread ? 'unread' : ''} 
-                ${mail.spam ? 'spam' : ''}`}
+              className={`mail-item ${isSelected ? 'selected' : ''} ${isUnread ? 'unread' : ''}`}
             >
               <div className="mail-item-content">
                 <div className="mail-item-meta">
@@ -106,13 +102,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
                   <div className={`mail-subject ${isUnread ? 'bold' : ''}`}>{mail.subject}</div>
                   <div className="mail-preview">{mail.preview}</div>
 
-                  {mail.spam && (
-                    <div className="mail-category">
-                      <span className="category-label spam">Spam</span>
-                    </div>
-                  )}
-
-                  {mail.category && !mail.spam && (
+                  {mail.category && (
                     <div className="mail-category">
                       <span className={`category-label ${mail.category.toLowerCase()}`}>{mail.category}</span>
                     </div>
