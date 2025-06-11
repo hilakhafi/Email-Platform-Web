@@ -81,15 +81,19 @@ const check = async (subject, body) => {
 
     for (const url of urls) {
 
-      const response = await sendToServer('GET', url);
+      const response = await sendToServer('POST', url);
 
       const parts = response.split('\n\n');
         if (parts.length === 2) {
             const [bloom, exact] = parts[1].split(' ');
-            if (bloom === 'true' && (exact === 'true' || exact === undefined)) {
-                return true;
-            }
         } else {
+            bloom = response.trim();
+            exact = undefined;
+          }
+        if (bloom === 'true' && (exact === 'true' || exact === undefined)) {
+            return true;
+          }
+         else {
             throw new Error(`Unexpected response from blacklist server: ${response}`);
         }
     }

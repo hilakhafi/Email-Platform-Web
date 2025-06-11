@@ -116,7 +116,8 @@ exports.postMail = async (req, res) => {
       timestamp: new Date().toISOString(),
       spam: isSpam, // Check if the email is spam
       preview,
-      isRead: false
+      isRead: false,
+      category: isSpam ? null : 'Inbox'
     };
 
     Emails.addMail(newMail); 

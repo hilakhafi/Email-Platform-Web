@@ -58,55 +58,72 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
       </div>
 
       <div className="mail-list-scroll">
-        {mails.map((mail) => {
-          const isSelected = selectedMail?.id === mail.id;
-          const isUnread = !mail.isRead;
+        {mails
+          .filter(mail => {
+            if (selectedCategory === 'Spam') {
+              return mail.spam;
+            }
+            
+            if (selectedCategory === 'All mail') {
+              return !mail.spam;
+            }
+            
+            if (selectedCategory === 'Inbox') {
+              return !mail.spam && (!mail.category || mail.category.toLowerCase() === 'inbox');
+            }
+            
+            // עבור קטגוריות אחרות
+            return !mail.spam && mail.category?.toLowerCase() === selectedCategory.toLowerCase();
+          })
+          .map((mail) => {
+            const isSelected = selectedMail?.id === mail.id;
+            const isUnread = !mail.isRead;
 
-          return (
-            <div
-              key={mail.id}
-              onClick={() => onSelect(mail)}
-              className={`mail-item 
-                ${isSelected ? 'selected' : ''} 
-                ${isUnread ? 'unread' : ''} 
-                ${mail.spam ? 'spam' : ''}`}
-            >
-              <div className="mail-item-content">
-                <div className="mail-item-meta">
-                  <button className="star-button">
-                    <Star
-                      size={16}
-                      className={`star-icon ${mail.isStarred ? 'starred' : ''}`}
-                    />
-                  </button>
-                  {mail.isImportant && <div className="important-dot"></div>}
-                </div>
-
-                <div className="mail-details">
-                  <div className="mail-header">
-                    <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>{mail.sender}</span>
-                    <span className="mail-date">{mail.date}</span>
+            return (
+              <div
+                key={mail.id}
+                onClick={() => onSelect(mail)}
+                className={`mail-item 
+                  ${isSelected ? 'selected' : ''} 
+                  ${isUnread ? 'unread' : ''} 
+                  ${mail.spam ? 'spam' : ''}`}
+              >
+                <div className="mail-item-content">
+                  <div className="mail-item-meta">
+                    <button className="star-button">
+                      <Star
+                        size={16}
+                        className={`star-icon ${mail.isStarred ? 'starred' : ''}`}
+                      />
+                    </button>
+                    {mail.isImportant && <div className="important-dot"></div>}
                   </div>
 
-                  <div className={`mail-subject ${isUnread ? 'bold' : ''}`}>{mail.subject}</div>
-                  <div className="mail-preview">{mail.preview}</div>
-
-                  {mail.spam && (
-                    <div className="mail-category">
-                      <span className="category-label spam">Spam</span>
+                  <div className="mail-details">
+                    <div className="mail-header">
+                      <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>{mail.from}</span>
+                      <span className="mail-date">{mail.date}</span>
                     </div>
-                  )}
 
-                  {mail.category && !mail.spam && (
-                    <div className="mail-category">
-                      <span className={`category-label ${mail.category.toLowerCase()}`}>{mail.category}</span>
-                    </div>
-                  )}
+                    <div className={`mail-subject ${isUnread ? 'bold' : ''}`}>{mail.subject}</div>
+                    <div className="mail-preview">{mail.preview}</div>
+
+                    {mail.spam && (
+                      <div className="mail-category">
+                        <span className="category-label spam">Spam</span>
+                      </div>
+                    )}
+
+                    {mail.category && !mail.spam && (
+                      <div className="mail-category">
+                        <span className={`category-label ${mail.category.toLowerCase()}`}>{mail.category}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     </div>
   );
