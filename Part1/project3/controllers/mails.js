@@ -4,7 +4,7 @@ const BlacklistServer = require('../services/BlacklistServer');
 
 // Get the 50 most recent emails related to the user
 exports.get50Emails = (req, res) => {
-  const userId = req.user.id; 
+  const userId = req.user.userId; 
   const relaventEmails = Emails.emails
     .filter(e => e.from === userId || e.to === userId)
     .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
@@ -30,7 +30,7 @@ exports.getMail = (req, res) => {
 // Update certain fields in a specific email
 exports.patchMail = (req, res) => {
   //header
-  const userId = req.user.id;
+  const userId = req.user.userId;
   const id = req.params.id;
   const mail = Emails.getMail(id); 
 
@@ -57,7 +57,7 @@ exports.patchMail = (req, res) => {
 // Delete a specific email
 exports.deleteMail = (req, res) => {
   //header
-  const userId = req.user.id;
+  const userId = req.user.userId;
   const id = req.params.id;
   const mail = Emails.getMail(id); 
 
@@ -76,11 +76,19 @@ exports.deleteMail = (req, res) => {
 
 // Send a new email
 exports.postMail = async (req, res) => {
+  console.log(req.user);
+  console.log("Decoded user from token:", req.user);
   try {
-    const userId = req.user.id; 
+    const userId = req.user.userId; 
+    console.log("User ID from token:", userId);
     const user = Users.getUser(userId);
     const { sendTo, subject, body } = req.body;
+    // validating that the email is in a valid format
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(sendTo)) {
+      return res.status(400).json({ error: "Invalid email format" });
+    }
     // check if the user exists    
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -112,7 +120,7 @@ exports.postMail = async (req, res) => {
     };
 
     Emails.addMail(newMail); 
-
+    console.log(Emails.emails);
     return res.status(201).json({});
 
   } catch (err) {
@@ -123,7 +131,7 @@ exports.postMail = async (req, res) => {
 
 // Search emails by query string
 exports.searchEmails = (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user.userId;
   const query = req.params.query;
   if (!query) {
     return res.status(400).json({ error: 'Query parameter is required' });
