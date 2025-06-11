@@ -81,7 +81,7 @@ const check = async (subject, body) => {
 
     for (const url of urls) {
 
-      const response = await sendToServer('POST', url);
+      const response = await sendToServer('GET', url);
 
       const parts = response.split('\n\n');
         if (parts.length === 2) {
