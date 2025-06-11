@@ -42,6 +42,38 @@ export default function MailHome() {
   
   const userMenuRef = useRef(null);
 
+  async function fetchMails() {
+  setLoading(true);
+  setError(null);
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No token found. Please login.");
+
+    const res = await fetch("http://localhost:4000/api/mails", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: 'include',
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch mails: ${res.status}`);
+    }
+
+    const data = await res.json();
+    setMails(data);
+  } catch (err) {
+    setError(err.message);
+    setMails([]);
+  } finally {
+    setLoading(false);
+  }
+}
+
+  // Handle new mail event (e.g., from WebSocket or similar)
+  function handleNewMail(newMail) {
+    setMails(prevMails => [newMail, ...prevMails]); // מוסיף למיילים קיים, בראש הרשימה
+  }
   // Close user menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
@@ -62,16 +94,10 @@ export default function MailHome() {
       try {
         const token = localStorage.getItem("token");
         const userId = localStorage.getItem("userId"); // נניח שאתה שומר את ה-ID גם כן
-        
-        if (!token) {
-          console.error("No token found");
-          return;
-        } 
+        console.log("Token:", token);
+        console.log("User ID:", userId);
 
-        if (!userId) {
-          console.error("No userId found");
-          return;
-        } 
+        if (!token || !userId) return;
 
         const res = await fetch(`http://localhost:4000/api/users/${userId}`, {
           headers: {
@@ -326,12 +352,18 @@ function filterMailsByCategory() {
           onSelect={setSelectedMail}
           darkMode={darkMode}
           selectedCategory={selectedCategory}
+          onRefresh={fetchMails}  // <-- פונקציה שמרעננת מיילים
+
         />
 
         <MailView mail={selectedMail} darkMode={darkMode} />
 
         {showCompose && (
-          <ComposeModal onClose={() => setShowCompose(false)} darkMode={darkMode} />
+          <ComposeModal 
+              onClose={() => setShowCompose(false)} 
+              darkMode={darkMode} 
+              onMailSent={handleNewMail} 
+          />        
         )}
 
         {showProfileModal && (
