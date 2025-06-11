@@ -158,35 +158,6 @@ export default function MailHome() {
   
   // fetch mails from the server
   useEffect(() => {
-    async function fetchMails() {
-      setLoading(true);
-      setError("");
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setError("No token found. Please login.");
-          setLoading(false);
-          return;
-        }
-        console.log("Token:", token);
-        console.log("Fetching mails...");
-        const res = await fetch("http://localhost:4000/api/mails", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("Response status:", res.status);
-        if (!res.ok) throw new Error(`Failed to fetch mails: ${res.status}`);
-
-        const data = await res.json();
-        setMails(data);
-      } catch (err) {
-        setError(err.message || "Unknown error");
-        setMails([]);
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchMails();
   }, []);
 
@@ -269,6 +240,23 @@ function filterMailsByCategory() {
 
   return filtered;
 }
+
+const toggleStar = (mailId) => {
+  setMails((prevMails) =>
+    prevMails.map((mail) =>
+      mail.id === mailId ? { ...mail, isStarred: !mail.isStarred } : mail
+    )
+  );
+};
+
+const moveToTrash = (mailId) => {
+  setMails((prevMails) =>
+    prevMails.map((mail) =>
+      mail.id === mailId ? { ...mail, isDeleted: true } : mail
+    )
+  );
+};
+
 
   return (
     <div className={`mail-home ${darkMode ? 'dark' : 'light'}`}>
