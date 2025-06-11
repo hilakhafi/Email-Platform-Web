@@ -64,6 +64,13 @@ export default function MailHome() {
 
     const data = await res.json();
     setMails(data);
+
+    // כאן נעדכן את selectedMail:
+    if (selectedMail) {
+      const updatedMail = data.find(mail => mail.id === selectedMail.id);
+      setSelectedMail(updatedMail || null);  // אם לא נמצא, מאפסים ל-null
+    }
+    
   } catch (err) {
     setError(err.message);
     setMails([]);
@@ -76,6 +83,7 @@ export default function MailHome() {
   function handleNewMail(newMail) {
     setMails(prevMails => [newMail, ...prevMails]); // מוסיף למיילים קיים, בראש הרשימה
   }
+
   // Close user menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
@@ -202,7 +210,6 @@ function filterMailsByCategory() {
   switch (selectedCategory) {
     case 'Inbox':
       filtered = mails.filter(mail => mail.ownerId === userId && mail.category === 'inbox');
-
       break;
     case 'Starred':
       filtered = mails.filter(mail => mail.ownerId === userId && mail.category === 'starred' );
