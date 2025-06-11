@@ -107,7 +107,7 @@ exports.postMail = async (req, res) => {
     const isSpam = await BlacklistServer.check(subject, body); 
     const preview = body.substring(0, 20) + '...'; 
 
-    const newMail = {
+    const SentMail = {
       id: Emails.emails.length + 1,
       from: userId,     
       to: recipient.id,
@@ -117,10 +117,29 @@ exports.postMail = async (req, res) => {
       spam: isSpam, // Check if the email is spam
       preview,
       isRead: false,
-      category: isSpam ? null : 'Inbox'
+      category: isSpam ? null : 'sent',
+      isSent: true, // Indicate that this is a sent email
+      isInbox: false // Indicate that this is not an inbox email
     };
 
-    Emails.addMail(newMail); 
+    const InboxMail = {
+      id: Emails.emails.length + 2,
+      from: userId,     
+      to: recipient.id,
+      subject,
+      body,
+      timestamp: new Date().toISOString(),
+      spam: isSpam, // Check if the email is spam
+      preview,
+      isRead: false,
+      category: isSpam ? null : 'Inbox',
+      isSent: false, // Indicate that this is a sent email
+      isInbox: true // Indicate that this is not an inbox email
+    };
+
+    Emails.addMail(SentMail); 
+    Emails.addMail(InboxMail); 
+
 
     console.log(Emails.emails);
     return res.status(201).json({});

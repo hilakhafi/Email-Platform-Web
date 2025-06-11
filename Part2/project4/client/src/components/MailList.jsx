@@ -77,18 +77,22 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
             if (selectedCategory === 'Spam') {
               return mail.spam;
             }
-            
+
             if (selectedCategory === 'All mail') {
               return !mail.spam;
             }
-            
+
             if (selectedCategory === 'Inbox') {
-              return !mail.spam && (!mail.category || mail.category.toLowerCase() === 'inbox');
+              return !mail.spam && mail.category?.toLowerCase() === 'inbox';
             }
-            
-            // עבור קטגוריות אחרות
+
+            if (selectedCategory === 'Sent') {
+              return !mail.spam && mail.category?.toLowerCase() === 'sent';
+            }
+
             return !mail.spam && mail.category?.toLowerCase() === selectedCategory.toLowerCase();
           })
+
           .map((mail) => {
             const isSelected = selectedMail?.id === mail.id;
             const isUnread = !mail.isRead;

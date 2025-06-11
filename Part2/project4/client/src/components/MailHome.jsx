@@ -27,7 +27,9 @@ export default function MailHome() {
   const [darkMode, setDarkMode] = useState(false);
   const [categories, setCategories] = useState(defaultCategories);
   const [labels, setLabels] = useState([]);
-  
+  const [searchInput, setSearchInput] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+
   // User menu states
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -153,6 +155,7 @@ export default function MailHome() {
     setUserInfo(updatedUserInfo);
   };
 
+  
   // fetch mails from the server
   useEffect(() => {
     async function fetchMails() {
@@ -224,22 +227,46 @@ function filterMailsByCategory() {
   const userId = getCurrentUserId();
   if (!userId) return [];
 
+  let filtered = [];
+  
   switch (selectedCategory) {
     case 'Inbox':
-      return mails.filter(mail => mail.to === userId && !mail.isDeleted && !mail.isSpam && mail.isInbox);
+      //filtered = mails.filter(mail => mail.to === userId && !mail.isDeleted && !mail.isSpam );
+      filtered = mails.filter(mail => mail.to === userId && !mail.isDeleted && !mail.isSpam && mail.isInbox);
+
+      break;
     case 'Starred':
-      return mails.filter(mail => mail.isStarred);
+      filtered = mails.filter(mail => mail.isStarred);
+      break;
     case 'Sent':
-      return mails.filter(mail => mail.from === userId && mail.isSent);
+      //filtered = mails.filter(mail => mail.from === userId);
+      filtered = mails.filter(mail => mail.from === userId && mail.isSent);
+
+      break;
     case 'Drafts':
-      return mails.filter(mail => mail.isDraft && mail.from === userId);
+      filtered = mails.filter(mail => mail.isDraft && mail.from === userId);
+      break;
     case 'Spam':
-      return mails.filter(mail => mail.isSpam);
+      filtered = mails.filter(mail => mail.isSpam);
+      break;
     case 'Trash':
-      return mails.filter(mail => mail.isDeleted);
+      filtered = mails.filter(mail => mail.isDeleted);
+      break;
     default:
-      return mails;
+      filtered = mails;
   }
+
+  // חיפוש – סינון לפי מחרוזת החיפוש
+  if (searchTerm.trim()) {
+    const lower = searchTerm.toLowerCase();
+    filtered = filtered.filter(mail =>
+      (mail.subject && mail.subject.toLowerCase().includes(lower)) ||
+      (mail.body && mail.body.toLowerCase().includes(lower)) ||
+      (mail.to && mail.to.toLowerCase().includes(lower))
+    );
+  }
+
+  return filtered;
 }
 
   return (
@@ -262,11 +289,24 @@ function filterMailsByCategory() {
           </div>
 
           <div className="search-wrapper">
-            <Search className="search-icon" size={20} />
+            <button 
+              onClick={() => setSearchTerm(searchInput)} 
+              className="search-icon-button" 
+              aria-label="Search"
+            >
+              <Search className="search-icon" size={20} />
+            </button>
             <input
               type="text"
               placeholder="Search mail..."
               className="search-input"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  setSearchTerm(searchInput);
+                }
+              }}
             />
           </div>
 
