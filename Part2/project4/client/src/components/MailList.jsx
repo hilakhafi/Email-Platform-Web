@@ -2,7 +2,8 @@ import React from 'react';
 import { Mail, Star, RefreshCw, MoreHorizontal } from 'lucide-react';
 import '../styles/MailList.css';
 
-function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, selectedCategory }) {
+
+function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, selectedCategory, onRefresh }) {
   const themeClass = darkMode ? 'dark' : 'light';
 
   if (loading) {
@@ -32,7 +33,14 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
       <div className={`mail-list-wrapper ${themeClass}`}>
         <div className="mail-list-header">
           <div className="header-actions">
-            <button className="icon-button"><RefreshCw size={18} /></button>
+            {/* כפתור רענון עם קריאה ל-onRefresh */}
+            <button
+              className="icon-button"
+              onClick={onRefresh}
+              aria-label="רענן מיילים"
+            >
+              <RefreshCw size={18} />
+            </button>
             <button className="icon-button"><MoreHorizontal size={18} /></button>
           </div>
           <h2 className="header-title">{selectedCategory}</h2>
@@ -50,7 +58,14 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
     <div className={`mail-list-wrapper ${themeClass}`}>
       <div className="mail-list-header">
         <div className="header-actions">
-          <button className="icon-button"><RefreshCw size={18} /></button>
+          {/* כפתור רענון עם קריאה ל-onRefresh */}
+          <button
+            className="icon-button"
+            onClick={onRefresh}
+            aria-label="רענן מיילים"
+          >
+            <RefreshCw size={18} />
+          </button>
           <button className="icon-button"><MoreHorizontal size={18} /></button>
         </div>
         <h2 className="header-title">{selectedCategory}</h2>

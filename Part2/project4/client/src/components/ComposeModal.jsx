@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Send, Paperclip } from 'lucide-react';
 import '../styles/ComposeModal.css'; // הוספת קובץ CSS רגיל
 
-function ComposeModal({ onClose, darkMode }) {
+function ComposeModal({ onClose, darkMode, onMailSent }) {
   const [to, setTo] = useState('');
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
@@ -27,8 +27,10 @@ const handleSend = async () => {
     });
     
     if (response.ok) {
+      const sentMail = await response.json(); // מניחים שהשרת מחזיר את המייל שנשלח
+      onMailSent(sentMail);  // מעדכן ב-MailHome
       alert("Email sent successfully!");
-      onClose(); // סגירת המודל
+      onClose();
     } else {
       const { error } = await response.json();
       alert("Error: " + error);
