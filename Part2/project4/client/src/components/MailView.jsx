@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, Archive, Trash2, MoreHorizontal, AlertTriangle } from 'lucide-react';
+import ComposeModal from './ComposeModal';
 import '../styles/MailView.css';
 
 function MailView({ mail, darkMode }) {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(false);
   const [errorUser, setErrorUser] = useState(null);
+  const [showReplyModal, setShowReplyModal] = useState(false);
 
   useEffect(() => {
     if (!mail || !mail.from) {
@@ -88,11 +90,22 @@ function MailView({ mail, darkMode }) {
 
       <div className="mailview-footer">
         <div className="footer-buttons">
-          <button className="btn primary">Reply</button>
+          <button className="btn primary" onClick={() => setShowReplyModal(true)}>Reply</button>
           <button className="btn secondary">Reply All</button>
           <button className="btn secondary">Forward</button>
         </div>
       </div>
+
+      {showReplyModal && (
+        <ComposeModal
+          onClose={() => setShowReplyModal(false)}
+          darkMode={darkMode}
+          onMailSent={() => setShowReplyModal(false)}
+          prefillTo={mail.from}
+          prefillSubject={`Re: ${mail.subject}`}
+          prefillBody={`\n\n--- Original message ---\n${mail.body}`}
+        />
+      )}
     </div>
   );
 }
