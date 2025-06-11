@@ -103,8 +103,9 @@ exports.postMail = async (req, res) => {
     if (!sendTo || !subject || !body) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
-
+    console.log("Calling BlacklistServer.check");
     const isSpam = await BlacklistServer.check(subject, body); 
+    console.log("isSpam result:", isSpam);
     const preview = body.substring(0, 20) + '...'; 
 
     const SentMail = {

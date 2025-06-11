@@ -1,6 +1,6 @@
 const net = require('net');
 const PORT = 8080;
-const HOST = 'blacklist';
+const HOST = 'localhost'; // or the IP address of your blacklist server
 
 let client = null;
 let queue = [];
@@ -80,25 +80,32 @@ const check = async (subject, body) => {
     if (urls.length === 0) return false;
 
     for (const url of urls) {
-
-      const response = await sendToServer('GET', url);
-
-      const parts = response.split('\n\n');
-        if (parts.length === 2) {
-            const [bloom, exact] = parts[1].split(' ');
-        } else {
-            bloom = response.trim();
-            exact = undefined;
-          }
-        if (bloom === 'true' && (exact === 'true' || exact === undefined)) {
-            return true;
-          }
-         else {
-            throw new Error(`Unexpected response from blacklist server: ${response}`);
-        }
+  try {
+    const response = await sendToServer('GET', url);
+    let bloom, exact;
+    const parts = response.split('\n\n');
+    if (parts.length === 2) {
+      [bloom, exact] = parts[1].split(' ');
+    } else {
+      bloom = response.trim();
+      exact = undefined;
     }
-    return false;  
-    // all links are valid, not blocked
+
+    if (bloom === 'true' && (exact === 'true' || exact === undefined)) {
+      return true;  // block the email if any link is blocked
+    }
+
+    //unexpected response handling
+    if (bloom !== 'true' && bloom !== 'false' && bloom !== undefined) {
+      throw new Error(`Unexpected response from blacklist server: ${response}`);
+    }
+
+  } catch (error) {
+    throw error;  // rethrow the error to be handled by the caller
+  }
+}
+
+  return false; // all links are valid, not blocked
 };
 
 // Add a URL to the blacklist
