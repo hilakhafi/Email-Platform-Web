@@ -73,39 +73,6 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
 
       <div className="mail-list-scroll">
         {mails
-          .filter(mail => {
-            if (selectedCategory === 'Spam') {
-              return mail.spam === true;
-            }
-
-            if (selectedCategory === 'All mail') {
-              return !mail.spam;
-            }
-
-            if (selectedCategory === 'Inbox') {
-              return !mail.spam && mail.isInbox === true;
-            }
-
-            if (selectedCategory === 'Sent') {
-              return !mail.spam && mail.isSent === true;
-            }
-
-            if (selectedCategory === 'Starred') {
-              return mail.isStarred === true;
-            }
-
-            if (selectedCategory === 'Trash') {
-              return mail.isDeleted === true;
-            }
-
-            if (selectedCategory === 'Drafts') {
-              return mail.isDraft === true;
-            }
-
-            // ברירת מחדל – החזר את כל מה שלא ספאם
-            return !mail.spam;
-          })
-
           .map((mail) => {
             const isSelected = selectedMail?.id === mail.id;
             const isUnread = !mail.isRead;

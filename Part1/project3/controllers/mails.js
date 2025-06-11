@@ -109,6 +109,7 @@ exports.postMail = async (req, res) => {
 
     const SentMail = {
       id: Emails.emails.length + 1,
+      ownerId: userId,
       from: userId,     
       to: recipient.id,
       subject,
@@ -117,12 +118,12 @@ exports.postMail = async (req, res) => {
       spam: isSpam, // Check if the email is spam
       preview,
       isRead: false,
-      isSent: true, // Indicate that this is a sent email
-      isInbox: false // Indicate that this is not an inbox email
+      category: 'sent', // Indicate that this is a sent email
     };
 
     const InboxMail = {
       id: Emails.emails.length + 2,
+      ownerId: recipient.id,
       from: userId,     
       to: recipient.id,
       subject,
@@ -131,8 +132,7 @@ exports.postMail = async (req, res) => {
       spam: isSpam, // Check if the email is spam
       preview,
       isRead: false,
-      isSent: false, // Indicate that this is a sent email
-      isInbox: true // Indicate that this is not an inbox email
+      category: 'inbox', // Indicate that this is an inbox email
     };
 
     Emails.addMail(SentMail); 

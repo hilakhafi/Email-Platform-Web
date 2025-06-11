@@ -190,27 +190,26 @@ export default function MailHome() {
     fetchMails();
   }, []);
 
-// Fetch labels (assuming an endpoint exists)
 useEffect(() => {
   const updatedCategories = defaultCategories.map(category => {
     let count = 0;
-    if (category.name === 'Inbox') {
-      count = mails.filter(mail => !mail.isArchived && !mail.isDeleted).length;
+
+    if (category.name === 'All mail') {
+      // כולל הכל חוץ מספאם ואשפה
+      count = mails.filter(mail => mail.category !== 'Spam' && mail.category !== 'Trash').length;
     } else if (category.name === 'Starred') {
       count = mails.filter(mail => mail.isStarred).length;
-    } else if (category.name === 'Sent') {
-      count = mails.filter(mail => mail.isSent).length;
-    } else if (category.name === 'Drafts') {
-      count = mails.filter(mail => mail.isDraft).length;
-    } else if (category.name === 'Spam') {
-      count = mails.filter(mail => mail.isSpam).length;
-    } else if (category.name === 'Trash') {
-      count = mails.filter(mail => mail.isDeleted).length;
+    } else {
+      // כל שאר הקטגוריות: Inbox, Sent, Drafts, Spam, Trash
+      count = mails.filter(mail => mail.category === category.name).length;
     }
+
     return { ...category, count };
   });
+
   setCategories(updatedCategories);
 }, [mails]);
+
 
 function getCurrentUserId() {
   const token = localStorage.getItem("token");
@@ -231,26 +230,23 @@ function filterMailsByCategory() {
   
   switch (selectedCategory) {
     case 'Inbox':
-      //filtered = mails.filter(mail => mail.to === userId && !mail.isDeleted && !mail.isSpam );
-      filtered = mails.filter(mail => mail.to === userId && !mail.isDeleted && !mail.isSpam && mail.isInbox);
+      filtered = mails.filter(mail => mail.ownerId === userId && mail.category === 'inbox');
 
       break;
     case 'Starred':
-      filtered = mails.filter(mail => mail.isStarred);
+      filtered = mails.filter(mail => mail.ownerId === userId && mail.category === 'starred' );
       break;
     case 'Sent':
-      //filtered = mails.filter(mail => mail.from === userId);
-      filtered = mails.filter(mail => mail.from === userId && mail.isSent);
-
+      filtered = mails.filter(mail => mail.ownerId === userId && mail.category === 'sent');
       break;
     case 'Drafts':
-      filtered = mails.filter(mail => mail.isDraft && mail.from === userId);
+      filtered = mails.filter(mail => mail.from === userId && mail.category === 'drafts');
       break;
     case 'Spam':
-      filtered = mails.filter(mail => mail.isSpam);
+      filtered = mails.filter(mail => mail.category === 'spam');
       break;
     case 'Trash':
-      filtered = mails.filter(mail => mail.isDeleted);
+      filtered = mails.filter(mail => mail.category === 'trash');
       break;
     default:
       filtered = mails;
@@ -261,8 +257,7 @@ function filterMailsByCategory() {
     const lower = searchTerm.toLowerCase();
     filtered = filtered.filter(mail =>
       (mail.subject && mail.subject.toLowerCase().includes(lower)) ||
-      (mail.body && mail.body.toLowerCase().includes(lower)) ||
-      (mail.to && mail.to.toLowerCase().includes(lower))
+      (mail.body && mail.body.toLowerCase().includes(lower))
     );
   }
 
