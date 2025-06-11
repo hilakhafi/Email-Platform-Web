@@ -7,6 +7,37 @@ function ComposeModal({ onClose, darkMode }) {
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
 
+ // בתוך ComposeModal.jsx
+const handleSend = async () => {
+  // if (!to || !subject || !body) {
+  //   alert("Please fill in all fields.");
+  //   return;
+  // }
+
+  try {
+    const token = localStorage.getItem("token"); // או sessionStorage או context
+    console.log("Sending with token:", token);
+    const response = await fetch('http://localhost:4000/api/mails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ sendTo: to, subject, body }),
+    });
+    
+    if (response.ok) {
+      alert("Email sent successfully!");
+      onClose(); // סגירת המודל
+    } else {
+      const { error } = await response.json();
+      alert("Error: " + error);
+    }
+  } catch (err) {
+    alert("An error occurred: " + err.message);
+  }
+};
+
 
 
   return (
@@ -50,7 +81,7 @@ function ComposeModal({ onClose, darkMode }) {
             <button onClick={onClose} className="cancel-button">
               Cancel
             </button>
-            <button className="send-button">
+            <button onClick={handleSend} className="send-button">
               <Send size={16} />
               Send
             </button>

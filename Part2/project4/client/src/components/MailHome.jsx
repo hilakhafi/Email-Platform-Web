@@ -83,6 +83,38 @@ useEffect(() => {
   setCategories(updatedCategories);
 }, [mails]);
 
+function getCurrentUserId() {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.userId;
+  } catch {
+    return null;
+  }
+}
+
+function filterMailsByCategory() {
+  const userId = getCurrentUserId();
+  if (!userId) return [];
+
+  switch (selectedCategory) {
+    case 'Inbox':
+      return mails.filter(mail => mail.to === userId && !mail.isDeleted && !mail.isSpam);
+    case 'Starred':
+      return mails.filter(mail => mail.isStarred);
+    case 'Sent':
+      return mails.filter(mail => mail.from === userId);
+    case 'Drafts':
+      return mails.filter(mail => mail.isDraft && mail.from === userId);
+    case 'Spam':
+      return mails.filter(mail => mail.isSpam);
+    case 'Trash':
+      return mails.filter(mail => mail.isDeleted);
+    default:
+      return mails;
+  }
+}
 
   return (
     <div className={`mail-home ${darkMode ? 'dark' : 'light'}`}>
@@ -142,7 +174,7 @@ useEffect(() => {
         )}
 
         <MailList
-          mails={mails}
+          mails={filterMailsByCategory()}
           loading={loading}
           error={error}
           selectedMail={selectedMail}
