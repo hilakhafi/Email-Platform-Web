@@ -117,7 +117,6 @@ exports.postMail = async (req, res) => {
       spam: isSpam, // Check if the email is spam
       preview,
       isRead: false,
-      category: isSpam ? null : 'sent',
       isSent: true, // Indicate that this is a sent email
       isInbox: false // Indicate that this is not an inbox email
     };
@@ -132,7 +131,6 @@ exports.postMail = async (req, res) => {
       spam: isSpam, // Check if the email is spam
       preview,
       isRead: false,
-      category: isSpam ? null : 'Inbox',
       isSent: false, // Indicate that this is a sent email
       isInbox: true // Indicate that this is not an inbox email
     };
