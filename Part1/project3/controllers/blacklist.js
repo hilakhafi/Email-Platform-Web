@@ -69,14 +69,11 @@ exports.markMailAsSpam = async (req, res) => {
   }
 
   try {
-    const urls = [...extractUrls(subject), ...extractUrls(body)];
-
-    for (const url of urls) {
-      await BlacklistService.add(url);
-    }
+    await BlacklistService.add(subject, body);
 
     return res.status(201).json({ message: 'Mail marked as spam and URLs blacklisted' });
   } catch (error) {
     return res.status(500).json({ error: 'Failed to mark mail as spam', details: error.message });
   }
 };
+
