@@ -140,18 +140,26 @@
 }
 
 .user-avatar {
-  width: 2rem;
-  height: 2rem;
-  background-color: #3b82f6;
-  border-radius: 9999px;
+  width: 52px; /* או יותר גדול לפי טעמך */
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: white;
-  user-select: none;
+  background: none; /* מסיר רקע */
+  border: none;     /* מסיר מסגרת אם יש */
+  padding: 0;
+  cursor: pointer;
 }
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
 
 /* Main content */
 .main-content {

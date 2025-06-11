@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Register.css";
 
@@ -16,9 +16,18 @@ function Register() {
     profileImage: null,
   });
 
+  const [previewImage, setPreviewImage] = useState(null);
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    return () => {
+      if (previewImage) {
+        URL.revokeObjectURL(previewImage);
+      }
+    };
+  }, [previewImage]);
 
   // אימות לשלב הנוכחי
   const validateStep = () => {
@@ -225,13 +234,38 @@ function Register() {
             <p className="error-text">{errors.reWritePass}</p>
           )}
 
-          <input
+          {/* <input
             type="file"
             accept="image/*"
             onChange={(e) =>
               setFormData({ ...formData, profileImage: e.target.files[0] })
             }
+          /> */}
+
+          <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            setFormData({ ...formData, profileImage: file });
+
+            if (file) {
+              setPreviewImage(URL.createObjectURL(file));
+            } else {
+              setPreviewImage(null);
+            }
+          }}
+        />
+        {previewImage && (
+        <div className="image-preview">
+          <img
+            src={previewImage}
+            alt="Preview"
+            style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "10px" }}
           />
+        </div>
+      )}
+
         </>
       )}
 
