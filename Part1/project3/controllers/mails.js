@@ -116,10 +116,23 @@ exports.postMail = async (req, res) => {
       to: recipient.id,
       subject,
       body,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      isSent: true,
+      isDraft: false,
+      isInbox: false, // אצל השולח זה לא מייל "נכנס"
     };
-
+    const inboxMail = {
+      ...newMail,
+      id: Emails.emails.length + 2,  // מזהה חדש
+      from: userId,
+      to: recipient.id,
+      isSent: false,         // אצל המקבל זה לא מייל "שנשלח"
+      isDraft: false,
+      isInbox: true          // אופציונלי לסינון
+    };
     Emails.addMail(newMail); 
+    Emails.addMail(inboxMail); 
+
     console.log(Emails.emails);
     return res.status(201).json({});
 
