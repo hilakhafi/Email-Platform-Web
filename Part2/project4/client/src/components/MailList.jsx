@@ -3,7 +3,7 @@ import { Mail, Star, RefreshCw, MoreHorizontal } from 'lucide-react';
 import '../styles/MailList.css';
 
 
-function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, selectedCategory, onRefresh }) {
+function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, selectedCategory, onRefresh, toggleStar, moveToTrash }) {
   const themeClass = darkMode ? 'dark' : 'light';
 
   if (loading) {

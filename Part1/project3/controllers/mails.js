@@ -119,6 +119,7 @@ exports.postMail = async (req, res) => {
       preview,
       isRead: false,
       category: 'sent', // Indicate that this is a sent email
+      isStarred: false, // Default value for isStarred
     };
 
     const InboxMail = {
@@ -133,6 +134,7 @@ exports.postMail = async (req, res) => {
       preview,
       isRead: false,
       category: 'inbox', // Indicate that this is an inbox email
+      isStarred: false, // Default value for isStarred
     };
 
     Emails.addMail(SentMail); 

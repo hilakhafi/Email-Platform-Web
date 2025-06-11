@@ -212,7 +212,7 @@ function filterMailsByCategory() {
       filtered = mails.filter(mail => mail.ownerId === userId && mail.category === 'inbox');
       break;
     case 'Starred':
-      filtered = mails.filter(mail => mail.ownerId === userId && mail.category === 'starred' );
+      filtered = mails.filter(mail => mail.ownerId === userId && mail.isStarred);
       break;
     case 'Sent':
       filtered = mails.filter(mail => mail.ownerId === userId && mail.category === 'sent');
@@ -253,7 +253,7 @@ const toggleStar = (mailId) => {
 const moveToTrash = (mailId) => {
   setMails((prevMails) =>
     prevMails.map((mail) =>
-      mail.id === mailId ? { ...mail, isDeleted: true } : mail
+      mail.id === mailId ? { ...mail, category: "trash" } : mail
     )
   );
 };
@@ -383,7 +383,8 @@ const moveToTrash = (mailId) => {
           darkMode={darkMode}
           selectedCategory={selectedCategory}
           onRefresh={fetchMails}  // <-- פונקציה שמרעננת מיילים
-
+          toggleStar={toggleStar}
+          moveToTrash={moveToTrash}
         />
 
         <MailView mail={selectedMail} darkMode={darkMode} />
