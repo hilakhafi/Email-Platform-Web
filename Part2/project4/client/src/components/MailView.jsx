@@ -8,6 +8,7 @@ function MailView({ mail, darkMode }) {
   const [loadingUser, setLoadingUser] = useState(false);
   const [errorUser, setErrorUser] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     if (!mail || !mail.from) {
@@ -41,6 +42,41 @@ function MailView({ mail, darkMode }) {
     fetchUser();
   }, [mail]);
 
+  async function handleMarkAsSpam(id) {
+  try {
+    await fetch(`http://localhost:4000/api/mails/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token'),
+      },
+      body: JSON.stringify({ spam: true }),
+    });
+    setShowMenu(false);
+    window.location.reload(); // או עדכון סטייט מקומי
+  } catch (error) {
+    console.error('Failed to mark as spam:', error);
+  }
+}
+
+async function handleMarkAsUnread(id) {
+  try {
+    await fetch(`http://localhost:4000/api/mails/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token'),
+      },
+      body: JSON.stringify({ isRead: false }),
+    });
+    setShowMenu(false);
+    window.location.reload(); // או עדכון סטייט
+  } catch (error) {
+    console.error('Failed to mark as unread:', error);
+  }
+}
+
+
   if (!mail) {
     return (
       <div className={`mailview-empty ${darkMode ? 'dark' : 'light'}`}>
@@ -63,7 +99,18 @@ function MailView({ mail, darkMode }) {
         <div className="actions">
           <button className="icon-btn"><Archive size={18} /></button>
           <button className="icon-btn"><Trash2 size={18} /></button>
-          <button className="icon-btn"><MoreHorizontal size={18} /></button>
+          <div className="dropdown-wrapper">
+          <button className="icon-btn" onClick={() => setShowMenu(prev => !prev)}>
+            <MoreHorizontal size={18} />
+          </button>
+
+      {showMenu && (
+        <div className="dropdown-menu">
+          <button onClick={() => handleMarkAsSpam(mail.id)}>Mark as Spam</button>
+          <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
+        </div>
+      )}
+</div>
         </div>
 
         <div className="sender-info">
