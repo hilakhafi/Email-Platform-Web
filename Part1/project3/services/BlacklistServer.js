@@ -73,39 +73,69 @@ const extractUrls = (text) => {
 };
 
 // checls if the mail includes blocked links
+// const check = async (subject, body) => {
+
+//     const urls = [...extractUrls(subject), ...extractUrls(body)];
+
+//     if (urls.length === 0) return false;
+
+//     for (const url of urls) {
+//       try {
+//         const response = await sendToServer('GET', url);
+//         let bloom, exact;
+//         const parts = response.split('\n\n');
+//         if (parts.length === 2) {
+//           [bloom, exact] = parts[1].split(' ');
+//         } else {
+//           bloom = response.trim();
+//           exact = undefined;
+//         }
+
+//         if (bloom === 'true' && (exact === 'true' || exact === undefined)) {
+//           return true;  // block the email if any link is blocked
+//         }
+
+//         //unexpected response handling
+//         if (bloom !== 'true' && bloom !== 'false' && bloom !== undefined) {
+//           throw new Error(`Unexpected response from blacklist server: ${response}`);
+//         }
+
+//       } catch (error) {
+//         throw error;  // rethrow the error to be handled by the caller
+//       }
+//   }
+//   return false; // all links are valid, not blocked
+// };
 const check = async (subject, body) => {
-
+  try {
     const urls = [...extractUrls(subject), ...extractUrls(body)];
-
     if (urls.length === 0) return false;
 
     for (const url of urls) {
-  try {
-    const response = await sendToServer('GET', url);
-    let bloom, exact;
-    const parts = response.split('\n\n');
-    if (parts.length === 2) {
-      [bloom, exact] = parts[1].split(' ');
-    } else {
-      bloom = response.trim();
-      exact = undefined;
-    }
+      const response = await sendToServer('GET', url);
+      let bloom, exact;
+        const parts = response.split('\n\n');
+        if (parts.length === 2) {
+          [bloom, exact] = parts[1].split(' ');
+        } else {
+          bloom = response.trim();
+          exact = undefined;
+        }
 
-    if (bloom === 'true' && (exact === 'true' || exact === undefined)) {
-      return true;  // block the email if any link is blocked
-    }
+        if (bloom === 'true' && (exact === 'true' || exact === undefined)) {
+          return true;  // block the email if any link is blocked
+        }
 
-    //unexpected response handling
-    if (bloom !== 'true' && bloom !== 'false' && bloom !== undefined) {
-      throw new Error(`Unexpected response from blacklist server: ${response}`);
+      if (bloom === 'true' && (exact === 'true' || exact === undefined)) {
+        return true;
+      }
     }
-
+    return false;
   } catch (error) {
-    throw error;  // rethrow the error to be handled by the caller
+    console.error('[ERROR] Failed to check blacklist:', error);
+    // כאן מחזירים false או true לפי ההחלטה שלך, לדוגמה false כדי לא לחסום בשגיאה
+    return false;
   }
-}
-
-  return false; // all links are valid, not blocked
 };
 
 // Add a URL to the blacklist
