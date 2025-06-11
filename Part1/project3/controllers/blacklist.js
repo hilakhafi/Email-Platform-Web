@@ -60,3 +60,23 @@ exports.checkEmailForSpam = async (req, res) => {
         res.status(500).json({ error: 'Error checking spam', details: err.message });
     }
 };
+
+exports.markMailAsSpam = async (req, res) => {
+  const { mailId, subject, body } = req.body;
+
+  if (!mailId || !subject || !body) {
+    return res.status(400).json({ error: 'mailId, subject and body are required' });
+  }
+
+  try {
+    const urls = [...extractUrls(subject), ...extractUrls(body)];
+
+    for (const url of urls) {
+      await BlacklistService.add(url);
+    }
+
+    return res.status(201).json({ message: 'Mail marked as spam and URLs blacklisted' });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to mark mail as spam', details: error.message });
+  }
+};
