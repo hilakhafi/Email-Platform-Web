@@ -27,7 +27,7 @@ function MailView({ mail, darkMode }) {
     </div>
 
     <div className="sender-info">
-    <div className="sender-avatar">{mail?.sender?.charAt(0) || '?'}</div>
+    <div className="sender-avatar">{mail?.from?.charAt(0) || '?'}</div>
       <div className="sender-details">
         <div className="sender-name">{mail.from}</div>
         <div className="send-time">

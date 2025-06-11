@@ -320,7 +320,7 @@
     transform: rotate(360deg);
   }
 }
-.category-label.spam {
+/* .category-label.spam {
   background-color: #fee2e2;
   color: #b91c1c;
 }
@@ -333,4 +333,9 @@
 .dark .mail-item.spam {
   background-color: #4b1e1e;
   border-left: 4px solid #f87171;
+} */
+
+.mail-date-small {
+  font-size: 0.8rem;
+  color: gray;
 }
