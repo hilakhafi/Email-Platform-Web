@@ -45,3 +45,18 @@ exports.removeFromBlackList = async (req, res) => {
         res.status(500).json({ error: 'Failed to remove from blacklist' });
     }
 };
+
+exports.checkEmailForSpam = async (req, res) => {
+    const { subject, body } = req.body;
+
+    if (!subject || !body) {
+        return res.status(400).json({ error: 'subject and body are required' });
+    }
+
+    try {
+        const isSpam = await BlacklistService.check(subject, body);
+        res.status(200).json({ spam: isSpam });
+    } catch (err) {
+        res.status(500).json({ error: 'Error checking spam', details: err.message });
+    }
+};

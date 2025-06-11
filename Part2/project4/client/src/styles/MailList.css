@@ -320,3 +320,17 @@
     transform: rotate(360deg);
   }
 }
+.category-label.spam {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.mail-item.spam {
+  border-left: 4px solid #dc2626;
+  background-color: #fff1f2;
+}
+
+.dark .mail-item.spam {
+  background-color: #4b1e1e;
+  border-left: 4px solid #f87171;
+}

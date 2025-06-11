@@ -96,7 +96,6 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("🚀 handleSubmit called"); // << בדיקה
 
     const validationErrors = validateAll();
     if (Object.keys(validationErrors).length > 0) {

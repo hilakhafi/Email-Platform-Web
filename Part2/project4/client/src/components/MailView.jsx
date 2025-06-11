@@ -1,6 +1,7 @@
 import React from 'react';
-import { Mail, Archive, Trash2, MoreHorizontal } from 'lucide-react';
+import { Mail, Archive, Trash2, MoreHorizontal, AlertTriangle } from 'lucide-react';
 import '../styles/MailView.css';
+
 function MailView({ mail, darkMode }) {
   if (!mail) {
     return (
@@ -15,38 +16,39 @@ function MailView({ mail, darkMode }) {
   }
 
   return (
-    <div className={`mailview-container ${darkMode ? 'dark' : 'light'}`}>
-      <div className="mailview-header">
-        <h1 className="mailview-subject">{mail.subject}</h1>
+    <div className="mailview-header">
+  <h1 className="mailview-subject">{mail.subject}</h1>
 
-        <div className="mailview-actions-sender">
-          <div className="actions">
-            <button className="icon-btn"><Archive size={18} /></button>
-            <button className="icon-btn"><Trash2 size={18} /></button>
-            <button className="icon-btn"><MoreHorizontal size={18} /></button>
-          </div>
+  <div className="mailview-actions-sender">
+    <div className="actions">
+      <button className="icon-btn"><Archive size={18} /></button>
+      <button className="icon-btn"><Trash2 size={18} /></button>
+      <button className="icon-btn"><MoreHorizontal size={18} /></button>
+    </div>
 
-          <div className="sender-info">
-            <div className="sender-avatar">{mail.sender.charAt(0)}</div>
-            <div className="sender-details">
-              <div className="sender-name">{mail.sender}</div>
-              <div className="send-time">{mail.date} at {mail.time}</div>
-            </div>
-          </div>
+    <div className="sender-info">
+    <div className="sender-avatar">{mail?.sender?.charAt(0) || '?'}</div>
+      <div className="sender-details">
+        <div className="sender-name">{mail.from}</div>
+        <div className="send-time">
+          {new Date(mail.timestamp).toLocaleDateString()} at {new Date(mail.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </div>
       </div>
+    </div>
+  </div>
+
+      {mail.spam && (
+        <div className="spam-warning">
+          <AlertTriangle size={18} className="spam-icon" />
+          <span>This email has been marked as spam due to suspicious content.</span>
+        </div>
+      )}
 
       <div className="mailview-body">
-        <p className="mailview-text preview-text">{mail.preview}</p>
-        <p className="mailview-text">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </p>
-        <p className="mailview-text">
-          Best regards,<br />
-          {mail.sender}
-        </p>
-      </div>
+    <p className="mailview-text">{mail.body}</p>
+    </div>
+
+
 
       <div className="mailview-footer">
         <div className="footer-buttons">

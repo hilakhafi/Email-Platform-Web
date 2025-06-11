@@ -89,7 +89,10 @@ export default function MailHome() {
 
             console.log('Profile image URL:', avatarUrl);
           setUserInfo({
-            name: `${userData.first_name} ${userData.last_name}` || "User",
+            // name: `${userData.first_name} ${userData.last_name}` || "User",
+            name: userData.first_name && userData.last_name
+            ? `${userData.first_name} ${userData.last_name}`
+            : "User",
             email: userData.mail || "user@example.com",
             avatar: userData.profileImage ? `http://localhost:4000/${userData.profileImage.replace(/\\/g, '/')}` : null,
             username: userData.username,
@@ -158,27 +161,60 @@ export default function MailHome() {
     fetchMails();
   }, []);
 
-  // Fetch labels (assuming an endpoint exists)
-  useEffect(() => {
-    const updatedCategories = defaultCategories.map(category => {
-      let count = 0;
-      if (category.name === 'Inbox') {
-        count = mails.filter(mail => !mail.isArchived && !mail.isDeleted).length;
-      } else if (category.name === 'Starred') {
-        count = mails.filter(mail => mail.isStarred).length;
-      } else if (category.name === 'Sent') {
-        count = mails.filter(mail => mail.isSent).length;
-      } else if (category.name === 'Drafts') {
-        count = mails.filter(mail => mail.isDraft).length;
-      } else if (category.name === 'Spam') {
-        count = mails.filter(mail => mail.isSpam).length;
-      } else if (category.name === 'Trash') {
-        count = mails.filter(mail => mail.isDeleted).length;
-      }
-      return { ...category, count };
-    });
-    setCategories(updatedCategories);
-  }, [mails]);
+// Fetch labels (assuming an endpoint exists)
+useEffect(() => {
+  const updatedCategories = defaultCategories.map(category => {
+    let count = 0;
+    if (category.name === 'Inbox') {
+      count = mails.filter(mail => !mail.isArchived && !mail.isDeleted).length;
+    } else if (category.name === 'Starred') {
+      count = mails.filter(mail => mail.isStarred).length;
+    } else if (category.name === 'Sent') {
+      count = mails.filter(mail => mail.isSent).length;
+    } else if (category.name === 'Drafts') {
+      count = mails.filter(mail => mail.isDraft).length;
+    } else if (category.name === 'Spam') {
+      count = mails.filter(mail => mail.isSpam).length;
+    } else if (category.name === 'Trash') {
+      count = mails.filter(mail => mail.isDeleted).length;
+    }
+    return { ...category, count };
+  });
+  setCategories(updatedCategories);
+}, [mails]);
+
+function getCurrentUserId() {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.userId;
+  } catch {
+    return null;
+  }
+}
+
+function filterMailsByCategory() {
+  const userId = getCurrentUserId();
+  if (!userId) return [];
+
+  switch (selectedCategory) {
+    case 'Inbox':
+      return mails.filter(mail => mail.to === userId && !mail.isDeleted && !mail.isSpam && mail.isInbox);
+    case 'Starred':
+      return mails.filter(mail => mail.isStarred);
+    case 'Sent':
+      return mails.filter(mail => mail.from === userId && mail.isSent);
+    case 'Drafts':
+      return mails.filter(mail => mail.isDraft && mail.from === userId);
+    case 'Spam':
+      return mails.filter(mail => mail.isSpam);
+    case 'Trash':
+      return mails.filter(mail => mail.isDeleted);
+    default:
+      return mails;
+  }
+}
 
   return (
     <div className={`mail-home ${darkMode ? 'dark' : 'light'}`}>
@@ -283,7 +319,7 @@ export default function MailHome() {
         )}
 
         <MailList
-          mails={mails}
+          mails={filterMailsByCategory()}
           loading={loading}
           error={error}
           selectedMail={selectedMail}
