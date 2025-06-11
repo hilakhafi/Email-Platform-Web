@@ -104,11 +104,8 @@ exports.postMail = async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const block = await BlacklistServer.check(subject, body);
-
-    if (block) {
-      return res.status(400).json({ error: 'URL is blacklisted' });
-    }
+    const isSpam = await BlacklistServer.check(subject, body); 
+    const preview = body.substring(0, 20) + '...'; 
 
     const newMail = {
       id: Emails.emails.length + 1,
@@ -116,7 +113,10 @@ exports.postMail = async (req, res) => {
       to: recipient.id,
       subject,
       body,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      spam: isSpam, // Check if the email is spam
+      preview,
+      isRead: false
     };
 
     Emails.addMail(newMail); 
