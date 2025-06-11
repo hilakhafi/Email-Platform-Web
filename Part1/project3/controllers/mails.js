@@ -121,7 +121,6 @@ exports.postMail = async (req, res) => {
     };
 
     Emails.addMail(newMail); 
-    Emails.addMail(inboxMail); 
 
     console.log(Emails.emails);
     return res.status(201).json({});
