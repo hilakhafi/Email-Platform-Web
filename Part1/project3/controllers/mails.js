@@ -104,10 +104,10 @@ exports.postMail = async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
     console.log("Calling BlacklistServer.check");
-    const isSpam = await BlacklistServer.check(subject, body); 
-    console.log("isSpam result:", isSpam);
+    //const isSpam = await BlacklistServer.check(subject, body); 
+    //console.log("isSpam result:", isSpam);
     const preview = body.substring(0, 20) + '...'; 
-
+    
     const SentMail = {
       id: Emails.emails.length + 1,
       ownerId: userId,
@@ -116,7 +116,8 @@ exports.postMail = async (req, res) => {
       subject,
       body,
       timestamp: new Date().toISOString(),
-      spam: isSpam, // Check if the email is spam
+      // spam: isSpam, // Check if the email is spam
+      spam: false, // For now, we assume the email is not spam
       preview,
       isRead: false,
       category: 'sent', // Indicate that this is a sent email
@@ -131,7 +132,8 @@ exports.postMail = async (req, res) => {
       subject,
       body,
       timestamp: new Date().toISOString(),
-      spam: isSpam, // Check if the email is spam
+      //spam: isSpam, // Check if the email is spam
+      spam: false, // For now, we assume the email is not spam
       preview,
       isRead: false,
       category: 'inbox', // Indicate that this is an inbox email

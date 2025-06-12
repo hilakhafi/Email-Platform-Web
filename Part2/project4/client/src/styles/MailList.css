@@ -351,3 +351,73 @@
 .trash-button:focus {
   outline: none; /* מונע קו פוקוס גם אחרי לחיצה */
 }
+
+.permanent-delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #e63946; /* אדום בולט */
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.permanent-delete-btn:hover {
+  color: #d62828;
+}
+
+.mail-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* רווח בין הכותרת לכפתור המחיקה */
+}
+
+.header-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.permanent-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--danger-color, #d9534f);
+  transition: color 0.2s ease;
+}
+
+.permanent-delete-btn:hover {
+  color: #a94442;
+}
+
+
+/* תיקון צבע אייקונים במצב Light */
+.light .icon-button svg {
+  color: #6b7280;
+}
+
+.light .icon-button:hover svg {
+  color: #374151;
+}
+
+.spam-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  margin-left: 12px;
+  transition: color 0.2s ease;
+}
+
+.spam-action-btn:hover {
+  color: #dc2626;
+}

@@ -20,7 +20,7 @@ export default function MailHome() {
   const [mails, setMails] = useState([]);
   const [selectedMail, setSelectedMail] = useState(null);
   const [showCompose, setShowCompose] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('Inbox');
+  const [selectedCategory, setSelectedCategory] = useState('inbox');
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -63,14 +63,15 @@ export default function MailHome() {
     }
 
     const data = await res.json();
+    console.log("Fetched mails:", data);
     setMails(data);
-
-    // כאן נעדכן את selectedMail:
+    
+    //כאן נעדכן את selectedMail:
     if (selectedMail) {
       const updatedMail = data.find(mail => mail.id === selectedMail.id);
       setSelectedMail(updatedMail || null);  // אם לא נמצא, מאפסים ל-null
     }
-    
+ 
   } catch (err) {
     setError(err.message);
     setMails([]);
@@ -242,22 +243,115 @@ function filterMailsByCategory() {
   return filtered;
 }
 
-const toggleStar = (mailId) => {
-  setMails((prevMails) =>
-    prevMails.map((mail) =>
-      mail.id === mailId ? { ...mail, isStarred: !mail.isStarred } : mail
-    )
-  );
+const toggleStar = async (mailId, currentStarred) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No token found.");
+
+    const res = await fetch(`http://localhost:4000/api/mails/${mailId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ isStarred: !currentStarred }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to toggle star");
+    }
+
+    setMails((prevMails) =>
+      prevMails.map((mail) =>
+        mail.id === mailId ? { ...mail, isStarred: !currentStarred } : mail
+      )
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
+const moveToTrash = async (mailId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No token found.");
+
+    const res = await fetch(`http://localhost:4000/api/mails/${mailId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ category: "trash" }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to move mail to trash");
+    }
+
+    // אם העדכון הצליח, נעדכן גם ב־state המקומי:
+    setMails((prevMails) =>
+      prevMails.map((mail) =>
+        mail.id === mailId ? { ...mail, category: "trash", isStarred: false } : mail
+      )
+    );
+  } catch (err) {
+    console.error(err);
+    // אפשר להראות הודעת שגיאה למשתמש
+  }
 };
 
-const moveToTrash = (mailId) => {
-  setMails((prevMails) =>
-    prevMails.map((mail) =>
-      mail.id === mailId ? { ...mail, category: "trash" } : mail
-    )
-  );
+const moveToSpam = async (mailId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No token found.");
+
+    const res = await fetch(`http://localhost:4000/api/mails/${mailId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ spam: true }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to move mail to trash");
+    }
+
+    // אם העדכון הצליח, נעדכן גם ב־state המקומי:
+    setMails((prevMails) =>
+      prevMails.map((mail) =>
+        mail.id === mailId ? { ...mail, spam: true , isStarred: false } : mail
+      )
+    );
+  } catch (err) {
+    console.error(err);
+    // אפשר להראות הודעת שגיאה למשתמש
+  }
 };
 
+const handlePermanentDelete = async (id) => {
+  const confirmDelete = window.confirm("Are you sure you want to permanently delete this email?");
+  if (!confirmDelete) return;
+
+  try {
+    const res = await fetch(`/api/mails/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    if (!res.ok) throw new Error("Failed to delete email");
+
+    // מסננים את המייל שנמחק מה-state
+    setMails(prev => prev.filter(mail => mail.id !== id));
+    setSelectedMail(null); // ניקוי הבחירה
+  } catch (err) {
+    console.error(err);
+    alert("Failed to delete the email permanently");
+  }
+};
 
   return (
     <div className={`mail-home ${darkMode ? 'dark' : 'light'}`}>
@@ -385,6 +479,8 @@ const moveToTrash = (mailId) => {
           onRefresh={fetchMails}  // <-- פונקציה שמרעננת מיילים
           toggleStar={toggleStar}
           moveToTrash={moveToTrash}
+          handlePermanentDelete={handlePermanentDelete}
+          moveToSpam={moveToSpam}
         />
 
         <MailView mail={selectedMail} darkMode={darkMode} />
