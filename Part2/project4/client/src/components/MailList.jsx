@@ -160,6 +160,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
                       />
                     </button>
                   )}
+                  {mail.category !== 'trash' && (
                   <button
                     className="trash-button"
                     onClick={(e) => {
@@ -169,7 +170,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
                   >
                     <Trash2 size={20} />
                   </button>
-
+                  )}
                   {mail.isImportant && <div className="important-dot"></div>}
                 </div>
 

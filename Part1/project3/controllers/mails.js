@@ -42,7 +42,7 @@ exports.patchMail = (req, res) => {
 }
 
   // change body
-  const allowedFields = ['subject', 'body', 'isRead', 'link', 'isTrash', 'isStarred'];
+  const allowedFields = ['subject', 'body', 'isRead', 'link', 'category', 'isStarred'];
   for (const field of allowedFields) {
     if (req.body[field] !== undefined) {
       mail[field] = req.body[field];
@@ -117,7 +117,7 @@ exports.postMail = async (req, res) => {
       body,
       timestamp: new Date().toISOString(),
       // spam: isSpam, // Check if the email is spam
-      spam: false, // For now, we assume the email is not spam
+      //spam: false, // For now, we assume the email is not spam
       preview,
       isRead: false,
       category: 'sent', // Indicate that this is a sent email
@@ -133,7 +133,7 @@ exports.postMail = async (req, res) => {
       body,
       timestamp: new Date().toISOString(),
       //spam: isSpam, // Check if the email is spam
-      spam: false, // For now, we assume the email is not spam
+      //spam: false, // For now, we assume the email is not spam
       preview,
       isRead: false,
       category: 'inbox', // Indicate that this is an inbox email
