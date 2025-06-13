@@ -284,6 +284,8 @@
   border: none;
   text-align: left;
   cursor: pointer;
+  color: #000;
+
 }
 
 /* Hover effect for dropdown buttons */

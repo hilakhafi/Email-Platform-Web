@@ -421,7 +421,7 @@
 .spam-action-btn:hover {
   color: #dc2626;
 }
-.dropdown-menu {
+/* .dropdown-menu {
   position: absolute;
   top: 30px;
   right: 0;
@@ -444,4 +444,4 @@
 }
 .dropdown-item:hover {
   background-color: #f0f0f0;
-}
+} */

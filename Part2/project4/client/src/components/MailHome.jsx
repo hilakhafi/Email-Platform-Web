@@ -341,7 +341,7 @@ const moveToSpam = async (mailId) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ spam: true }),
+      body: JSON.stringify({ category: "spam" }),
     });
 
     if (!res.ok) {
