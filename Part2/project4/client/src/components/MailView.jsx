@@ -3,7 +3,7 @@ import { Mail, Archive, Trash2, MoreHorizontal, AlertTriangle } from 'lucide-rea
 import ComposeModal from './ComposeModal';
 import '../styles/MailView.css';
 
-function MailView({ mail, darkMode }) {
+function MailView({ mail, darkMode, restoreMail, moveToSpam  }) {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(false);
   const [errorUser, setErrorUser] = useState(null);
@@ -42,22 +42,22 @@ function MailView({ mail, darkMode }) {
     fetchUser();
   }, [mail]);
 
-  async function handleMarkAsSpam(id) {
-  try {
-    await fetch(`http://localhost:4000/api/mails/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('token'),
-      },
-      body: JSON.stringify({ spam: true }),
-    });
-    setShowMenu(false);
-    window.location.reload(); // או עדכון סטייט מקומי
-  } catch (error) {
-    console.error('Failed to mark as spam:', error);
-  }
-}
+//   async function handleMarkAsSpam(id) {
+//   try {
+//     await fetch(`http://localhost:4000/api/mails/${id}`, {
+//       method: 'PATCH',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': localStorage.getItem('token'),
+//       },
+//       body: JSON.stringify({ spam: true }),
+//     });
+//     setShowMenu(false);
+//     window.location.reload(); // או עדכון סטייט מקומי
+//   } catch (error) {
+//     console.error('Failed to mark as spam:', error);
+//   }
+// }
 
 async function handleMarkAsUnread(id) {
   try {
@@ -106,8 +106,9 @@ async function handleMarkAsUnread(id) {
 
       {showMenu && (
         <div className="dropdown-menu">
-          <button onClick={() => handleMarkAsSpam(mail.id)}>Mark as Spam</button>
+          <button onClick={() => moveToSpam(mail.id)}>Mark as Spam</button>
           <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
+          <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>
         </div>
       )}
 </div>

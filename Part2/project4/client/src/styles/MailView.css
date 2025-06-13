@@ -1,4 +1,4 @@
-/* כללי */
+/* General container for the mail view */
 .mailview-container {
   display: flex;
   flex-direction: column;
@@ -7,12 +7,13 @@
   background-color: white;
 }
 
+/* Dark mode style for the mail view */
 .mailview-container.dark {
   background-color: #1f2937;
   color: #d1d5db;
 }
 
-/* מצב ללא מייל נבחר */
+/* Empty state when no mail is selected */
 .mailview-empty {
   flex: 1;
   display: flex;
@@ -30,6 +31,7 @@
   color: #9ca3af;
 }
 
+/* Icon shown in empty state */
 .empty-icon {
   margin: 0 auto 1rem auto;
   color: #d1d5db;
@@ -39,18 +41,20 @@
   color: #6b7280;
 }
 
+/* Title text in empty state */
 .empty-title {
   font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
+/* Subtitle text in empty state */
 .empty-subtitle {
   font-size: 0.875rem;
   color: inherit;
 }
 
-/* כותרת */
+/* Mail header (subject area) */
 .mailview-header {
   border-bottom: 1px solid #e5e7eb;
   padding: 1.5rem;
@@ -62,6 +66,7 @@
   border-color: #374151;
 }
 
+/* Mail subject text */
 .mailview-subject {
   font-size: 1.25rem;
   font-weight: 600;
@@ -69,18 +74,20 @@
   color: inherit;
 }
 
-/* פעולות ומידע על השולח */
+/* Section containing actions and sender info */
 .mailview-actions-sender {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* Icons/actions (like delete, spam etc.) */
 .actions {
   display: flex;
   gap: 0.5rem;
 }
 
+/* Generic icon button */
 .icon-btn {
   padding: 0.5rem;
   border-radius: 9999px;
@@ -91,6 +98,7 @@
   color: inherit;
 }
 
+/* Hover style for icon buttons */
 .icon-btn:hover {
   background-color: rgba(243, 244, 246, 0.8);
 }
@@ -99,13 +107,14 @@
   background-color: #374151;
 }
 
-/* מידע על השולח */
+/* Sender info section */
 .sender-info {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
+/* Sender avatar circle with initials */
 .sender-avatar {
   width: 2.5rem;
   height: 2.5rem;
@@ -119,16 +128,19 @@
   font-size: 1.25rem;
 }
 
+/* Sender name and time column */
 .sender-details {
   display: flex;
   flex-direction: column;
 }
 
+/* Sender name text */
 .sender-name {
   font-weight: 600;
   color: inherit;
 }
 
+/* Timestamp of the mail */
 .send-time {
   font-size: 0.875rem;
   color: #6b7280;
@@ -138,19 +150,21 @@
   color: #9ca3af;
 }
 
-/* גוף המייל */
+/* Mail body content */
 .mailview-body {
   flex: 1;
   padding: 1.5rem;
   overflow-y: auto;
 }
 
+/* Mail text content */
 .mailview-text {
   line-height: 1.6;
   color: #1f2937;
   margin-top: 1rem;
 }
 
+/* Preview text style (used if necessary) */
 .mailview-text.preview-text {
   margin-top: 0;
 }
@@ -159,7 +173,7 @@
   color: #d1d5db;
 }
 
-/* תחתית עם כפתורים */
+/* Footer section with buttons */
 .mailview-footer {
   border-top: 1px solid #e5e7eb;
   padding: 1rem 1.5rem;
@@ -171,11 +185,13 @@
   border-color: #374151;
 }
 
+/* Wrapper for footer buttons */
 .footer-buttons {
   display: flex;
   gap: 0.5rem;
 }
 
+/* Generic button styles */
 .btn {
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
@@ -185,6 +201,7 @@
   border: 1px solid transparent;
 }
 
+/* Primary button (e.g., reply/send) */
 .btn.primary {
   background-color: #2563eb; /* blue-600 */
   color: white;
@@ -195,6 +212,7 @@
   background-color: #1d4ed8; /* blue-700 */
 }
 
+/* Secondary button (e.g., cancel) */
 .btn.secondary {
   background-color: transparent;
   border-color: #d1d5db;
@@ -213,6 +231,8 @@
 .mailview-container.dark .btn.secondary:hover {
   background-color: #374151;
 }
+
+/* Spam warning box */
 .spam-warning {
   display: flex;
   align-items: center;
@@ -225,20 +245,24 @@
   border-radius: 0.375rem;
 }
 
+/* Spam warning in dark mode */
 .dark .spam-warning {
   background-color: #4b1e1e;
   color: #fecaca;
   border-left-color: #f87171;
 }
 
+/* Icon in spam warning */
 .spam-icon {
   flex-shrink: 0;
-} 
+}
 
+/* Wrapper for dropdown menu */
 .dropdown-wrapper {
   position: relative;
 }
 
+/* Dropdown menu container */
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -251,6 +275,7 @@
   z-index: 999;
 }
 
+/* Buttons inside dropdown */
 .dropdown-menu button {
   display: block;
   width: 100%;
@@ -261,6 +286,7 @@
   cursor: pointer;
 }
 
+/* Hover effect for dropdown buttons */
 .dropdown-menu button:hover {
   background-color: #f2f2f2;
 }

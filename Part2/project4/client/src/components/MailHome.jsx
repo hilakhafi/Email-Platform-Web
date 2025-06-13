@@ -291,12 +291,42 @@ const moveToTrash = async (mailId) => {
     // אם העדכון הצליח, נעדכן גם ב־state המקומי:
     setMails((prevMails) =>
       prevMails.map((mail) =>
-        mail.id === mailId ? { ...mail, category: "trash", isStarred: false } : mail
+        mail.id === mailId ? { ...mail, category: "trash", isStarred: false, previousCategory: selectedCategory } : mail
       )
     );
   } catch (err) {
     console.error(err);
     // אפשר להראות הודעת שגיאה למשתמש
+  }
+};
+
+const restoreMail = async (mailId, previousCategory) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No token found.");
+
+    const res = await fetch(`http://localhost:4000/api/mails/${mailId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ category: previousCategory || "inbox", previousCategory: null }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to restore mail");
+    }
+
+    setMails((prevMails) =>
+      prevMails.map((mail) =>
+        mail.id === mailId
+          ? { ...mail, category: previousCategory || "inbox", previousCategory: null }
+          : mail
+      )
+    );
+  } catch (err) {
+    console.error(err);
   }
 };
 
@@ -321,7 +351,7 @@ const moveToSpam = async (mailId) => {
     // אם העדכון הצליח, נעדכן גם ב־state המקומי:
     setMails((prevMails) =>
       prevMails.map((mail) =>
-        mail.id === mailId ? { ...mail, spam: true , isStarred: false } : mail
+        mail.id === mailId ? { ...mail, category: "spam" , isStarred: false } : mail
       )
     );
   } catch (err) {
@@ -480,10 +510,14 @@ const handlePermanentDelete = async (id) => {
           toggleStar={toggleStar}
           moveToTrash={moveToTrash}
           handlePermanentDelete={handlePermanentDelete}
-          moveToSpam={moveToSpam}
+          
         />
 
-        <MailView mail={selectedMail} darkMode={darkMode} />
+        <MailView 
+        mail={selectedMail} darkMode={darkMode}
+        restoreMail={restoreMail}
+        moveToSpam={moveToSpam}
+        />
 
         {showCompose && (
           <ComposeModal 

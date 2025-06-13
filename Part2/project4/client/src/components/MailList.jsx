@@ -3,7 +3,7 @@ import { Mail, Star, RefreshCw, MoreHorizontal, CircleSlash, Trash2 } from 'luci
 import '../styles/MailList.css';
 
 
-function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, selectedCategory, onRefresh, toggleStar, moveToTrash, handlePermanentDelete, moveToSpam }) {
+function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, selectedCategory, onRefresh, toggleStar, moveToTrash, handlePermanentDelete}) {
   const themeClass = darkMode ? 'dark' : 'light';
   
   if (loading) {
@@ -34,33 +34,6 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
         <div className="mail-list-header">
           <div className="header-left">
             <h2 className="header-title">{selectedCategory}</h2>
-             {selectedMail && selectedCategory !== 'Trash' && !selectedMail.spam && (
-              <button
-                className="spam-action-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  moveToSpam(selectedMail.id);
-                }}
-                aria-label="סמן כספאם"
-                title="סמן כספאם"
-              >
-                <CircleSlash size={20} />
-              </button>
-            )}
-
-            {selectedCategory === 'Trash' && selectedMail && (
-              <button
-                className="permanent-delete-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePermanentDelete(selectedMail.id);
-                }}
-                aria-label="מחק לצמיתות"
-                title="מחק לצמיתות"
-              >
-                <Trash2 size={20} />
-              </button>
-            )}
           </div>
           <div className="header-actions">
             <button
@@ -70,9 +43,9 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
             >
               <RefreshCw size={18} />
             </button>
-            <button className="icon-button">
+            {/* <button className="icon-button">
               <MoreHorizontal size={18} />
-            </button>
+            </button> */}
           </div>
         </div>
         <div className="center empty-state">
@@ -89,7 +62,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
       <div className="mail-list-header">
         <div className="header-left">
           <h2 className="header-title">{selectedCategory}</h2>
-          {selectedMail && selectedCategory !== 'Trash' && !selectedMail.spam && (
+          {/* {selectedMail && selectedCategory !== 'Trash' && !selectedMail.spam && (
               <button
                 className="spam-action-btn"
                 onClick={(e) => {
@@ -101,7 +74,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
               >
                 <CircleSlash size={20} />
               </button>
-            )}
+            )} */}
           {selectedCategory === 'Trash' && selectedMail && (
             <button
               className="permanent-delete-btn"
@@ -124,9 +97,9 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
           >
             <RefreshCw size={18} />
           </button>
-          <button className="icon-button">
+          {/* <button className="icon-button">
             <MoreHorizontal size={18} />
-          </button>
+          </button> */}
         </div>
       </div>
 

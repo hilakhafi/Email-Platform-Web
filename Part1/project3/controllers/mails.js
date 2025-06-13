@@ -42,7 +42,7 @@ exports.patchMail = (req, res) => {
 }
 
   // change body
-  const allowedFields = ['subject', 'body', 'isRead', 'link', 'category', 'isStarred'];
+  const allowedFields = ['subject', 'body', 'isRead', 'link', 'category', 'isStarred', 'previousCategory'];
   for (const field of allowedFields) {
     if (req.body[field] !== undefined) {
       mail[field] = req.body[field];
@@ -121,6 +121,7 @@ exports.postMail = async (req, res) => {
       preview,
       isRead: false,
       category: 'sent', // Indicate that this is a sent email
+      previousCategory: 'sent', // Store the previous category for future reference
       isStarred: false, // Default value for isStarred
     };
 
@@ -137,6 +138,7 @@ exports.postMail = async (req, res) => {
       preview,
       isRead: false,
       category: 'inbox', // Indicate that this is an inbox email
+      previousCategory: 'inbox', // Store the previous category for future reference
       isStarred: false, // Default value for isStarred
     };
 
