@@ -164,6 +164,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
       <div className="mail-list-header">
         <div className="header-left">
           <h2 className="header-title">{selectedCategory}</h2>
+
           {selectedCategory === 'Trash' && selectedMail && (
             <button
               className="permanent-delete-btn"
@@ -190,17 +191,74 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
       </div>
 
       <div className="mail-list-scroll">
-        {mails.map((mail) => (
-          <MailItemWithUser
-            key={mail.id}
-            mail={mail}
-            selectedMail={selectedMail}
-            onSelect={onSelect}
-            darkMode={darkMode}
-            toggleStar={toggleStar}
-            moveToTrash={moveToTrash}
-          />
-        ))}
+        {mails.map((mail) => {
+          const isSelected = selectedMail?.id === mail.id;
+          const isUnread = !mail.isRead;
+
+          return (
+            <div
+              key={mail.id}
+              onClick={() => onSelect(mail)}
+              className={`mail-item 
+                ${isSelected ? 'selected' : ''} 
+                ${isUnread ? 'unread' : ''} 
+                ${mail.spam ? 'spam' : ''}`}
+            >
+              <div className="mail-item-content">
+                <div className="mail-item-meta">
+                  {mail.category !== 'trash' && (
+                    <button
+                      className="star-button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleStar(mail.id, mail.isStarred);
+                      }}
+                    >
+                      <Star
+                        size={16}
+                        className={`star-icon ${mail.isStarred ? 'starred' : ''}`}
+                      />
+                    </button>
+                  )}
+                  {mail.category !== 'trash' && (
+                  <button
+                    className="trash-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      moveToTrash(mail.id);
+                    }}
+                  >
+                    <Trash2 size={20} />
+                  </button>
+                  )}
+                  {mail.isImportant && <div className="important-dot"></div>}
+                </div>
+
+                <div className="mail-details">
+                  <div className="mail-header">
+                    <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>{mail.fromMail}</span>
+                    <span className="mail-date">{mail.timestamp}</span>
+                  </div>
+
+                  <div className={`mail-subject ${isUnread ? 'bold' : ''}`}>{mail.subject}</div>
+                  <div className="mail-preview">{mail.preview}</div>
+
+                  {mail.spam && (
+                    <div className="mail-category">
+                      <span className="category-label spam">Spam</span>
+                    </div>
+                  )}
+
+                  {mail.category && !mail.spam && (
+                    <div className="mail-category">
+                      <span className={`category-label ${mail.category.toLowerCase()}`}>{mail.category}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

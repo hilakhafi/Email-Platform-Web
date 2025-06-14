@@ -110,7 +110,8 @@ exports.postMail = async (req, res) => {
     const SentMail = {
       id: Emails.emails.length + 1,
       ownerId: userId,
-      from: userId,     
+      from: userId,  
+      fromMail: user.mail, // Add the sender's email   
       to: recipient.id,
       subject,
       body,
@@ -128,6 +129,7 @@ exports.postMail = async (req, res) => {
       id: Emails.emails.length + 2,
       ownerId: recipient.id,
       from: userId,     
+      fromMail: user.mail, // Add the sender's email   
       to: recipient.id,
       subject,
       body,
