@@ -62,19 +62,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
       <div className="mail-list-header">
         <div className="header-left">
           <h2 className="header-title">{selectedCategory}</h2>
-          {/* {selectedMail && selectedCategory !== 'Trash' && !selectedMail.spam && (
-              <button
-                className="spam-action-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  moveToSpam(selectedMail.id);
-                }}
-                aria-label="סמן כספאם"
-                title="סמן כספאם"
-              >
-                <CircleSlash size={20} />
-              </button>
-            )} */}
+
           {selectedCategory === 'Trash' && selectedMail && (
             <button
               className="permanent-delete-btn"
@@ -149,8 +137,8 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
 
                 <div className="mail-details">
                   <div className="mail-header">
-                    <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>{mail.from}</span>
-                    <span className="mail-date">{mail.date}</span>
+                    <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>{mail.fromMail}</span>
+                    <span className="mail-date">{mail.timestamp}</span>
                   </div>
 
                   <div className={`mail-subject ${isUnread ? 'bold' : ''}`}>{mail.subject}</div>

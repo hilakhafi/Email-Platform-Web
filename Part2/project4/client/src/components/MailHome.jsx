@@ -325,6 +325,7 @@ const restoreMail = async (mailId, previousCategory) => {
           : mail
       )
     );
+     setSelectedCategory(previousCategory.charAt(0).toUpperCase() + previousCategory.slice(1));
   } catch (err) {
     console.error(err);
   }
