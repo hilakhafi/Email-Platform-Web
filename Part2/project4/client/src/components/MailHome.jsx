@@ -311,7 +311,7 @@ const restoreMail = async (mailId, previousCategory) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ category: previousCategory || "inbox", previousCategory: null }),
+      body: JSON.stringify({ category: previousCategory}),
     });
 
     if (!res.ok) {
@@ -321,7 +321,7 @@ const restoreMail = async (mailId, previousCategory) => {
     setMails((prevMails) =>
       prevMails.map((mail) =>
         mail.id === mailId
-          ? { ...mail, category: previousCategory || "inbox", previousCategory: null }
+          ? { ...mail, category: previousCategory}
           : mail
       )
     );
@@ -330,18 +330,18 @@ const restoreMail = async (mailId, previousCategory) => {
   }
 };
 
-const moveToSpam = async (mailId) => {
+const moveToSpam = async (mail) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No token found.");
 
-    const res = await fetch(`http://localhost:4000/api/mails/${mailId}`, {
+    const res = await fetch(`http://localhost:4000/api/mails/${mail.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ category: "spam" }),
+      body: JSON.stringify({ category: "spam", isStarred: false }),
     });
 
     if (!res.ok) {
@@ -350,10 +350,27 @@ const moveToSpam = async (mailId) => {
 
     // אם העדכון הצליח, נעדכן גם ב־state המקומי:
     setMails((prevMails) =>
-      prevMails.map((mail) =>
-        mail.id === mailId ? { ...mail, category: "spam" , isStarred: false } : mail
+      prevMails.map((mailcheck) =>
+        mailcheck.id === mail.id ? { ...mailcheck, category: "spam" , isStarred: false } : mailcheck
       )
     );
+    
+    // 3. Extract + Add URLs to blacklist
+    // const blockedUrls = await BlacklistService.check(subject, body); // השתמשי בגרסה החדשה של check
+    // for (const url of blockedUrls) {
+
+      const res2 = await fetch("http://localhost:4000/api/blacklist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ subject: mail.subject, body: mail.body, }),
+      });
+
+      if (!res2.ok) {
+      throw new Error("Failed to move mail to blacklist");
+    }
   } catch (err) {
     console.error(err);
     // אפשר להראות הודעת שגיאה למשתמש

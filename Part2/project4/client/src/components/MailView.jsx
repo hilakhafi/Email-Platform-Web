@@ -106,7 +106,7 @@ async function handleMarkAsUnread(id) {
 
       {showMenu && (
         <div className="dropdown-menu">
-          <button onClick={() => moveToSpam(mail.id)}>Mark as Spam</button>
+          <button onClick={() => moveToSpam(mail)}>Mark as Spam</button>
           <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
           <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>
         </div>

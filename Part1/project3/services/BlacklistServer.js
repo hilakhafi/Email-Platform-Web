@@ -1,6 +1,6 @@
 const net = require('net');
 const PORT = 8080;
-const HOST = 'localhost'; // or the IP address of your blacklist server
+const HOST = 'blacklist'; // or the IP address of your blacklist server
 
 let client = null;
 let queue = [];
@@ -108,7 +108,7 @@ const extractUrls = (text) => {
 // };
 const check = async (subject, body) => {
   try {
-    const urls = [...extractUrls(subject), ...extractUrls(body)];
+        const urls = [...extractUrls(subject), ...extractUrls(body)];
     if (urls.length === 0) return false;
 
     for (const url of urls) {
@@ -153,6 +153,7 @@ const remove = async (url) => {
 
 module.exports = {
     sendToServer,
+    extractUrls, 
     check,
     add,
     remove

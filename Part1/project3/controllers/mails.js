@@ -1,6 +1,5 @@
 const Emails = require('../models/mails');
 const Users = require('../models/users');
-const BlacklistServer = require('../services/BlacklistServer');
 
 // Get the 50 most recent emails related to the user
 exports.get50Emails = (req, res) => {
