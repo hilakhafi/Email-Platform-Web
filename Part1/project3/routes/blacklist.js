@@ -11,6 +11,7 @@ router.delete('/:id', blacklistController.removeFromBlackList);
 //router.post('/url', blacklistController.checkEmailForSpam);
 // Mark an email as spam
 //router.post('/mark-spam', blacklistController.markMailAsSpam);
+router.post('/check', blacklistController.checkEmailForSpam);
 
 
 module.exports = router;
