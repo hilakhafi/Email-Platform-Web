@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Archive, Trash2, MoreHorizontal, AlertTriangle } from 'lucide-react';
+import { Mail, Archive, Trash2, MoreHorizontal, AlertTriangle, ArrowLeft } from 'lucide-react';
 import ComposeModal from './ComposeModal';
 import '../styles/MailView.css';
 
-function MailView({ mail, darkMode, restoreMail, moveToSpam  }) {
+function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose  }) {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(false);
   const [errorUser, setErrorUser] = useState(null);
@@ -101,7 +101,13 @@ async function handleMarkAsUnread(id) {
   const fromName = user ? `${user.first_name} ${user.last_name}` : loadingUser ? 'Loading...' : errorUser ? 'Unknown' : 'Unknown';
 
   return (
+    
     <div className="mailview-header">
+      <div className={`mailview-topbar ${darkMode ? 'dark' : 'light'}`}>
+        <button className="back-arrow" onClick={onClose}>
+          <ArrowLeft size={20} />
+        </button>
+      </div>
       <h1 className="mailview-subject">{mail.subject}</h1>
 
       <div className="mailview-actions-sender">
@@ -118,6 +124,7 @@ async function handleMarkAsUnread(id) {
           <button onClick={() => moveToSpam(mail)}>Mark as Spam</button>
           <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
           <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>
+
         </div>
       )}
 </div>
