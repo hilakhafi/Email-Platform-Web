@@ -144,7 +144,7 @@ const generateDefaultProfileImage = (letter) => {
 
       // אם לא צורפה תמונה → צור ברירת מחדל עם אות ראשונה מהאימייל
       if (!formData.profileImage) {
-        const firstLetter = formData.mail?.charAt(0) || "U";
+        const firstLetter = formData.username?.charAt(0) || "U";
         const blob = await generateDefaultProfileImage(firstLetter);
         const previewUrl = URL.createObjectURL(blob);
         setPreviewImage(previewUrl);
