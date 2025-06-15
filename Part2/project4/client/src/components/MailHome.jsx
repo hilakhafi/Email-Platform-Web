@@ -472,7 +472,7 @@ const handlePermanentDelete = async (id) => {
                 <div className="user-dropdown">
                   <div className="user-info">
                     <div className="user-details">
-                      <h3>{userInfo.name}</h3>
+                      <h3>{userInfo.username}</h3>
                       <p>{userInfo.email}</p>
                     </div>
                   </div>
