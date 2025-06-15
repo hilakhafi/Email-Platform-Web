@@ -94,7 +94,38 @@ function Register() {
     setStep(step - 1);
   };
 
-  const handleSubmit = async (e) => {
+  // פונקציה שיוצרת Blob של תמונה עם אות על רקע צבעוני
+const generateDefaultProfileImage = (letter) => {
+  const canvas = document.createElement("canvas");
+  canvas.width = 200;
+  canvas.height = 200;
+  const ctx = canvas.getContext("2d");
+
+  // צבע רקע אקראי מתוך רשימה
+  const colors = ["#f59e0b", "#10b981", "#3b82f6", "#ec4899", "#8b5cf6"];
+  const bgColor = colors[Math.floor(Math.random() * colors.length)];
+
+  // רקע
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // טקסט – האות הראשונה
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 100px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(letter.toUpperCase(), canvas.width / 2, canvas.height / 2);
+
+  // הפיכה ל־Blob
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => {
+      resolve(blob);
+    }, "image/png");
+  });
+};
+
+
+ const handleSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = validateAll();
@@ -106,38 +137,42 @@ function Register() {
     try {
       const data = new FormData();
       for (const key in formData) {
-        data.append(key, formData[key]);
+        if (key !== "profileImage") {
+          data.append(key, formData[key]);
+        }
       }
-      for (let pair of data.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
+
+      // אם לא צורפה תמונה → צור ברירת מחדל עם אות ראשונה מהאימייל
+      if (!formData.profileImage) {
+        const firstLetter = formData.mail?.charAt(0) || "U";
+        const blob = await generateDefaultProfileImage(firstLetter);
+        const previewUrl = URL.createObjectURL(blob);
+        setPreviewImage(previewUrl);
+        data.append("profileImage", blob, "generated-profile.png");
+      } else {
+        data.append("profileImage", formData.profileImage);
       }
-      console.log("📦 Sending data:", data);
+
       const response = await fetch("http://localhost:4000/api/users/register", {
         method: "POST",
         body: data,
       });
-      const result = await response.json(); // ← לקרוא פעם אחת בלבד
 
-    if (!response.ok) {
-      console.error("Server response error:", result);
-      setServerError(result.error || "Registration failed. Try again.");
-      return;
-    }
+      const result = await response.json();
+
+      if (!response.ok) {
+        console.error("Server response error:", result);
+        setServerError(result.error || "Registration failed. Try again.");
+        return;
+      }
 
       navigate("/login");
-      // if (!response.ok) {
-      //   const text = await response.text(); // ← לא json כדי לא להיתקע אם זה טקסט פשוט
-      //   console.error("Server response error:", text);
-      //   const errorData = await response.json();
-      //   throw new Error(errorData.message || "Registration failed. Try again.");
-      // }
-
-      // navigate("/login");
     } catch (err) {
       console.error("❌ Registration error:", err.message);
       setServerError(err.message);
     }
   };
+  
 
   return (
     <form className="register-form" onSubmit={handleSubmit}>
