@@ -24,14 +24,23 @@ function MailView({ mail, darkMode, restoreMail, moveToSpam  }) {
         const res = await fetch(`http://localhost:4000/api/users/${mail.from}`, {
           headers: {
             'user-id': mail.from,
+            'Authorization': localStorage.getItem('token'), // הוספת טוקן אם נדרש
           },
         });
 
-        if (!res.ok) throw new Error(`Failed to fetch user: ${res.status}`);
+        console.log("Response status:", res.status);
+        
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.log("Error response:", errorText);
+          throw new Error(`Failed to fetch user: ${res.status} - ${errorText}`);
+        }
 
         const data = await res.json();
+        console.log("user data received:", data);
         setUser(data);
       } catch (err) {
+        console.error("Error fetching user:", err);
         setErrorUser(err.message);
         setUser(null);
       } finally {
@@ -121,6 +130,7 @@ async function handleMarkAsUnread(id) {
             <div className="send-time">
               {new Date(mail.timestamp).toLocaleDateString()} at {new Date(mail.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
+            <div className="sender-email">{user && user.mail ? `<${user.mail}>` : ''}</div>
           </div>
         </div>
       </div>
@@ -149,9 +159,9 @@ async function handleMarkAsUnread(id) {
           onClose={() => setShowReplyModal(false)}
           darkMode={darkMode}
           onMailSent={() => setShowReplyModal(false)}
-          prefillTo={mail.from}
+          prefillTo={user?.mail || ''} // תיקון עיקרי - השתמשי ב-user.mail במקום user.email
           prefillSubject={`Re: ${mail.subject}`}
-          prefillBody={`\n\n--- Original message ---\n${mail.body}`}
+          prefillBody={`\n\n--- Original message from ${user?.mail || 'unknown'} ---\n${mail.body}`}
         />
       )}
     </div>
