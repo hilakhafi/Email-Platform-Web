@@ -7,36 +7,31 @@ function ComposeModal({ onClose, darkMode, onMailSent, prefillTo = '', prefillSu
   const [subject, setSubject] = useState(prefillSubject);
   const [body, setBody] = useState(prefillBody);
 
-  
-  const handleSend = async () => {
+const handleSend = async () => {
   try {
     const token = localStorage.getItem("token");
-    console.log("Sending with token:", token);
 
-    // 🚫 בדיקת ספאם לפני שליחה
-    // const spamResponse = await fetch('http://localhost:4000/api/blacklist/check', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${token}`
-    //   },
-    //   body: JSON.stringify({ subject, body })
-    // });
+    // נבדוק האם יש קישור זדוני, אבל לא נעצור
+    const spamResponse = await fetch('http://localhost:4000/api/blacklist/check', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ subject, body })
+    });
 
-    // const spamResult = await spamResponse.json();
-    // if (spamResult.spam) {
-    //   alert("Email contains blocked links.");
-    //   return;
-    // }
+    const spamResult = await spamResponse.json();
+    const isSpam = spamResult.spam;
 
-    // ✅ שליחת מייל אם לא נחסם
+    // שולחים מייל כולל מידע האם הוא ספאם
     const response = await fetch('http://localhost:4000/api/mails', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ sendTo: to, subject, body }),
+      body: JSON.stringify({ sendTo: to, subject, body, isSpam }),
     });
 
     if (response.ok) {
@@ -48,26 +43,11 @@ function ComposeModal({ onClose, darkMode, onMailSent, prefillTo = '', prefillSu
       const { error } = await response.json();
       alert("Error: " + error);
     }
-    const spamResponse = await fetch('http://localhost:4000/api/blacklist/check', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({ subject, body })
-    });
-
-    const spamResult = await spamResponse.json();
-    if (spamResult.spam) {
-      alert("Email contains blocked links.");
-      // צריך להוסיף את ההעברה לספאם!!!!!!!
-      return;
-    }
-    
   } catch (err) {
     alert("An error occurred: " + err.message);
   }
 };
+
 
 
   return (

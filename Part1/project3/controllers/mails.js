@@ -81,7 +81,8 @@ exports.postMail = async (req, res) => {
     const userId = req.user.userId; 
     console.log("User ID from token:", userId);
     const user = Users.getUser(userId);
-    const { sendTo, subject, body } = req.body;
+    //const { sendTo, subject, body } = req.body;
+    const { sendTo, subject, body, isSpam } = req.body;
     // validating that the email is in a valid format
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -103,8 +104,6 @@ exports.postMail = async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
     console.log("Calling BlacklistServer.check");
-    //const isSpam = await BlacklistServer.check(subject, body); 
-    //console.log("isSpam result:", isSpam);
     const preview = body.substring(0, 20) + '...'; 
     
     const SentMail = {
@@ -116,8 +115,6 @@ exports.postMail = async (req, res) => {
       subject,
       body,
       timestamp: new Date().toISOString(),
-      // spam: isSpam, // Check if the email is spam
-      //spam: false, // For now, we assume the email is not spam
       preview,
       isRead: false,
       category: 'sent', // Indicate that this is a sent email
@@ -134,12 +131,10 @@ exports.postMail = async (req, res) => {
       subject,
       body,
       timestamp: new Date().toISOString(),
-      //spam: isSpam, // Check if the email is spam
-      //spam: false, // For now, we assume the email is not spam
       preview,
       isRead: false,
-      category: 'inbox', // Indicate that this is an inbox email
-      previousCategory: 'inbox', // Store the previous category for future reference
+      category: isSpam ? 'spam' : 'inbox',          // 🟢 קובע לאן המייל ילך
+      previousCategory: isSpam ? 'spam' : 'inbox',
       isStarred: false, // Default value for isStarred
     };
 
