@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Star, RefreshCw, MoreHorizontal, CircleSlash, Trash2 } from 'lucide-react';
+import { Mail, Star, RefreshCw, MoreHorizontal, CircleSlash, Trash2, Paperclip } from 'lucide-react';
 import '../styles/MailList.css';
 
 // קומפוננטה לטעינת פרטי משתמש בודד
@@ -35,6 +35,7 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode, toggleStar, 
 
   const isSelected = selectedMail?.id === mail.id;
   const isUnread = !mail.isRead;
+  const hasAttachments = mail.attachments && mail.attachments.length > 0;
   
   // הצגת שם המשתמש או מצב טעינה
   const senderName = loadingUser 
@@ -80,15 +81,29 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode, toggleStar, 
           </button>
           )}
           {mail.isImportant && <div className="important-dot"></div>}
+          {hasAttachments && (
+            <div className="attachment-indicator" title={`${mail.attachments.length} attachment${mail.attachments.length > 1 ? 's' : ''}`}>
+              <Paperclip size={14} />
+            </div>
+          )}
         </div>
 
         <div className="mail-details">
           <div className="mail-header">
             <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>{senderName}</span>
-            <span className="mail-date">{mail.date}</span>
+            <div className="mail-header-right">
+              <span className="mail-date">{mail.date}</span>
+            </div>
           </div>
 
-          <div className={`mail-subject ${isUnread ? 'bold' : ''}`}>{mail.subject}</div>
+          <div className={`mail-subject ${isUnread ? 'bold' : ''}`}>
+            {mail.subject}
+            {hasAttachments && (
+              <span className="subject-attachment-count">
+                ({mail.attachments.length})
+              </span>
+            )}
+          </div>
           <div className="mail-preview">{mail.preview}</div>
 
           {mail.spam && (
@@ -159,6 +174,16 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
     );
   }
 
+ const filteredMails = mails.filter((mail) => {
+  const category = selectedCategory.toLowerCase();
+
+  if (category === 'starred') {
+    return mail.isStarred === true;
+  }
+
+  return mail.category?.toLowerCase() === category;
+});
+
   return (
     <div className={`mail-list-wrapper ${themeClass}`}>
       <div className="mail-list-header">
@@ -191,7 +216,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
       </div>
 
       <div className="mail-list-scroll">
-        {mails.map((mail) => {
+        {filteredMails.map((mail) => {
           const isSelected = selectedMail?.id === mail.id;
           const isUnread = !mail.isRead;
 

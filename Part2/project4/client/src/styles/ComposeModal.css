@@ -181,3 +181,22 @@
   background-color: #1d4ed8;
   transform: scale(1.05);
 }
+/* הוסיפי את זה לקובץ ComposeModal.css הקיים */
+
+/* סטיילים נוספים עבור כפתור ה-attach */
+.attach-button {
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* סטייל לכפתור השליחה כשהוא disabled */
+.send-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.send-button:disabled:hover {
+  background-color: #9ca3af;
+  transform: none;
+}

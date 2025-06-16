@@ -1,14 +1,39 @@
 import React, { useState } from 'react';
-import { X, Send, Paperclip, Mail } from 'lucide-react';
+import { X, Send, Paperclip } from 'lucide-react';
+import AttachmentsList from './AttachmentsList';
+import useFileUpload from '../hooks/useFileUpload';
 import '../styles/ComposeModal.css';
 
-function ComposeModal({ onClose, darkMode, onMailSent, prefillTo = '', prefillSubject = '', prefillBody = ''}) {
+function ComposeModal({ 
+  onClose, 
+  darkMode, 
+  onMailSent, 
+  prefillTo = '', 
+  prefillSubject = '', 
+  prefillBody = '' 
+}) {
   const [to, setTo] = useState(prefillTo);
   const [subject, setSubject] = useState(prefillSubject);
   const [body, setBody] = useState(prefillBody);
   const [mails, setMails] = useState([]);
+  const [sending, setSending] = useState(false);
+
+  // שימוש ב-hook לניהול קבצים
+  const { 
+    attachments, 
+    handleFileUpload, 
+    removeAttachment, 
+    clearAttachments 
+  } = useFileUpload(10); // מקסימום 10MB
 
 const handleSend = async () => {
+    if (!to.trim() || !subject.trim()) {
+      alert('Please fill in recipient and subject');
+      return;
+    }
+
+    setSending(true);
+    
   try {
     const token = localStorage.getItem("token");
 
@@ -26,28 +51,71 @@ const handleSend = async () => {
     const isSpam = spamResult.spam;
 
     // שולחים מייל כולל מידע האם הוא ספאם
-    const response = await fetch('http://localhost:4000/api/mails', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({ sendTo: to, subject, body, isSpam }),
-    });
+      
+      // אם יש קבצים מצורפים, שלח ל-files endpoint
+      if (attachments.length > 0) {
+        // יצירת FormData להעלאת קבצים
+        const formData = new FormData();
+        formData.append('sendTo', to);
+        formData.append('subject', subject);
+        formData.append('body', body);
+        
+        // הוספת כל הקבצים ל-FormData
+        attachments.forEach((file) => {
+          formData.append('attachments', file);
+        });
 
-    if (response.ok) {
-      const sentMail = await response.json();
-      onMailSent(sentMail);
-      alert("Email sent successfully!");
-      onClose();
-    } else {
-      const { error } = await response.json();
-      alert("Error: " + error);
+        const response = await fetch('http://localhost:4000/api/files/send', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            // אל תוסיפי Content-Type כאשר משתמשים ב-FormData
+          },
+          body: formData
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+            console.log("Server response:", result); // ← הוסיפי את זה לראות מה חוזר
+          alert("Email sent successfully with " + result.attachments + " attachments!");
+          clearAttachments();
+          onClose();
+          if (onMailSent) onMailSent();
+        } else {
+          const error = await response.json();
+          alert("Error: " + (error.message || error.error));
+        }
+      } else {
+        // אם אין קבצים מצורפים, שלח JSON רגיל ל-mails endpoint
+      const response = await fetch('http://localhost:4000/api/mails', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+      },
+        body: JSON.stringify({
+            sendTo: to,
+            subject: subject,
+            body: body
+         , isSpam })
+      });
+
+        if (response.ok) {
+          alert("Email sent successfully!");
+          onClose();
+          if (onMailSent) onMailSent();
+        } else {
+          const error = await response.json();
+          alert("Error: " + (error.error || error.message));
+        }
+      }
+    } catch (err) {
+      console.error("Send error:", err);
+      alert("An error occurred: " + err.message);
+    } finally {
+      setSending(false);
     }
-  } catch (err) {
-    alert("An error occurred: " + err.message);
-  }
-};
+  };
 
 const moveToDraft = async (mailData) => {
   try {
@@ -81,8 +149,6 @@ const moveToDraft = async (mailData) => {
 
   }
 };
-
-
   return (
     <div className="compose-overlay">
       <div className={`compose-modal ${darkMode ? 'dark' : 'light'}`}>
@@ -108,6 +174,14 @@ const moveToDraft = async (mailData) => {
             onChange={(e) => setSubject(e.target.value)}
             className="compose-input"
           />
+
+          {/* קומפוננטת קבצים מצורפים */}
+          <AttachmentsList 
+            attachments={attachments}
+            onRemoveAttachment={removeAttachment}
+            darkMode={darkMode}
+          />
+
           <textarea
             placeholder="Write your email here..."
             value={body}
@@ -117,9 +191,18 @@ const moveToDraft = async (mailData) => {
         </div>
 
         <div className="compose-footer">
-          <button className="icon-button">
+          {/* כפתור להעלאת קבצים */}
+          <label className="icon-button attach-button">
             <Paperclip size={20} />
-          </button>
+            <input
+              type="file"
+              multiple
+              onChange={handleFileUpload}
+              style={{ display: 'none' }}
+              accept="*/*"
+            />
+          </label>
+          
           <div className="footer-buttons">
             <button onClick={() => {
               moveToDraft({to, subject, body});              
@@ -127,9 +210,14 @@ const moveToDraft = async (mailData) => {
               className="cancel-button">
               Cancel
             </button>
-            <button onClick={handleSend} className="send-button">
+            <button 
+              onClick={handleSend} 
+              className="send-button"
+              disabled={sending}
+            >
               <Send size={16} />
-              Send
+              {sending ? 'Sending...' : 'Send'}
+              {attachments.length > 0 && ` (${attachments.length} files)`}
             </button>
           </div>
         </div>

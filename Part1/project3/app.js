@@ -16,6 +16,8 @@ const usersT = require('./routes/tokens');
 const mails = require('./routes/mails');
 const blacklist = require('./routes/blacklist');
 const labels = require('./routes/labels');
+const filesRoutes = require('./routes/files'); 
+
 
 app.use('/api/users', usersU);
 app.use('/api/tokens', usersT);
@@ -25,6 +27,8 @@ app.use('/api/labels', labels);
 app.use('/api/blacklist', blacklist);
 app.disable('etag');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/files', filesRoutes);
+
 
 app.listen(4000, () => { 
 console.log("Server running on port 4000");
