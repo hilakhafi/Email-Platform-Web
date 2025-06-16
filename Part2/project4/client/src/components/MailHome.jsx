@@ -332,6 +332,7 @@ const restoreMail = async (mailId, previousCategory) => {
           : mail
       )
     );
+     setSelectedCategory(previousCategory.charAt(0).toUpperCase() + previousCategory.slice(1));
   } catch (err) {
     console.error(err);
   }
@@ -478,7 +479,7 @@ const handlePermanentDelete = async (id) => {
                 <div className="user-dropdown">
                   <div className="user-info">
                     <div className="user-details">
-                      <h3>{userInfo.name}</h3>
+                      <h3>{userInfo.username}</h3>
                       <p>{userInfo.email}</p>
                     </div>
                   </div>
@@ -511,43 +512,50 @@ const handlePermanentDelete = async (id) => {
 
       {/* Main Content */}
       <main className="main-content">
-        {!sidebarCollapsed && (
-          <Sidebar
-            onCompose={() => setShowCompose(true)}
-            selectedCategory={selectedCategory}
-            onCategorySelect={setSelectedCategory}
-            categories={categories}
-            labels={labels}
-            darkMode={darkMode}
-          />
-        )}
+  {/* Sidebar - תמיד מוצג */}
+  {!sidebarCollapsed && (
+    <Sidebar
+      onCompose={() => setShowCompose(true)}
+      selectedCategory={selectedCategory}
+      onCategorySelect={setSelectedCategory}
+      categories={categories}
+      labels={labels}
+      darkMode={darkMode}
+    />
+  )}
 
-        <MailList
-          mails={filterMailsByCategory()}
-          loading={loading}
-          error={error}
-          selectedMail={selectedMail}
-          onSelect={setSelectedMail}
-          darkMode={darkMode}
-          selectedCategory={selectedCategory}
-          onRefresh={fetchMails}  // <-- פונקציה שמרעננת מיילים
-          toggleStar={toggleStar}
-          moveToTrash={moveToTrash}
-          handlePermanentDelete={handlePermanentDelete}
-          
-        />
-
-        <MailView 
-        mail={selectedMail} darkMode={darkMode}
-        restoreMail={restoreMail}
-        moveToSpam={moveToSpam}
-        />
+        {/* תוכן מיילים - או רשימה או מייל אחד */}
+        <div className="mail-content">
+          {!selectedMail ? (
+            <MailList
+              mails={filterMailsByCategory()}
+              loading={loading}
+              error={error}
+              selectedMail={selectedMail}
+              onSelect={setSelectedMail}
+              darkMode={darkMode}
+              selectedCategory={selectedCategory}
+              onRefresh={fetchMails}
+              toggleStar={toggleStar}
+              moveToTrash={moveToTrash}
+              handlePermanentDelete={handlePermanentDelete}
+            />
+          ) : (
+            <MailView
+              mail={selectedMail}
+              darkMode={darkMode}
+              restoreMail={restoreMail}
+              moveToSpam={moveToSpam}
+              onClose={() => setSelectedMail(null)}
+            />
+          )}
+        </div>
 
         {showCompose && (
           <ComposeModal 
-              onClose={() => setShowCompose(false)} 
-              darkMode={darkMode} 
-              onMailSent={handleNewMail} 
+            onClose={() => setShowCompose(false)} 
+            darkMode={darkMode} 
+            onMailSent={handleNewMail} 
           />        
         )}
 
@@ -560,6 +568,7 @@ const handlePermanentDelete = async (id) => {
           />
         )}
       </main>
+
     </div>
   );
 }

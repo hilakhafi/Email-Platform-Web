@@ -25,7 +25,7 @@ function ComposeModal({
     clearAttachments 
   } = useFileUpload(10); // מקסימום 10MB
 
-  const handleSend = async () => {
+const handleSend = async () => {
     if (!to.trim() || !subject.trim()) {
       alert('Please fill in recipient and subject');
       return;
@@ -33,9 +33,23 @@ function ComposeModal({
 
     setSending(true);
     
-    try {
-      const token = localStorage.getItem("token");
-      console.log("Sending with token:", token);
+  try {
+    const token = localStorage.getItem("token");
+
+    // נבדוק האם יש קישור זדוני, אבל לא נעצור
+    const spamResponse = await fetch('http://localhost:4000/api/blacklist/check', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ subject, body })
+    });
+
+    const spamResult = await spamResponse.json();
+    const isSpam = spamResult.spam;
+
+    // שולחים מייל כולל מידע האם הוא ספאם
       
       // אם יש קבצים מצורפים, שלח ל-files endpoint
       if (attachments.length > 0) {
@@ -72,18 +86,18 @@ function ComposeModal({
         }
       } else {
         // אם אין קבצים מצורפים, שלח JSON רגיל ל-mails endpoint
-        const response = await fetch('http://localhost:4000/api/mails', {
-          method: 'POST',
-          headers: {
+      const response = await fetch('http://localhost:4000/api/mails', {
+        method: 'POST',
+        headers: {
             'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+          'Content-Type': 'application/json',
+      },
+        body: JSON.stringify({
             sendTo: to,
             subject: subject,
             body: body
-          })
-        });
+         , isSpam })
+      });
 
         if (response.ok) {
           alert("Email sent successfully!");

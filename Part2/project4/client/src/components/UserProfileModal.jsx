@@ -18,9 +18,7 @@ const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
 
   useEffect(() => {
     if (userInfo) {
-      console.log("Raw avatar path:", userInfo.avatar);
       const fixedAvatarUrl = userInfo.avatar ? `http://localhost:4000/${userInfo.avatar.replace(/\\/g, '/')}` : null;
-      console.log("Fixed avatar URL:", fixedAvatarUrl);
       setImagePreview(fixedAvatarUrl);
       const nameParts = userInfo.name.split(' ');
       setFormData({
@@ -140,13 +138,7 @@ const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
         <form onSubmit={handleSubmit} className="profile-form">
           {/* Profile Image */}
           <div className="image-section">
-            <div className="image-preview">
-              {imagePreview ? (
-                <img src={imagePreview} alt="Profile Preview" />
-              ) : (
-                <User size={48} />
-              )}
-            </div>
+            
             <label className="image-upload-btn">
               <Camera size={16} />
               <span>Change picture</span>
@@ -194,7 +186,7 @@ const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
               />
             </div>
 
-            <div className="form-group">
+            {/* <div className="form-group">
               <label>Email</label>
               <input
                 type="mail"
@@ -203,7 +195,7 @@ const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
                 onChange={handleInputChange}
                 required
               />
-            </div>
+            </div> */}
 
             <div className="form-group">
               <label>Birth date</label>

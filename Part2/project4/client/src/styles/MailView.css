@@ -402,3 +402,44 @@
   color: #4caf50;
 }
 
+
+.mailview-topbar {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: #1f2937;
+  color: white;
+  border-bottom: 1px solid #374151;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+}
+
+.mailview-topbar.light {
+  background-color: #f3f4f6;
+  color: #111827;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.back-arrow {
+  font-size: 1.25rem;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.main-content {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+.mail-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
