@@ -159,6 +159,16 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
     );
   }
 
+ const filteredMails = mails.filter((mail) => {
+  const category = selectedCategory.toLowerCase();
+
+  if (category === 'starred') {
+    return mail.isStarred === true;
+  }
+
+  return mail.category?.toLowerCase() === category;
+});
+
   return (
     <div className={`mail-list-wrapper ${themeClass}`}>
       <div className="mail-list-header">
@@ -191,7 +201,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
       </div>
 
       <div className="mail-list-scroll">
-        {mails.map((mail) => {
+        {filteredMails.map((mail) => {
           const isSelected = selectedMail?.id === mail.id;
           const isUnread = !mail.isRead;
 
