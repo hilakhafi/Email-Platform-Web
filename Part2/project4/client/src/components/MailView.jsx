@@ -3,12 +3,15 @@ import { Mail, Archive, Trash2, MoreHorizontal, AlertTriangle, ArrowLeft } from 
 import ComposeModal from './ComposeModal';
 import '../styles/MailView.css';
 
-function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose  }) {
+function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose, handlePermanentDelete,selectedCategory  }) {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(false);
   const [errorUser, setErrorUser] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showComposeModal, setShowComposeModal] = useState(false);
+  const [draftToDeleteAfterSend, setDraftToDeleteAfterSend] = useState(null);
+
 
   useEffect(() => {
     if (!mail || !mail.from) {
@@ -67,6 +70,10 @@ function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose  }) {
 //     console.error('Failed to mark as spam:', error);
 //   }
 // }
+const handleResend = () => {
+  setDraftToDeleteAfterSend(mail); // שומרים את ה־id למחיקה רק אם השליחה תתבצע
+  setShowComposeModal(true);
+}; 
 
 async function handleMarkAsUnread(id) {
   try {
@@ -103,17 +110,28 @@ async function handleMarkAsUnread(id) {
   return (
     
     <div className="mailview-header">
+      {!showReplyModal && !showComposeModal && (
       <div className={`mailview-topbar ${darkMode ? 'dark' : 'light'}`}>
         <button className="back-arrow" onClick={onClose}>
           <ArrowLeft size={20} />
         </button>
       </div>
+      )}
       <h1 className="mailview-subject">{mail.subject}</h1>
 
       <div className="mailview-actions-sender">
         <div className="actions">
           <button className="icon-btn"><Archive size={18} /></button>
-          <button className="icon-btn"><Trash2 size={18} /></button>
+          {selectedCategory === 'Trash' && (
+            <button
+              className="permanent-delete-btn icon-btn"
+              onClick={() => handlePermanentDelete(mail)}
+              aria-label="מחק לצמיתות"
+              title="מחק לצמיתות"
+            >
+              <Trash2 size={20} />
+            </button>
+          )}
           <div className="dropdown-wrapper">
           <button className="icon-btn" onClick={() => setShowMenu(prev => !prev)}>
             <MoreHorizontal size={18} />
@@ -124,6 +142,7 @@ async function handleMarkAsUnread(id) {
           <button onClick={() => moveToSpam(mail)}>Mark as Spam</button>
           <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
           <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>
+          <button onClick={() => {handleResend();  setShowMenu(false);}}>Resend</button>
 
         </div>
       )}
@@ -171,6 +190,27 @@ async function handleMarkAsUnread(id) {
           prefillBody={`\n\n--- Original message from ${user?.mail || 'unknown'} ---\n${mail.body}`}
         />
       )}
+      {showComposeModal && (
+        <ComposeModal
+          onClose={() => {
+            setShowComposeModal(false);     
+            setDraftToDeleteAfterSend(null);
+          }}         
+          darkMode={darkMode}
+          onMailSent={() => {
+          if (draftToDeleteAfterSend) {
+            handlePermanentDelete(draftToDeleteAfterSend);
+          }
+            setShowComposeModal(false);
+            setDraftToDeleteAfterSend(null);
+            onClose(); // סוגר את ה-MailView, אם תרצי
+          }}
+          prefillTo={mail.toMail || ''}            // שימי לב! משתמשת ב־toMail
+          prefillSubject={mail.subject || ''}
+          prefillBody={mail.body || ''}
+        />
+      )}
+
     </div>
   );
 }

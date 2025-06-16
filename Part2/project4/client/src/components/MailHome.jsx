@@ -71,7 +71,7 @@ export default function MailHome() {
       const updatedMail = data.find(mail => mail.id === selectedMail.id);
       setSelectedMail(updatedMail || null);  // אם לא נמצא, מאפסים ל-null
     }
- 
+    
   } catch (err) {
     setError(err.message);
     setMails([]);
@@ -79,6 +79,7 @@ export default function MailHome() {
     setLoading(false);
   }
 }
+
 
   // Handle new mail event (e.g., from WebSocket or similar)
   function handleNewMail(newMail) {
@@ -378,12 +379,14 @@ const moveToSpam = async (mail) => {
   }
 };
 
-const handlePermanentDelete = async (id) => {
-  const confirmDelete = window.confirm("Are you sure you want to permanently delete this email?");
-  if (!confirmDelete) return;
-
+const handlePermanentDelete = async (mail) => {
+  if(mail.category !== 'drafts') {
+    const confirmDelete = window.confirm("Are you sure you want to permanently delete this email?");
+    if (!confirmDelete) return;
+  }
+  // אם המייל הוא טיוטה, לא נבקש אישור
   try {
-    const res = await fetch(`/api/mails/${id}`, {
+    const res = await fetch(`/api/mails/${mail.id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -393,7 +396,7 @@ const handlePermanentDelete = async (id) => {
     if (!res.ok) throw new Error("Failed to delete email");
 
     // מסננים את המייל שנמחק מה-state
-    setMails(prev => prev.filter(mail => mail.id !== id));
+    setMails(prev => prev.filter(deleteMail => deleteMail.id !== mail.id));
     setSelectedMail(null); // ניקוי הבחירה
   } catch (err) {
     console.error(err);
@@ -540,6 +543,8 @@ const handlePermanentDelete = async (id) => {
               restoreMail={restoreMail}
               moveToSpam={moveToSpam}
               onClose={() => setSelectedMail(null)}
+              handlePermanentDelete={handlePermanentDelete}
+              selectedCategory={selectedCategory}
             />
           )}
         </div>
@@ -549,6 +554,9 @@ const handlePermanentDelete = async (id) => {
             onClose={() => setShowCompose(false)} 
             darkMode={darkMode} 
             onMailSent={handleNewMail} 
+            // moveToDraft={moveToDraft}
+            // mail={selectedMail}
+            // updateDraftCategory={updateDraftCategory}
           />        
         )}
 

@@ -165,7 +165,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
         <div className="header-left">
           <h2 className="header-title">{selectedCategory}</h2>
 
-          {selectedCategory === 'Trash' && selectedMail && (
+          {/* {selectedCategory === 'Trash' && selectedMail && (
             <button
               className="permanent-delete-btn"
               onClick={(e) => {
@@ -177,7 +177,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
             >
               <Trash2 size={20} />
             </button>
-          )}
+          )} */}
         </div>
         <div className="header-actions">
           <button
@@ -236,7 +236,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
 
                 <div className="mail-details">
                   <div className="mail-header">
-                    <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>{mail.fromMail}</span>
+                    <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>{mail.category === 'inbox' ? mail.fromMail : mail.toMail}</span>
                     <span className="mail-date">{mail.timestamp}</span>
                   </div>
 

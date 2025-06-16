@@ -72,84 +72,105 @@ exports.deleteMail = (req, res) => {
 
   res.status(204).json();
 };
-
 // Send a new email
 exports.postMail = async (req, res) => {
-  console.log(req.user);
-  console.log("Decoded user from token:", req.user);
   try {
-    const userId = req.user.userId; 
-    console.log("User ID from token:", userId);
+    const userId = req.user.userId;
     const user = Users.getUser(userId);
-    //const { sendTo, subject, body } = req.body;
-    const { sendTo, subject, body, isSpam } = req.body;
-    // validating that the email is in a valid format
+    const { sendTo, subject, body, isSpam, category } = req.body;
 
+    // בדיקות בסיסיות
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (!subject || !body) {
+      return res.status(400).json({ error: "Missing subject or body" });
+    }
+
+    // ננסה למצוא את המקבל אם נשלח
+    const recipient = sendTo ? Users.getUserByMail(sendTo) : null;
+
+    const preview = body.substring(0, 20) + '...';
+
+    // אם זו טיוטה
+    if (category === 'drafts') {
+      const DraftMail = {
+        id: Emails.emails.length + 1,
+        ownerId: userId,
+        from: userId,
+        fromMail: user.mail,
+        to: recipient ? recipient.id : null,
+        toMail: recipient ? recipient.mail : '',
+        subject,
+        body,
+        timestamp: new Date().toISOString(),
+        preview,
+        isRead: false,
+        category: 'drafts',
+        previousCategory: 'drafts',
+        isStarred: false,
+      };
+
+      Emails.emails.push(DraftMail);
+      return res.status(201).json(DraftMail);
+    }
+
+    // אם זו שליחה רגילה — נוודא שכתובת תקינה
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(sendTo)) {
       return res.status(400).json({ error: "Invalid email format" });
     }
-    // check if the user exists    
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    
-    // check if the recipient exists
-    const recipient = Users.getUserByMail(sendTo);
+
     if (!recipient) {
       return res.status(404).json({ error: 'Recipient user not found' });
     }
 
-    if (!sendTo || !subject || !body) {
-        return res.status(400).json({ error: 'Missing required fields' });
-    }
-    console.log("Calling BlacklistServer.check");
-    const preview = body.substring(0, 20) + '...'; 
-    
     const SentMail = {
       id: Emails.emails.length + 1,
       ownerId: userId,
-      from: userId,  
-      fromMail: user.mail, // Add the sender's email   
+      from: userId,
+      fromMail: user.mail,
       to: recipient.id,
+      toMail: recipient.mail,
       subject,
       body,
       timestamp: new Date().toISOString(),
       preview,
       isRead: false,
-      category: 'sent', // Indicate that this is a sent email
-      previousCategory: 'sent', // Store the previous category for future reference
-      isStarred: false, // Default value for isStarred
+      // category ||
+      category: (isSpam ? 'spam' : 'sent'),
+      previousCategory: isSpam ? 'spam' : 'sent',
+      isStarred: false,
     };
 
     const InboxMail = {
       id: Emails.emails.length + 2,
       ownerId: recipient.id,
-      from: userId,     
-      fromMail: user.mail, // Add the sender's email   
+      from: userId,
+      fromMail: user.mail,
       to: recipient.id,
+      toMail: recipient.mail,
       subject,
       body,
       timestamp: new Date().toISOString(),
       preview,
       isRead: false,
-      category: isSpam ? 'spam' : 'inbox',          // 🟢 קובע לאן המייל ילך
+      category: isSpam ? 'spam' : 'inbox',
       previousCategory: isSpam ? 'spam' : 'inbox',
-      isStarred: false, // Default value for isStarred
+      isStarred: false,
     };
 
-    Emails.addMail(SentMail); 
-    Emails.addMail(InboxMail); 
+    Emails.addMail(SentMail);
+    Emails.addMail(InboxMail);
 
-
-    console.log(Emails.emails);
-    return res.status(201).json({});
-
+    return res.status(201).json(SentMail); // מחזירים את המייל שנשלח
   } catch (err) {
     console.error("Error in postMail:", err);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 // Search emails by query string
 exports.searchEmails = (req, res) => {

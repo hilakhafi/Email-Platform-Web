@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { X, Send, Paperclip } from 'lucide-react';
+import { X, Send, Paperclip, Mail } from 'lucide-react';
 import '../styles/ComposeModal.css';
 
-function ComposeModal({ onClose, darkMode, onMailSent, prefillTo = '', prefillSubject = '', prefillBody = '' }) {
+function ComposeModal({ onClose, darkMode, onMailSent, prefillTo = '', prefillSubject = '', prefillBody = ''}) {
   const [to, setTo] = useState(prefillTo);
   const [subject, setSubject] = useState(prefillSubject);
   const [body, setBody] = useState(prefillBody);
+  const [mails, setMails] = useState([]);
 
 const handleSend = async () => {
   try {
@@ -48,6 +49,38 @@ const handleSend = async () => {
   }
 };
 
+const moveToDraft = async (mailData) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch('http://localhost:4000/api/mails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        
+        sendTo: mailData.to || '',
+        subject: mailData.subject,
+        body: mailData.body,
+        category: 'drafts',       // חשוב לשלוח את הקטגוריה
+      }),
+    });
+
+    if (response.ok) {
+      const newDraft = await response.json();
+      onMailSent(newDraft);
+      alert("Email saved as draft");
+    } else {
+      const err = await response.json();
+      alert("Failed to save draft:" + err.message);
+    }
+  } catch (error) {
+    alert("Error saving draft:" + error.message);
+
+  }
+};
 
 
   return (
@@ -88,7 +121,10 @@ const handleSend = async () => {
             <Paperclip size={20} />
           </button>
           <div className="footer-buttons">
-            <button onClick={onClose} className="cancel-button">
+            <button onClick={() => {
+              moveToDraft({to, subject, body});              
+              onClose(); }}
+              className="cancel-button">
               Cancel
             </button>
             <button onClick={handleSend} className="send-button">

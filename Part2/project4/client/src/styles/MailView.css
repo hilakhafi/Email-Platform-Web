@@ -296,20 +296,26 @@
 .mailview-topbar {
   display: flex;
   align-items: center;
-  padding: 0.5rem 1rem;
-  background-color: #1f2937;
-  color: white;
-  border-bottom: 1px solid #374151;
+  justify-content: space-between;
+  padding: 6px 16px;
+  margin: 8px auto;
+  background-color: #ffffffcc; /* לבן חצי שקוף */
+  backdrop-filter: blur(6px); /* טשטוש קל */
+  color: #111827;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   position: sticky;
-  top: 0;
-  z-index: 10;
-  width: 100%;
+  top: 8px;
+  z-index: 100;
+  width: calc(100% - 32px); /* ריווח מהקצוות */
+  transition: all 0.3s ease;
 }
 
-.mailview-topbar.light {
-  background-color: #f3f4f6;
-  color: #111827;
-  border-bottom: 1px solid #d1d5db;
+
+.mailview-topbar.dark {
+  background-color: #1f2937cc;
+  color: #f9fafb;
+  border: none;
 }
 
 .back-arrow {
