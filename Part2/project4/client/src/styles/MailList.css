@@ -413,3 +413,68 @@
 .spam-action-btn:hover {
   color: #dc2626;
 }
+.attachment-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  color: #666;
+  margin-left: 4px;
+}
+
+.dark .attachment-indicator {
+  background-color: #404040;
+  color: #aaa;
+}
+
+.mail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.mail-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subject-attachment-count {
+  color: #666;
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+.dark .subject-attachment-count {
+  color: #aaa;
+}
+
+/* עדכון למיקום של mail-item-meta */
+.mail-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/* רספונסיביות */
+@media (max-width: 768px) {
+  .attachment-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .attachment-actions {
+    align-self: flex-end;
+  }
+  
+  .attachment-indicator {
+    width: 20px;
+    height: 20px;
+  }
+}

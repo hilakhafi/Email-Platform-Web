@@ -81,9 +81,16 @@ export default function MailHome() {
 }
 
   // Handle new mail event (e.g., from WebSocket or similar)
-  function handleNewMail(newMail) {
-    setMails(prevMails => [newMail, ...prevMails]); // מוסיף למיילים קיים, בראש הרשימה
+function handleNewMail(newMail) {
+  // בדוק אם המייל תקין
+  if (newMail && typeof newMail === 'object' && newMail.id) {
+    setMails(prevMails => [newMail, ...prevMails]);
+  } else {
+    // אם לא - רענן את כל המיילים
+    console.log("Invalid mail object received, refreshing all mails");
+    fetchMails();
   }
+}
 
   // Close user menu when clicking outside
   useEffect(() => {

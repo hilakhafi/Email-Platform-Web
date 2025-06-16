@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Archive, Trash2, MoreHorizontal, AlertTriangle } from 'lucide-react';
+import { Mail, Archive, Trash2, MoreHorizontal, AlertTriangle, Paperclip, Download, Eye } from 'lucide-react';
 import ComposeModal from './ComposeModal';
 import '../styles/MailView.css';
 
@@ -51,40 +51,103 @@ function MailView({ mail, darkMode, restoreMail, moveToSpam  }) {
     fetchUser();
   }, [mail]);
 
-//   async function handleMarkAsSpam(id) {
-//   try {
-//     await fetch(`http://localhost:4000/api/mails/${id}`, {
-//       method: 'PATCH',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': localStorage.getItem('token'),
-//       },
-//       body: JSON.stringify({ spam: true }),
-//     });
-//     setShowMenu(false);
-//     window.location.reload(); // או עדכון סטייט מקומי
-//   } catch (error) {
-//     console.error('Failed to mark as spam:', error);
-//   }
-// }
-
-async function handleMarkAsUnread(id) {
-  try {
-    await fetch(`http://localhost:4000/api/mails/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('token'),
-      },
-      body: JSON.stringify({ isRead: false }),
-    });
-    setShowMenu(false);
-    window.location.reload(); // או עדכון סטייט
-  } catch (error) {
-    console.error('Failed to mark as unread:', error);
+  async function handleMarkAsUnread(id) {
+    try {
+      await fetch(`http://localhost:4000/api/mails/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('token'),
+        },
+        body: JSON.stringify({ isRead: false }),
+      });
+      setShowMenu(false);
+      window.location.reload(); // או עדכון סטייט
+    } catch (error) {
+      console.error('Failed to mark as unread:', error);
+    }
   }
-}
 
+  // פונקציה להורדת קובץ
+  const handleDownloadAttachment = (attachment) => {
+    try {
+      // אם יש base64 data
+      if (attachment.data) {
+        const byteCharacters = atob(attachment.data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: attachment.contentType || 'application/octet-stream' });
+        
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = attachment.filename || 'attachment';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }
+      // אם יש path לקובץ בשרת
+      else if (attachment.path) {
+        const link = document.createElement('a');
+        link.href = `http://localhost:4000/api/attachments/${attachment.path}`;
+        link.download = attachment.filename || 'attachment';
+        link.click();
+      }
+    } catch (error) {
+      console.error('Error downloading attachment:', error);
+      alert('שגיאה בהורדת הקובץ');
+    }
+  };
+
+  // פונקציה לתצוגה מקדימה של קובץ
+  const handlePreviewAttachment = (attachment) => {
+    try {
+      if (attachment.data) {
+        const byteCharacters = atob(attachment.data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: attachment.contentType || 'application/octet-stream' });
+        
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      } else if (attachment.path) {
+        window.open(`http://localhost:4000/api/attachments/${attachment.path}`, '_blank');
+      }
+    } catch (error) {
+      console.error('Error previewing attachment:', error);
+      alert('שגיאה בתצוגה מקדימה של הקובץ');
+    }
+  };
+
+  // פונקציה לקבלת איקון לפי סוג קובץ
+  const getFileIcon = (filename, contentType) => {
+    const extension = filename?.split('.').pop()?.toLowerCase();
+    const type = contentType?.toLowerCase();
+    
+    if (type?.includes('image') || ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'].includes(extension)) {
+      return '🖼️';
+    }
+    if (type?.includes('pdf') || extension === 'pdf') {
+      return '📄';
+    }
+    if (type?.includes('text') || ['txt', 'doc', 'docx'].includes(extension)) {
+      return '📝';
+    }
+    if (['xlsx', 'xls', 'csv'].includes(extension)) {
+      return '📊';
+    }
+    if (['zip', 'rar', '7z'].includes(extension)) {
+      return '🗜️';
+    }
+    return '📎';
+  };
 
   if (!mail) {
     return (
@@ -144,6 +207,49 @@ async function handleMarkAsUnread(id) {
 
       <div className="mailview-body">
         <p className="mailview-text">{mail.body}</p>
+        
+        {/* הצגת קבצים מצורפים */}
+        {mail.attachments && mail.attachments.length > 0 && (
+          <div className="attachments-section">
+            <div className="attachments-header">
+              <Paperclip size={16} />
+              <span>{mail.attachments.length} attachment{mail.attachments.length > 1 ? 's' : ''}</span>
+            </div>
+            <div className="attachments-list">
+              {mail.attachments.map((attachment, index) => (
+                <div key={index} className="attachment-item">
+                  <div className="attachment-info">
+                    <span className="attachment-icon">
+                      {getFileIcon(attachment.filename, attachment.contentType)}
+                    </span>
+                    <div className="attachment-details">
+                      <span className="attachment-name">{attachment.filename || `attachment-${index + 1}`}</span>
+                      <span className="attachment-size">
+                        {attachment.size ? `${(attachment.size / 1024).toFixed(1)} KB` : 'Unknown size'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="attachment-actions">
+                    <button 
+                      className="attachment-btn preview-btn"
+                      onClick={() => handlePreviewAttachment(attachment)}
+                      title="תצוגה מקדימה"
+                    >
+                      <Eye size={14} />
+                    </button>
+                    <button 
+                      className="attachment-btn download-btn"
+                      onClick={() => handleDownloadAttachment(attachment)}
+                      title="הורד קובץ"
+                    >
+                      <Download size={14} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="mailview-footer">
