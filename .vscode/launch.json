@@ -19,6 +19,13 @@
           "ignoreFailures": true
         }
       ]
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Debug React App",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/src"
     }
   ]
 }

@@ -187,7 +187,7 @@ async function handleMarkAsUnread(id) {
       <div className="mailview-actions-sender">
         <div className="actions">
           <button className="icon-btn"><Archive size={18} /></button>
-          {selectedCategory === 'Trash' && (
+          {/* {selectedCategory === 'Trash' && (
             <button
               className="permanent-delete-btn icon-btn"
               onClick={() => handlePermanentDelete(mail)}
@@ -196,7 +196,7 @@ async function handleMarkAsUnread(id) {
             >
               <Trash2 size={20} />
             </button>
-          )}
+          )} */}
           <div className="dropdown-wrapper">
           <button className="icon-btn" onClick={() => setShowMenu(prev => !prev)}>
             <MoreHorizontal size={18} />

@@ -112,7 +112,7 @@ exports.postMail = async (req, res) => {
         isStarred: false,
       };
 
-      Emails.emails.push(DraftMail);
+      Emails.addMail(DraftMail);
       return res.status(201).json(DraftMail);
     }
 
@@ -125,7 +125,10 @@ exports.postMail = async (req, res) => {
     if (!recipient) {
       return res.status(404).json({ error: 'Recipient user not found' });
     }
-
+    console.log("User:", user);
+    console.log("Recipient:", recipient);
+    console.log("user.mail === sendTo:", user.mail === sendTo);
+    
     const SentMail = {
       id: Emails.emails.length + 1,
       ownerId: userId,
@@ -138,8 +141,7 @@ exports.postMail = async (req, res) => {
       timestamp: new Date().toISOString(),
       preview,
       isRead: false,
-      // category ||
-      category: (isSpam ? 'spam' : 'sent'),
+      category:  category || (isSpam ? 'spam' : 'sent'),
       previousCategory: isSpam ? 'spam' : 'sent',
       isStarred: false,
     };
@@ -156,13 +158,20 @@ exports.postMail = async (req, res) => {
       timestamp: new Date().toISOString(),
       preview,
       isRead: false,
-      category: isSpam ? 'spam' : 'inbox',
+      category: category || (isSpam ? 'spam' : 'inbox'),
       previousCategory: isSpam ? 'spam' : 'inbox',
       isStarred: false,
     };
 
     Emails.addMail(SentMail);
     Emails.addMail(InboxMail);
+    console.log("All mails:");
+    console.log(Emails.emails.map(m => ({
+      id: m.id,
+      ownerId: m.ownerId,
+      category: m.category,
+      subject: m.subject
+    })));
 
     return res.status(201).json(SentMail); // מחזירים את המייל שנשלח
   } catch (err) {

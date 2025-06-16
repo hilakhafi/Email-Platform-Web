@@ -8,18 +8,19 @@ import UserProfileModal from './UserProfileModal';
 import '../styles/MailHome.css';
 
 const defaultCategories = [
-  { name: "Inbox", icon: Inbox, color: "blue", count: 0 },
-  { name: "Starred", icon: Star, color: "yellow", count: 0 },
-  { name: "Sent", icon: SendHorizontal, color: "green", count: 0 },
-  { name: "Drafts", icon: FileText, color: "gray", count: 0 },
-  { name: "Spam", icon: AlertCircle, color: "orange", count: 0 },
-  { name: "Trash", icon: Trash2, color: "red", count: 0 }
+  { name: "inbox", icon: Inbox, color: "blue", count: 0 },
+  { name: "starred", icon: Star, color: "yellow", count: 0 },
+  { name: "sent", icon: SendHorizontal, color: "green", count: 0 },
+  { name: "drafts", icon: FileText, color: "gray", count: 0 },
+  { name: "spam", icon: AlertCircle, color: "orange", count: 0 },
+  { name: "trash", icon: Trash2, color: "red", count: 0 }
 ];
 
 export default function MailHome() {
   const [mails, setMails] = useState([]);
   const [selectedMail, setSelectedMail] = useState(null);
   const [showCompose, setShowCompose] = useState(false);
+  //first state for selected category
   const [selectedCategory, setSelectedCategory] = useState('inbox');
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -43,7 +44,12 @@ export default function MailHome() {
   });
   
   const userMenuRef = useRef(null);
-
+//   const handleMailSent = () => {
+//   // מחכים רגע כדי שהמייל ייכנס גם לנמען
+//   setTimeout(() => {
+//     fetchMails();
+//   }, 300); // או אפילו פחות
+// };
   async function fetchMails() {
   setLoading(true);
   setError(null);
@@ -113,8 +119,6 @@ function handleNewMail(newMail) {
       try {
         const token = localStorage.getItem("token");
         const userId = localStorage.getItem("userId"); // נניח שאתה שומר את ה-ID גם כן
-        console.log("Token:", token);
-        console.log("User ID:", userId);
 
         if (!token || !userId) return;
 
@@ -213,32 +217,31 @@ function getCurrentUserId() {
 function filterMailsByCategory() {
   const userId = getCurrentUserId();
   if (!userId) return [];
+  console.log("Decoded userId:", getCurrentUserId());
 
   let filtered = [];
-  
+
   switch (selectedCategory) {
-    case 'Inbox':
+    case 'inbox':
       filtered = mails.filter(mail => mail.ownerId === userId && mail.category === 'inbox');
       break;
-    case 'Starred':
+    case 'starred':
       filtered = mails.filter(mail => mail.ownerId === userId && mail.isStarred);
       break;
-    case 'Sent':
+    case 'sent':
       filtered = mails.filter(mail => mail.ownerId === userId && mail.category === 'sent');
       break;
-    case 'Drafts':
-      filtered = mails.filter(mail => mail.from === userId && mail.category === 'drafts');
+    case 'drafts':
+      filtered = mails.filter(mail => mail.ownerId === userId && mail.category === 'drafts');
       break;
-    case 'Spam':
-      filtered = mails.filter(mail => mail.category === 'spam');
+    case 'spam':
+      filtered = mails.filter(mail => mail.ownerId === userId && mail.category === 'spam');
       break;
-    case 'Trash':
-      filtered = mails.filter(mail => mail.category === 'trash');
-      break;
+    case 'trash':
+      filtered = mails.filter(mail => mail.ownerId === userId && mail.category === 'trash');
     default:
       filtered = mails;
   }
-
   // חיפוש – סינון לפי מחרוזת החיפוש
   if (searchTerm.trim()) {
     const lower = searchTerm.toLowerCase();
@@ -386,28 +389,60 @@ const moveToSpam = async (mail) => {
   }
 };
 
-const handlePermanentDelete = async (mail) => {
-  if(mail.category !== 'drafts') {
-    const confirmDelete = window.confirm("Are you sure you want to permanently delete this email?");
+// const handlePermanentDelete = async (mail) => {
+//   if(mail.category !== 'drafts') {
+//     const confirmDelete = window.confirm("Are you sure you want to permanently delete this email?");
+//     if (!confirmDelete) return;
+//   }
+//   // אם המייל הוא טיוטה, לא נבקש אישור
+//   try {
+//     const res = await fetch(`/api/mails/${mail.id}`, {
+//       method: 'DELETE',
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem('token')}`,
+//       },
+//     });
+
+//     if (!res.ok) throw new Error("Failed to delete email");
+
+//     // מסננים את המייל שנמחק מה-state
+//     setMails(prev => prev.filter(deleteMail => deleteMail.id !== mail.id));
+//     setSelectedMail(null); // ניקוי הבחירה
+//   } catch (err) {
+//     console.error(err);
+//     alert("Failed to delete the email permanently");
+//   }
+// };
+  const handlePermanentDelete = async (mailsToDelete) => {
+  // תמיכה במייל אחד בלבד
+  const mailsArray = Array.isArray(mailsToDelete) ? mailsToDelete : [mailsToDelete];
+
+  const hasNonDraft = mailsArray.some(mail => mail.category !== 'drafts');
+
+  // בקשת אישור אם יש מייל לא מטיוטה
+  if (hasNonDraft) {
+    const confirmDelete = window.confirm("Are you sure you want to permanently delete the selected email(s)?");
     if (!confirmDelete) return;
   }
-  // אם המייל הוא טיוטה, לא נבקש אישור
+
   try {
-    const res = await fetch(`/api/mails/${mail.id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
+    for (const mail of mailsArray) {
+      const res = await fetch(`/api/mails/${mail.id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
 
-    if (!res.ok) throw new Error("Failed to delete email");
+      if (!res.ok) throw new Error("Failed to delete email");
+    }
 
-    // מסננים את המייל שנמחק מה-state
-    setMails(prev => prev.filter(deleteMail => deleteMail.id !== mail.id));
-    setSelectedMail(null); // ניקוי הבחירה
+    setMails(prev => prev.filter(mail => !mailsArray.some(toDelete => toDelete.id === mail.id)));
+    setSelectedMail(null);
+    // setSelectedMails([]); // נקה בחירה מרובה אם צריך
   } catch (err) {
     console.error(err);
-    alert("Failed to delete the email permanently");
+    alert("Failed to delete one or more emails permanently");
   }
 };
 
@@ -529,7 +564,7 @@ const handlePermanentDelete = async (mail) => {
 
         {/* תוכן מיילים - או רשימה או מייל אחד */}
         <div className="mail-content">
-          {!selectedMail ? (
+          {!selectedMail && mails.length > 0  ? (
             <MailList
               mails={filterMailsByCategory()}
               loading={loading}

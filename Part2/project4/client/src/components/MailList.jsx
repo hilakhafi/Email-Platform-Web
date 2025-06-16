@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Star, RefreshCw, MoreHorizontal, CircleSlash, Trash2, Paperclip } from 'lucide-react';
+import { Mail, Star, RefreshCw, MoreHorizontal, CircleSlash, Trash2, Paperclip, Circle } from 'lucide-react';
 import '../styles/MailList.css';
 
 // קומפוננטה לטעינת פרטי משתמש בודד
@@ -124,6 +124,15 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode, toggleStar, 
 }
 
 function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, selectedCategory, onRefresh, toggleStar, moveToTrash, handlePermanentDelete}) {
+  const [selectedMails, setSelectedMails] = useState([]);
+
+  const toggleSelectMail = (mailId) => {
+  setSelectedMails(prev =>
+    prev.includes(mailId) ? prev.filter(id => id !== mailId) : [...prev, mailId]
+  );
+};
+
+const clearSelection = () => setSelectedMails([]);
   const themeClass = darkMode ? 'dark' : 'light';
   
   if (loading) {
@@ -152,6 +161,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
     return (
       <div className={`mail-list-wrapper ${themeClass}`}>
         <div className="mail-list-header">
+
           <div className="header-left">
             <h2 className="header-title">{selectedCategory}</h2>
           </div>
@@ -176,46 +186,105 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
 
  const filteredMails = mails.filter((mail) => {
   const category = selectedCategory.toLowerCase();
-
   if (category === 'starred') {
     return mail.isStarred === true;
   }
-
   return mail.category?.toLowerCase() === category;
 });
 
   return (
     <div className={`mail-list-wrapper ${themeClass}`}>
-      <div className="mail-list-header">
+     <div className="mail-list-header">
+        {/* צד שמאל – רק הכותרת */}
         <div className="header-left">
           <h2 className="header-title">{selectedCategory}</h2>
-
-          {/* {selectedCategory === 'Trash' && selectedMail && (
-            <button
-              className="permanent-delete-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                handlePermanentDelete(selectedMail.id);
-              }}
-              aria-label="מחק לצמיתות"
-              title="מחק לצמיתות"
-            >
-              <Trash2 size={20} />
-            </button>
-          )} */}
         </div>
+
+        {/* צד ימין – רענון + bulk actions */}
         <div className="header-actions">
+          
+            <div className="bulk-actions-buttons">
+{/*               
+              {selectedCategory !== 'trash' && (
+                <button
+                  onClick={() => {
+                    selectedMails.forEach((mailId) => {
+                      const mail = mails.find((m) => m.id === mailId);
+                      if (mail) {
+                        toggleStar(mail.id, mail.isStarred);
+                      }
+                    });
+                  }}
+                  className="icon-button"
+                  aria-label="סמן בכוכב"
+                >
+                  <Star size={18} />
+                </button>
+              )} */}
+
+              <button
+                className="icon-button"
+                onClick={() => {
+                  if (selectedCategory === 'trash') {
+                    const mailsToDelete = selectedMails
+                      .map((id) => mails.find((m) => m.id === id))
+                      .filter(Boolean);
+                    handlePermanentDelete(mailsToDelete);
+                  } else {
+                    selectedMails.forEach((id) => {
+                      moveToTrash(id);
+                    });
+                    clearSelection();
+                  }
+                }}
+                aria-label={selectedCategory === 'trash' ? "מחק לצמיתות" : "העבר לאשפה"}
+                title={selectedCategory === 'trash' ? "מחק לצמיתות" : "העבר לאשפה"}
+              >
+                <Trash2 size={18} />
+              </button>
+
+              <button
+                onClick={clearSelection}
+                className="icon-button"
+                aria-label="בטל בחירה"
+                title="בטל בחירה"
+              >
+                <CircleSlash size={18} />
+              </button>
+
+              <button
+                className="icon-button"
+                aria-label="עוד פעולות"
+                title="עוד פעולות"
+              >
+                <MoreHorizontal size={18} />
+              </button>
+
+              <button
+                onClick={() => setSelectedMails(filteredMails.map(m => m.id))}
+                className="icon-button"
+                aria-label="בחר הכל"
+                title="בחר הכל"
+              >
+                <Circle size={18} />
+              </button>
+            </div>
+          
+
           <button
             className="icon-button"
             onClick={onRefresh}
             aria-label="רענן מיילים"
+            title="רענן מיילים"
           >
             <RefreshCw size={18} />
           </button>
         </div>
       </div>
 
+
       <div className="mail-list-scroll">
+        
         {filteredMails.map((mail) => {
           const isSelected = selectedMail?.id === mail.id;
           const isUnread = !mail.isRead;
@@ -230,6 +299,17 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
                 ${mail.spam ? 'spam' : ''}`}
             >
               <div className="mail-item-content">
+                  <input
+                    type="checkbox"
+                    checked={selectedMails.includes(mail.id)}
+                    onChange={(e) => {
+                      e.stopPropagation();
+                      toggleSelectMail(mail.id);
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+
+                    className="mail-checkbox"
+                  />
                 <div className="mail-item-meta">
                   {mail.category !== 'trash' && (
                     <button
@@ -245,7 +325,7 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
                       />
                     </button>
                   )}
-                  {mail.category !== 'trash' && (
+                  {/* {mail.category !== 'trash' && (
                   <button
                     className="trash-button"
                     onClick={(e) => {
@@ -255,14 +335,17 @@ function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, sel
                   >
                     <Trash2 size={20} />
                   </button>
-                  )}
+                  )} */} 
                   {mail.isImportant && <div className="important-dot"></div>}
                 </div>
 
                 <div className="mail-details">
                   <div className="mail-header">
                     <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>{mail.category === 'inbox' ? mail.fromMail : mail.toMail}</span>
-                    <span className="mail-date">{mail.timestamp}</span>
+                    <span className="mail-date">{new Date(mail.timestamp).toLocaleString("en-US", {
+                      dateStyle: "medium",
+                      timeStyle: "short"
+                    })}</span>
                   </div>
 
                   <div className={`mail-subject ${isUnread ? 'bold' : ''}`}>{mail.subject}</div>
