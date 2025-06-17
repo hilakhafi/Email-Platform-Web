@@ -56,12 +56,9 @@
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 700;
-  font-size: 1.25rem;
-  color: #111827;
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .mail-home.dark .logo {
@@ -166,6 +163,8 @@
   flex: 1;
   display: flex;
   overflow: hidden;
+  width: 100vw; /* הוסף שורה זו */
+
 }
 
 .search-icon-button {

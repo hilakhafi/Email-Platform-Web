@@ -217,24 +217,6 @@ const clearSelection = () => setSelectedMails([]);
         <div className="header-actions">
           
             <div className="bulk-actions-buttons">
-              {/*               
-              {selectedCategory !== 'trash' && (
-                <button
-                  onClick={() => {
-                    selectedMails.forEach((mailId) => {
-                      const mail = mails.find((m) => m.id === mailId);
-                      if (mail) {
-                        toggleStar(mail.id, mail.isStarred);
-                      }
-                    });
-                  }}
-                  className="icon-button"
-                  aria-label="סמן בכוכב"
-                >
-                  <Star size={18} />
-                </button>
-              )} */}
-
               <button
                 className="icon-button"
                 onClick={() => {
@@ -263,14 +245,6 @@ const clearSelection = () => setSelectedMails([]);
                 title="בטל בחירה"
               >
                 <CircleSlash size={18} />
-              </button>
-
-              <button
-                className="icon-button"
-                aria-label="עוד פעולות"
-                title="עוד פעולות"
-              >
-                <MoreHorizontal size={18} />
               </button>
 
               <button
@@ -336,6 +310,7 @@ const clearSelection = () => setSelectedMails([]);
                 ${mail.spam ? 'spam' : ''}`}
             >
               <div className="mail-item-content">
+                <div className="mail-item-meta">
                   <input
                     type="checkbox"
                     checked={selectedMails.includes(mail.id)}
@@ -347,7 +322,6 @@ const clearSelection = () => setSelectedMails([]);
 
                     className="mail-checkbox"
                   />
-                <div className="mail-item-meta">
                   {mail.category !== 'trash' && (
                     <button
                       className="star-button"
@@ -362,23 +336,30 @@ const clearSelection = () => setSelectedMails([]);
                       />
                     </button>
                   )}
-                  {/* {mail.category !== 'trash' && (
-                  <button
-                    className="trash-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      moveToTrash(mail.id);
-                    }}
-                  >
-                    <Trash2 size={20} />
-                  </button>
-                  )} */} 
+                  <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>
+                    {mail.category === 'inbox' ? (mail.fromMail || 'Unknown') : (mail.toMail || 'Unknown')}
+                  </span>
+
+                  <span className={`mail-subject ${isUnread ? 'bold' : ''}`}>
+                    {mail.subject}
+                  </span>
+
+                  <span className="mail-preview">
+                    {mail.preview}
+                  </span>
+
+                  <span className="mail-date">
+                    {new Date(mail.timestamp).toLocaleString("en-US", {
+                      dateStyle: "medium",
+                      timeStyle: "short"
+                    })}
+                  </span>
                   {mail.isImportant && <div className="important-dot"></div>}
                 </div>
+              </div>
 
-                <div className="mail-details">
+                {/* <div className="mail-details">
                   <div className="mail-header">
-                    <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>{mail.category === 'inbox' ? mail.fromMail : mail.toMail}</span>
                     <span className="mail-date">{new Date(mail.timestamp).toLocaleString("en-US", {
                       dateStyle: "medium",
                       timeStyle: "short"
@@ -398,10 +379,9 @@ const clearSelection = () => setSelectedMails([]);
                     <div className="mail-category">
                       <span className={`category-label ${mail.category.toLowerCase()}`}>{mail.category}</span>
                     </div>
-                  )}
-                </div>
+                  )} */}
+                {/* </div> */}
               </div>
-            </div>
           );
         })}
       </div>

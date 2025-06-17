@@ -502,7 +502,7 @@ const moveToSpam = async (mail) => {
             </button>
             <div className="logo">
               <Mail size={24} />
-              <span>Gmail</span>
+              <span>Mailo</span>
             </div>
           </div>
 

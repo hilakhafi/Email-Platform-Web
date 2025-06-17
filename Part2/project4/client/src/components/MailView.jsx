@@ -230,17 +230,7 @@ const handlePreviewAttachment = (attachment) => {
 
       <div className="mailview-actions-sender">
         <div className="actions">
-          <button className="icon-btn"><Archive size={18} /></button>
-          {/* {selectedCategory === 'Trash' && (
-            <button
-              className="permanent-delete-btn icon-btn"
-              onClick={() => handlePermanentDelete(mail)}
-              aria-label="מחק לצמיתות"
-              title="מחק לצמיתות"
-            >
-              <Trash2 size={20} />
-            </button>
-          )} */}
+          
           <div className="dropdown-wrapper">
           <button className="icon-btn" onClick={() => setShowMenu(prev => !prev)}>
             <MoreHorizontal size={18} />
