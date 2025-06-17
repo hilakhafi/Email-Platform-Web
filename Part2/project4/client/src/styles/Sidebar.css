@@ -150,3 +150,42 @@
 .sidebar.dark .label-name {
   color: #d1d5db;
 }
+
+.labels-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.labels-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: #555;
+}
+
+.add-label-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 10px;
+  color: inherit;
+  outline: none;          /* ✅ מונע מסגרת כחולה בדפדפנים */
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+  appearance: none;             /* ✅ מסיר סגנון כפתור דיפולטי */
+  -webkit-appearance: none;
+}
+
+.add-label-btn:focus,
+.add-label-btn:focus-visible,
+.add-label-btn:active {
+  outline: none;
+  box-shadow: none;
+  background: none;
+}
+
+.add-label-btn:hover {
+  color: #0a58ca;
+}

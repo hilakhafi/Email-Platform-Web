@@ -2,13 +2,19 @@ const labelsModel = require('../models/labels');
 
 // Return all labels (even if empty) - filtered by userId
 exports.getAllLabels = (req, res) => {
-  const userId = req.user.id; // using user ID from authentication middleware (token)
-  // if (isNaN(userId)) {
-  //   return res.status(400).json({ error: "Missing or invalid user ID" });
-  // } No longer needed, as userId is set by auth middleware
-
+  console.log('GET /api/labels called, userId:', req.user.userId);
+  const userId = req.user.userId; // using user ID from authentication middleware (token)
+  if (isNaN(userId)) {
+    return res.status(400).json({ error: "Missing or invalid user ID" });
+  } //No longer needed, as userId is set by auth middleware
   const userLabels = labelsModel.getAllLabels(userId);
-  res.status(200).json(userLabels); 
+  console.log('Labels found:', userLabels);
+
+  res.json(userLabels);
+  console.log('All labels:', labelsModel.labels);
+
+
+  // res.status(200).json(userLabels); 
 };
 
 
@@ -18,7 +24,7 @@ exports.getLabel = (req, res) => {
   const label = labelsModel.getLabel(id);
 
   if (label) {
-    if (label.userId !== req.user.id) {
+    if (label.userId !== req.user.userId) {
       return res.status(403).json({ error: "Access denied" });
     }
       res.status(200).json(label);
@@ -36,7 +42,7 @@ exports.editLabel = (req, res) => {
   if (!label) {
     return res.status(404).json({ error: "Label not found" });
   }
-  if (label.userId !== req.user.id) {
+  if (label.userId !== req.user.userId) {
       return res.status(403).json({ error: "Access denied" });
   }
   // Update allowed fields only const allowedFields = ['name', 'color']; ----??
@@ -51,7 +57,7 @@ exports.editLabel = (req, res) => {
 };
 // Create a new label
 exports.addLabel = (req, res) => {
-  const userId = req.user.id; // using user ID from authentication middleware (token
+  const userId = Number(req.user.userId); // using user ID from authentication middleware (token
   const { name, color } = req.body;
 
   if (!name || isNaN(userId)) {
@@ -66,7 +72,8 @@ exports.addLabel = (req, res) => {
   };
 
   labelsModel.addLabel(newLabel);
-  res.status(201).location(`/api/labels/${newLabel.id}`).json();
+  console.log("Labels after add:", labelsModel.labels);
+  res.status(201).location(`/api/labels/${newLabel.id}`).json(newLabel);
 };
 
 
@@ -79,7 +86,7 @@ exports.deleteLabel = (req, res) => {
   if (!label) {
     return res.status(404).json({ error: "label not found" });
   }
-  if (label.userId !== req.user.id) {
+  if (label.userId !== req.user.userId) {
       return res.status(403).json({ error: "Access denied" });
   }
   //save changes
