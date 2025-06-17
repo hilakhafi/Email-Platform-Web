@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Send, Paperclip } from 'lucide-react';
 import AttachmentsList from './AttachmentsList';
 import useFileUpload from '../hooks/useFileUpload';
@@ -10,7 +10,8 @@ function ComposeModal({
   onMailSent, 
   prefillTo = '', 
   prefillSubject = '', 
-  prefillBody = '' 
+  prefillBody = '',
+  forwardAttachments = [] // קבצים מצורפים מהמייל המועבר
 }) {
   const [to, setTo] = useState(prefillTo);
   const [subject, setSubject] = useState(prefillSubject);
@@ -23,8 +24,19 @@ function ComposeModal({
     attachments, 
     handleFileUpload, 
     removeAttachment, 
-    clearAttachments 
+    clearAttachments,
+    addAttachmentsFromForward // פונקציה חדשה להוספת קבצים מועברים
   } = useFileUpload(10); // מקסימום 10MB
+
+  // הוספת קבצים מצורפים מהמייל המועבר בעת טעינת הקומפוננטה
+  useEffect(() => {
+    if (forwardAttachments && forwardAttachments.length > 0) {
+      // אם יש פונקציה להוספת קבצים מועברים, השתמש בה
+      if (addAttachmentsFromForward) {
+        addAttachmentsFromForward(forwardAttachments);
+      }
+    }
+  }, [forwardAttachments, addAttachmentsFromForward]);
 
 const handleSend = async () => {
     if (!to.trim() || !subject.trim()) {
@@ -52,18 +64,40 @@ const handleSend = async () => {
 
     // שולחים מייל כולל מידע האם הוא ספאם
       
-      // אם יש קבצים מצורפים, שלח ל-files endpoint
-      if (attachments.length > 0) {
+      // אם יש קבצים מצורפים (חדשים או מועברים), שלח ל-files endpoint
+      if (attachments.length > 0 || forwardAttachments.length > 0) {
         // יצירת FormData להעלאת קבצים
         const formData = new FormData();
         formData.append('sendTo', to);
         formData.append('subject', subject);
         formData.append('body', body);
         
-        // הוספת כל הקבצים ל-FormData
+        // הוספת כל הקבצים החדשים ל-FormData
         attachments.forEach((file) => {
           formData.append('attachments', file);
         });
+
+        // הוספת קבצים מועברים אם יש
+        if (forwardAttachments && forwardAttachments.length > 0) {
+          forwardAttachments.forEach((attachment) => {
+            // אם יש data (base64), המר אותו חזרה לקובץ
+            if (attachment.data) {
+              try {
+                const byteCharacters = atob(attachment.data);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                  byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: attachment.contentType || 'application/octet-stream' });
+                const file = new File([blob], attachment.filename, { type: attachment.contentType });
+                formData.append('attachments', file);
+              } catch (error) {
+                console.error('Error converting attachment:', error);
+              }
+            }
+          });
+        }
 
         const response = await fetch('http://localhost:4000/api/files/send', {
           method: 'POST',
@@ -77,7 +111,8 @@ const handleSend = async () => {
         if (response.ok) {
           const result = await response.json();
             console.log("Server response:", result); // ← הוסיפי את זה לראות מה חוזר
-          alert("Email sent successfully with " + result.attachments + " attachments!");
+          const totalAttachments = attachments.length + (forwardAttachments?.length || 0);
+          alert("Email sent successfully with " + totalAttachments + " attachments!");
           clearAttachments();
           onClose();
           if (onMailSent) onMailSent();
@@ -96,8 +131,9 @@ const handleSend = async () => {
         body: JSON.stringify({
             sendTo: to,
             subject: subject,
-            body: body
-         , isSpam })
+            body: body,
+            isSpam
+         })
       });
 
         if (response.ok) {
@@ -149,11 +185,19 @@ const moveToDraft = async (mailData) => {
 
   }
 };
+
+  // קביעת כותרת המודל בהתאם לסוג הפעולה
+  const getModalTitle = () => {
+    if (prefillSubject.startsWith('Re:')) return 'Reply';
+    if (prefillSubject.startsWith('Fwd:')) return 'Forward';
+    return 'New Message';
+  };
+
   return (
     <div className="compose-overlay">
       <div className={`compose-modal ${darkMode ? 'dark' : 'light'}`}>
         <div className="compose-header">
-          <h2 className="compose-title">New Message</h2>
+          <h2 className="compose-title">{getModalTitle()}</h2>
           <button onClick={onClose} className="icon-button close-button">
             <X size={20} />
           </button>
@@ -180,6 +224,7 @@ const moveToDraft = async (mailData) => {
             attachments={attachments}
             onRemoveAttachment={removeAttachment}
             darkMode={darkMode}
+            forwardedAttachments={forwardAttachments} // העברת הקבצים המועברים
           />
 
           <textarea
@@ -217,7 +262,8 @@ const moveToDraft = async (mailData) => {
             >
               <Send size={16} />
               {sending ? 'Sending...' : 'Send'}
-              {attachments.length > 0 && ` (${attachments.length} files)`}
+              {(attachments.length > 0 || forwardAttachments.length > 0) && 
+                ` (${attachments.length + (forwardAttachments?.length || 0)} files)`}
             </button>
           </div>
         </div>
