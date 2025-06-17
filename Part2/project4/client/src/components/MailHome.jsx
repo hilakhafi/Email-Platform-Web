@@ -191,24 +191,31 @@ function handleNewMail(newMail) {
   }, []);
 
 useEffect(() => {
+  console.log('fromMail:', mails.fromMail);
+  console.log('toMail:', mails.toMail);
+  console.log('email', userInfo.email);
+
+  if (!userInfo) return; // אם אין משתמש, לא עושים כלום
+
+  const userMails = mails.filter(mail => mail.toMail === userInfo.email);
+  const userDraft = mails.filter(mail => mail.fromMail === userInfo.email);
+
   const updatedCategories = defaultCategories.map(category => {
     let count = 0;
 
-    if (category.name === 'All mail') {
-      // כולל הכל חוץ מספאם ואשפה
-      count = mails.filter(mail => mail.category !== 'Spam' && mail.category !== 'Trash').length;
-    } else if (category.name === 'Starred') {
-      count = mails.filter(mail => mail.isStarred).length;
-    } else {
-      // כל שאר הקטגוריות: Inbox, Sent, Drafts, Spam, Trash
-      count = mails.filter(mail => mail.category === category.name).length;
+    if (category.name === 'inbox') {
+      count = userMails.filter(mail => mail.category === 'inbox' && mail.isRead === false).length;
+    } else if (category.name === 'spam') {
+      count = userMails.filter(mail => mail.category === 'spam' && mail.isRead === false).length;
+    } else if (category.name === 'drafts') {
+      count = userDraft.filter(mail => mail.category === 'drafts').length;
     }
-
     return { ...category, count };
   });
 
   setCategories(updatedCategories);
-}, [mails]);
+
+}, [mails, userInfo]);
 
 
 function getCurrentUserId() {

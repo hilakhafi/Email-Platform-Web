@@ -141,8 +141,8 @@ exports.postMail = async (req, res) => {
       timestamp: new Date().toISOString(),
       preview,
       isRead: true,
-      category:  category || (isSpam ? 'spam' : 'sent'),
-      previousCategory: isSpam ? 'spam' : 'sent',
+      category: 'sent',
+      previousCategory: 'sent',
       isStarred: false,
     };
 
