@@ -1,10 +1,12 @@
-/* בסיס */
+/* scroll in the page */
 .mail-list-wrapper {
   flex: 1;
   display: flex;
   flex-direction: column;
   border-right: 1px solid;
   transition: background-color 0.3s;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .mail-list-wrapper.light {
@@ -501,4 +503,63 @@
   margin: 0;
   accent-color: #1a73e8; /* צבע כחול כמו בג'ימייל */
   cursor: pointer;
+}
+
+/*Design butten to move page*/
+/* עיצוב כולל לחצים (svg) */
+.page-arrow svg {
+  color: inherit; /* מקבל צבע מהכפתור עצמו */
+}
+
+/* מצב רגיל */
+.page-arrow {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: inherit; /* ברירת מחדל - אפור כהה */
+  transition: transform 0.2s ease;
+}
+
+/* ריחוף */
+.page-arrow:hover:not(:disabled) {
+  transform: scale(1.2);
+}
+
+/* כפתור מנוטרל (חץ לא פעיל) */
+.page-arrow:disabled {
+  cursor: default;
+}
+
+/* מספרים */
+.page-indicator {
+  font-weight: bold;
+  color: inherit; /* כך יקבל צבע כמו החצים */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-size: 16px; /* או תואם ל־svg */
+}
+
+/* מצב כהה (אם יש לך מחלקת dark על body או root) */
+.dark .page-arrow,
+.dark .page-indicator {
+  color: white;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  font-size: 16px; /* חשוב! כדי ליישר את המספרים עם האייקונים */
+  height: 40px;   
+}
+
+.top-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* או לפי מה שיש לך */
 }
