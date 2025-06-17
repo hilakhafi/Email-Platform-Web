@@ -309,13 +309,20 @@ const moveToTrash = async (mailId) => {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No token found.");
 
+    // מוצא את המייל כדי לקבל את הקטגוריה הנוכחית שלו
+    const mailToMove = mails.find(mail => mail.id === mailId);
+    if (!mailToMove) throw new Error("Mail not found.");
+
     const res = await fetch(`http://localhost:4000/api/mails/${mailId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ category: "trash" }),
+      body: JSON.stringify({ 
+        category: "trash", 
+        previousCategory: mailToMove.category // שומר את הקטגוריה הנוכחית
+      }),
     });
 
     if (!res.ok) {
@@ -325,7 +332,14 @@ const moveToTrash = async (mailId) => {
     // אם העדכון הצליח, נעדכן גם ב־state המקומי:
     setMails((prevMails) =>
       prevMails.map((mail) =>
-        mail.id === mailId ? { ...mail, category: "trash", isStarred: false, previousCategory: selectedCategory } : mail
+        mail.id === mailId 
+          ? { 
+              ...mail, 
+              category: "trash", 
+              isStarred: false, 
+              previousCategory: mailToMove.category 
+            } 
+          : mail
       )
     );
   } catch (err) {
@@ -345,7 +359,7 @@ const restoreMail = async (mailId, previousCategory) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ category: previousCategory}),
+      body: JSON.stringify({ category: previousCategory }),
     });
 
     if (!res.ok) {
@@ -355,11 +369,15 @@ const restoreMail = async (mailId, previousCategory) => {
     setMails((prevMails) =>
       prevMails.map((mail) =>
         mail.id === mailId
-          ? { ...mail, category: previousCategory}
+          ? { ...mail, category: previousCategory }
           : mail
       )
     );
-     setSelectedCategory(previousCategory.charAt(0).toUpperCase() + previousCategory.slice(1));
+    
+    // סוגר את המייל הנוכחי ועובר לקטגוריה שאליה המייל חזר
+    setSelectedMail(null);
+    setSelectedCategory(previousCategory);
+    
   } catch (err) {
     console.error(err);
   }
