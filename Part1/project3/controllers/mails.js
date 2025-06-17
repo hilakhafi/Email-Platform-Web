@@ -2,14 +2,36 @@ const Emails = require('../models/mails');
 const Users = require('../models/users');
 
 // Get the 50 most recent emails related to the user
-exports.get50Emails = (req, res) => {
-  const userId = req.user.userId; 
-  const relaventEmails = Emails.emails
-    .filter(e => e.from === userId || e.to === userId)
-    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-    .slice(0, 50);
+// exports.get50Emails = (req, res) => {
+//   const userId = req.user.userId; 
+//   const relaventEmails = Emails.emails
+//     .filter(e => e.from === userId || e.to === userId)
+//     .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+//     .slice(0, 50);
 
-    res.json(relaventEmails);
+//     res.json(relaventEmails);
+// };
+exports.get50Emails = (req, res) => {
+  const userId = req.user.userId;
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = 50;
+
+  const allRelevantEmails = Emails.emails
+    .filter(e => e.from === userId || e.to === userId)
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+  const totalEmails = allRelevantEmails.length;
+  const totalPages = Math.ceil(totalEmails / pageSize);
+
+  // חיתוך לפי עמוד
+  const startIndex = (page - 1) * pageSize;
+  const paginatedEmails = allRelevantEmails.slice(startIndex, startIndex + pageSize);
+
+  res.json({
+    mails: paginatedEmails,
+    totalPages,
+    currentPage: page,
+  });
 };
 
 // Get a single email by ID

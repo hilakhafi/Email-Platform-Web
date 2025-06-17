@@ -30,6 +30,8 @@ export default function MailHome() {
   const [labels, setLabels] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   // User menu states
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -58,14 +60,18 @@ export default function MailHome() {
 //     fetchMails();
 //   }, 300); // או אפילו פחות
 // };
-  async function fetchMails() {
+  useEffect(() => {
+  fetchMails(currentPage);
+}, [currentPage]);
+
+  async function fetchMails(page = 1) {
   setLoading(true);
   setError(null);
   try {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No token found. Please login.");
 
-    const res = await fetch("http://localhost:4000/api/mails", {
+    const res = await fetch(`http://localhost:4000/api/mails?page=${page}`, {      
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -78,7 +84,9 @@ export default function MailHome() {
 
     const data = await res.json();
     console.log("Fetched mails:", data);
-    setMails(data);
+    setMails(data.mails);
+    setCurrentPage(data.currentPage);
+    setTotalPages(data.totalPages);
     
     //כאן נעדכן את selectedMail:
     if (selectedMail) {
@@ -592,6 +600,9 @@ const moveToSpam = async (mail) => {
               toggleStar={toggleStar}
               moveToTrash={moveToTrash}
               handlePermanentDelete={handlePermanentDelete}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              setCurrentPage={setCurrentPage}
             />
           ) : (
             <MailView
