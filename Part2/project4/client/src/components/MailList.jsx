@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Star, RefreshCw, MoreHorizontal, CircleSlash, Trash2, Paperclip, Circle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Mail, Star, RefreshCw, MoreHorizontal, CircleSlash, Trash2, Paperclip, Circle } from 'lucide-react';
 import '../styles/MailList.css';
 
 // קומפוננטה לטעינת פרטי משתמש בודד
@@ -123,7 +123,20 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode, toggleStar, 
   );
 }
 
-function MailList({ mails, selectedMail, onSelect, loading, error, darkMode, selectedCategory, onRefresh, toggleStar, moveToTrash, handlePermanentDelete}) {
+function MailList({ mails,
+  selectedMail,
+  onSelect,
+  loading,
+  error,
+  darkMode,
+  selectedCategory,
+  onRefresh,
+  toggleStar,
+  moveToTrash,
+  handlePermanentDelete,
+  currentPage,
+  totalPages,
+  setCurrentPage}) {
   const [selectedMails, setSelectedMails] = useState([]);
 
   const toggleSelectMail = (mailId) => {
@@ -204,7 +217,7 @@ const clearSelection = () => setSelectedMails([]);
         <div className="header-actions">
           
             <div className="bulk-actions-buttons">
-{/*               
+              {/*               
               {selectedCategory !== 'trash' && (
                 <button
                   onClick={() => {
@@ -279,6 +292,30 @@ const clearSelection = () => setSelectedMails([]);
           >
             <RefreshCw size={18} />
           </button>
+          <div className="pagination-controls">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+              disabled={currentPage === 1}
+              className="page-arrow"
+              title="עמוד קודם"
+            >
+              <ChevronLeft size={20} />
+            </button>
+
+            <span className="page-indicator">
+              {currentPage} / {totalPages}
+            </span>
+
+            <button
+              onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="page-arrow"
+              title="עמוד הבא"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
+
         </div>
       </div>
 

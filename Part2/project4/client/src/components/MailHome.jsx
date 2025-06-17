@@ -30,6 +30,8 @@ export default function MailHome() {
   const [labels, setLabels] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   // User menu states
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -58,14 +60,18 @@ export default function MailHome() {
 //     fetchMails();
 //   }, 300); // או אפילו פחות
 // };
-  async function fetchMails() {
+  useEffect(() => {
+  fetchMails(currentPage);
+}, [currentPage]);
+
+  async function fetchMails(page = 1) {
   setLoading(true);
   setError(null);
   try {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No token found. Please login.");
 
-    const res = await fetch("http://localhost:4000/api/mails", {
+    const res = await fetch(`http://localhost:4000/api/mails?page=${page}`, {      
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -78,7 +84,9 @@ export default function MailHome() {
 
     const data = await res.json();
     console.log("Fetched mails:", data);
-    setMails(data);
+    setMails(data.mails);
+    setCurrentPage(data.currentPage);
+    setTotalPages(data.totalPages);
     
     //כאן נעדכן את selectedMail:
     if (selectedMail) {
@@ -301,13 +309,20 @@ const moveToTrash = async (mailId) => {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No token found.");
 
+    // מוצא את המייל כדי לקבל את הקטגוריה הנוכחית שלו
+    const mailToMove = mails.find(mail => mail.id === mailId);
+    if (!mailToMove) throw new Error("Mail not found.");
+
     const res = await fetch(`http://localhost:4000/api/mails/${mailId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ category: "trash" }),
+      body: JSON.stringify({ 
+        category: "trash", 
+        previousCategory: mailToMove.category // שומר את הקטגוריה הנוכחית
+      }),
     });
 
     if (!res.ok) {
@@ -317,7 +332,14 @@ const moveToTrash = async (mailId) => {
     // אם העדכון הצליח, נעדכן גם ב־state המקומי:
     setMails((prevMails) =>
       prevMails.map((mail) =>
-        mail.id === mailId ? { ...mail, category: "trash", isStarred: false, previousCategory: selectedCategory } : mail
+        mail.id === mailId 
+          ? { 
+              ...mail, 
+              category: "trash", 
+              isStarred: false, 
+              previousCategory: mailToMove.category 
+            } 
+          : mail
       )
     );
   } catch (err) {
@@ -337,7 +359,7 @@ const restoreMail = async (mailId, previousCategory) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ category: previousCategory}),
+      body: JSON.stringify({ category: previousCategory }),
     });
 
     if (!res.ok) {
@@ -347,11 +369,15 @@ const restoreMail = async (mailId, previousCategory) => {
     setMails((prevMails) =>
       prevMails.map((mail) =>
         mail.id === mailId
-          ? { ...mail, category: previousCategory}
+          ? { ...mail, category: previousCategory }
           : mail
       )
     );
-     setSelectedCategory(previousCategory.charAt(0).toUpperCase() + previousCategory.slice(1));
+    
+    // סוגר את המייל הנוכחי ועובר לקטגוריה שאליה המייל חזר
+    setSelectedMail(null);
+    setSelectedCategory(previousCategory);
+    
   } catch (err) {
     console.error(err);
   }
@@ -592,6 +618,9 @@ const moveToSpam = async (mail) => {
               toggleStar={toggleStar}
               moveToTrash={moveToTrash}
               handlePermanentDelete={handlePermanentDelete}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              setCurrentPage={setCurrentPage}
             />
           ) : (
             <MailView

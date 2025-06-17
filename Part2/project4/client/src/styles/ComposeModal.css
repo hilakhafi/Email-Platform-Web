@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 50;
+  z-index: 9999; /* העלאת z-index משמעותית */
   backdrop-filter: blur(4px); /* טשטוש רקע */
 }
 
@@ -19,6 +19,8 @@
   flex-direction: column;
   transition: background-color 0.3s;
   overflow: hidden;
+  position: relative; /* הוספה */
+  z-index: 10000; /* הוספה - גבוה יותר מה-overlay */
 }
 
 .compose-modal.light {
@@ -181,9 +183,6 @@
   background-color: #1d4ed8;
   transform: scale(1.05);
 }
-/* הוסיפי את זה לקובץ ComposeModal.css הקיים */
-
-/* סטיילים נוספים עבור כפתור ה-attach */
 .attach-button {
   cursor: pointer;
   transition: all 0.25s ease;

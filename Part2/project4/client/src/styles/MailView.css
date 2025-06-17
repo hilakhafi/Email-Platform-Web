@@ -154,7 +154,7 @@
 .mailview-body {
   flex: 1;
   padding: 1.5rem;
-  overflow-y: auto;
+  /*overflow-y: auto;*/
 }
 
 /* Mail text content */

@@ -8,6 +8,7 @@ function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose, handlePerm
   const [loadingUser, setLoadingUser] = useState(false);
   const [errorUser, setErrorUser] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
+  const [showForwardModal, setShowForwardModal] = useState(false); // הוספת state לforward modal
   const [showMenu, setShowMenu] = useState(false);
   const [showComposeModal, setShowComposeModal] = useState(false);
   const [draftToDeleteAfterSend, setDraftToDeleteAfterSend] = useState(null);
@@ -219,7 +220,7 @@ const handlePreviewAttachment = (attachment) => {
   return (
     
     <div className="mailview-header">
-      {!showReplyModal && !showComposeModal && (
+      {!showReplyModal && !showComposeModal && !showForwardModal && (
       <div className={`mailview-topbar ${darkMode ? 'dark' : 'light'}`}>
         <button className="back-arrow" onClick={onClose}>
           <ArrowLeft size={20} />
@@ -302,14 +303,14 @@ const handlePreviewAttachment = (attachment) => {
                     </div>
                   </div>
                   <div className="attachment-actions">
-                    <button 
+                    <button
                       className="attachment-btn preview-btn"
                       onClick={() => handlePreviewAttachment(attachment)}
                       title="תצוגה מקדימה"
                     >
                       <Eye size={14} />
                     </button>
-                    <button 
+                    <button
                       className="attachment-btn download-btn"
                       onClick={() => handleDownloadAttachment(attachment)}
                       title="הורד קובץ"
@@ -327,11 +328,11 @@ const handlePreviewAttachment = (attachment) => {
       <div className="mailview-footer">
         <div className="footer-buttons">
           <button className="btn primary" onClick={() => setShowReplyModal(true)}>Reply</button>
-          <button className="btn secondary">Reply All</button>
-          <button className="btn secondary">Forward</button>
+          <button className="btn secondary" onClick={() => setShowForwardModal(true)}>Forward</button>
         </div>
       </div>
 
+      {/* Modal למענה */}
       {showReplyModal && (
         <ComposeModal
           onClose={() => setShowReplyModal(false)}
@@ -342,6 +343,21 @@ const handlePreviewAttachment = (attachment) => {
           prefillBody={`\n\n--- Original message from ${user?.mail || 'unknown'} ---\n${mail.body}`}
         />
       )}
+
+      {/* Modal להעברה */}
+      {showForwardModal && (
+        <ComposeModal
+          onClose={() => setShowForwardModal(false)}
+          darkMode={darkMode}
+          onMailSent={() => setShowForwardModal(false)}
+          prefillTo="" // נשאיר ריק כדי שהמשתמש יוכל למלא
+          prefillSubject={`Fwd: ${mail.subject}`}
+          prefillBody={`\n\n--- Forwarded message ---\nFrom: ${user?.mail || 'unknown'}\nDate: ${new Date(mail.timestamp).toLocaleString()}\nSubject: ${mail.subject}\n\n${mail.body}`}
+          forwardAttachments={mail.attachments} // העברת הקבצים המצורפים
+        />
+      )}
+
+      {/* Modal לשליחה מחדש */}
       {showComposeModal && (
         <ComposeModal
           onClose={() => {
