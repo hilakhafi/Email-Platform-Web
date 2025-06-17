@@ -302,14 +302,14 @@ const handlePreviewAttachment = (attachment) => {
                     </div>
                   </div>
                   <div className="attachment-actions">
-                    <button 
+                    <button
                       className="attachment-btn preview-btn"
                       onClick={() => handlePreviewAttachment(attachment)}
                       title="תצוגה מקדימה"
                     >
                       <Eye size={14} />
                     </button>
-                    <button 
+                    <button
                       className="attachment-btn download-btn"
                       onClick={() => handleDownloadAttachment(attachment)}
                       title="הורד קובץ"
