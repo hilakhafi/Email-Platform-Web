@@ -119,63 +119,65 @@ async function handleMarkAsUnread(id) {
   }
 }
 
-  // פונקציה להורדת קובץ
-  const handleDownloadAttachment = (attachment) => {
-    try {
-      // אם יש base64 data
-      if (attachment.data) {
-        const byteCharacters = atob(attachment.data);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: attachment.contentType || 'application/octet-stream' });
-        
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = attachment.filename || 'attachment';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
+// פונקציה להורדת קובץ - מתוקנת
+const handleDownloadAttachment = (attachment) => {
+  try {
+    // אם יש base64 data
+    if (attachment.data) {
+      const byteCharacters = atob(attachment.data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
-      // אם יש path לקובץ בשרת
-      else if (attachment.path) {
-        const link = document.createElement('a');
-        link.href = `http://localhost:4000/api/attachments/${attachment.path}`;
-        link.download = attachment.filename || 'attachment';
-        link.click();
-      }
-    } catch (error) {
-      console.error('Error downloading attachment:', error);
-      alert('שגיאה בהורדת הקובץ');
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: attachment.contentType || 'application/octet-stream' });
+               
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = attachment.filename || 'attachment';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
     }
-  };
+    // אם יש path לקובץ בשרת
+    else if (attachment.path) {
+      const link = document.createElement('a');
+      // תיקון הנתיב - הסרת files/ מהנתיב
+      link.href = `http://localhost:4000/uploads/${attachment.filename}`;
+      link.download = attachment.filename || 'attachment';
+      link.click();
+    }
+  } catch (error) {
+    console.error('Error downloading attachment:', error);
+    alert('שגיאה בהורדת הקובץ');
+  }
+};
 
-  // פונקציה לתצוגה מקדימה של קובץ
-  const handlePreviewAttachment = (attachment) => {
-    try {
-      if (attachment.data) {
-        const byteCharacters = atob(attachment.data);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: attachment.contentType || 'application/octet-stream' });
-        
-        const url = window.URL.createObjectURL(blob);
-        window.open(url, '_blank');
-      } else if (attachment.path) {
-        window.open(`http://localhost:4000/api/attachments/${attachment.path}`, '_blank');
+// פונקציה לתצוגה מקדימה של קובץ - מתוקנת
+const handlePreviewAttachment = (attachment) => {
+  try {
+    if (attachment.data) {
+      const byteCharacters = atob(attachment.data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
-    } catch (error) {
-      console.error('Error previewing attachment:', error);
-      alert('שגיאה בתצוגה מקדימה של הקובץ');
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: attachment.contentType || 'application/octet-stream' });
+      
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    } else if (attachment.path) {
+      // תיקון הנתיב - השתמש ב-uploads/ ישירות
+      window.open(`http://localhost:4000/uploads/${attachment.filename}`, '_blank');
     }
-  };
+  } catch (error) {
+    console.error('Error previewing attachment:', error);
+    alert('שגיאה בתצוגה מקדימה של הקובץ');
+  }
+};
 
   // פונקציה לקבלת איקון לפי סוג קובץ
   const getFileIcon = (filename, contentType) => {

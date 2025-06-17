@@ -26,6 +26,7 @@ app.use('/api/mails', mails);
 app.use('/api/labels', labels);
 app.use('/api/blacklist', blacklist);
 app.disable('etag');
+// Static files for uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/files', filesRoutes);
 
