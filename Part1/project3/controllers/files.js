@@ -3,10 +3,10 @@ const path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
-// הגדרת multer
+// הגדרת multer - שמירה ישירות ב-uploads (ללא תיקיית files)
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const uploadPath = path.join(__dirname, '..', 'uploads', 'files');
+    const uploadPath = path.join(__dirname, '..', 'uploads');
     // יצירת התיקייה אם היא לא קיימת
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true });
@@ -125,10 +125,11 @@ const sendMail = async (req, res) => {
   }
 };
 
+// תיקון הפונקציה downloadAttachment - להסיר את תיקיית files
 const downloadAttachment = (req, res) => {
   try {
     const filename = req.params.filename;
-    const filepath = path.join(__dirname, '..', 'uploads', 'files', filename);
+    const filepath = path.join(__dirname, '..', 'uploads', filename); // הסרת 'files' מהנתיב
 
     if (!fs.existsSync(filepath)) {
       return res.status(404).json({ error: 'File not found' });
