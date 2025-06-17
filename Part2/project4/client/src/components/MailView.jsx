@@ -3,7 +3,7 @@ import { Mail, Archive, Trash2, MoreHorizontal, AlertTriangle, Paperclip, Downlo
 import ComposeModal from './ComposeModal';
 import '../styles/MailView.css';
 
-function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose, handlePermanentDelete,selectedCategory  }) {
+function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose, handlePermanentDelete,selectedCategory, onUpdateMail}) {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(false);
   const [errorUser, setErrorUser] = useState(null);
@@ -50,8 +50,44 @@ function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose, handlePerm
         setLoadingUser(false);
       }
     }
+     // סימון המייל כנקרא
+      async function markMailAsRead() {
+        if (!mail.isRead) {
+          try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+              console.error('No authorization token found');
+              return;
+            }
+            const res = await fetch(`http://localhost:4000/api/mails/${mail.id}`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,  // לשים "Bearer " לפני הטוקן, אם השרת דורש
+              },
+              body: JSON.stringify({ isRead: true }),
+            });
 
+            if (res.ok) {
+              try {
+                const updatedMail = await res.json();
+                onUpdateMail?.(updatedMail);
+              } catch (e) {
+                console.warn('Response was empty, using local update');
+                onUpdateMail?.({ ...mail, isRead: true }); // לעדכן מתוך הסטייט הקיים
+              }
+            } else {
+              // אפשר לקרוא טקסט של הודעת שגיאה מהשרת ולוג אותו
+              const errorText = await res.text();
+              console.error(`Failed to mark mail as read: ${res.status} ${res.statusText} - ${errorText}`);
+            }
+          } catch (err) {
+            console.error("Network or fetch error:", err);
+          }
+        }
+      }
     fetchUser();
+    markMailAsRead();
   }, [mail]);
 
 
@@ -62,16 +98,22 @@ const handleResend = () => {
 
 async function handleMarkAsUnread(id) {
   try {
-    await fetch(`http://localhost:4000/api/mails/${id}`, {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`http://localhost:4000/api/mails/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('token'),
+        'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({ isRead: false }),
     });
-    setShowMenu(false);
-    window.location.reload(); // או עדכון סטייט
+    if (res.ok) {
+      const updatedMail = await res.json();
+      setShowMenu(false);
+      onUpdateMail(updatedMail);  // מעדכן את ה-mail ב-parent
+    }
+    // setShowMenu(false);
+    // window.location.reload(); // או עדכון סטייט
   } catch (error) {
     console.error('Failed to mark as unread:', error);
   }

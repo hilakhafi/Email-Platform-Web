@@ -42,6 +42,14 @@ export default function MailHome() {
     birthDate: "",
     gender: ""
   });
+
+  const handleUpdateMail = (updatedMail) => {
+  console.log('handleUpdateMail', updatedMail);
+  setMails(prev =>
+    prev.map(mail => (mail.id === updatedMail.id ? updatedMail : mail))
+  );
+  setSelectedMail(updatedMail); // גם המייל הנבחר מתעדכן
+};
   
   const userMenuRef = useRef(null);
 //   const handleMailSent = () => {
@@ -587,6 +595,7 @@ const moveToSpam = async (mail) => {
               onClose={() => setSelectedMail(null)}
               handlePermanentDelete={handlePermanentDelete}
               selectedCategory={selectedCategory}
+              onUpdateMail={handleUpdateMail}
             />
           )}
         </div>
