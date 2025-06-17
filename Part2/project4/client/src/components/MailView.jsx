@@ -8,6 +8,7 @@ function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose, handlePerm
   const [loadingUser, setLoadingUser] = useState(false);
   const [errorUser, setErrorUser] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
+  const [showForwardModal, setShowForwardModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showComposeModal, setShowComposeModal] = useState(false);
   const [draftToDeleteAfterSend, setDraftToDeleteAfterSend] = useState(null);
