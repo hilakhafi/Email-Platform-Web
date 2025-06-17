@@ -18,7 +18,13 @@
   background-color: #1f2937;
   border-color: #374151;
 }
+.mail-item-meta span {
+  color: black;
+  margin-inline: 1rem;
+  font-family: 'Inter', sans-serif;
 
+
+}
 /* מרכז מסך */
 .center {
   display: flex;
@@ -82,7 +88,7 @@
 }
 
 .light .icon-button:hover {
-  background-color: #2159ca;
+  background-color: #b6c5e5;
 }
 
 .dark .icon-button:hover {
@@ -90,6 +96,7 @@
 }
 
 .header-title {
+  font-family: 'Poppins', sans-serif;
   font-size: 1.125rem;
   font-weight: 500;
 }
@@ -182,7 +189,7 @@
 .mail-item-content {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* רווח בין הפריטים */
+  gap: 50rem; /* רווח בין הפריטים */
 }
 
 .mail-item-meta {
@@ -196,6 +203,7 @@
   border: none;
   background: transparent;
   border-radius: 0.25rem;
+  width: 50px;
 }
 
 .light .star-button:hover {
@@ -235,6 +243,7 @@
 
 .mail-sender {
   font-weight: 500;
+  width: 200px; /* גודל קבוע */
 }
 
 .bold {
@@ -242,8 +251,9 @@
 }
 
 .mail-date {
-  font-size: 0.875rem;
+  font-weight: 500;
   color: #6b7280;
+  width: 200px; /* גודל קבוע */
 }
 
 .dark .mail-date {
@@ -251,8 +261,9 @@
 }
 
 .mail-subject {
-  font-size: 0.875rem;
+  font-weight: 500;
   margin-bottom: 0.25rem;
+  width: 200px; /* גודל קבוע */
 }
 
 .light .mail-subject {
@@ -264,11 +275,12 @@
 }
 
 .mail-preview {
-  font-size: 0.875rem;
+  font-weight: 500;
   color: #6b7280;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 400px; /* גודל קבוע */
 }
 
 .dark .mail-preview {
@@ -503,12 +515,13 @@
   margin: 0;
   accent-color: #1a73e8; /* צבע כחול כמו בג'ימייל */
   cursor: pointer;
+  width: 20px; /* גודל מותאם */
 }
 
 /*Design butten to move page*/
 /* עיצוב כולל לחצים (svg) */
 .page-arrow svg {
-  color: inherit; /* מקבל צבע מהכפתור עצמו */
+  color: #c5cfdb; /* מקבל צבע מהכפתור עצמו */
 }
 
 /* מצב רגיל */
@@ -517,13 +530,14 @@
   border: none;
   cursor: pointer;
   padding: 0.25rem;
-  color: inherit; /* ברירת מחדל - אפור כהה */
+  color: #c5cfdb; /* ברירת מחדל - אפור כהה */
   transition: transform 0.2s ease;
 }
 
 /* ריחוף */
 .page-arrow:hover:not(:disabled) {
   transform: scale(1.2);
+  color: #c5cfdb;
 }
 
 /* כפתור מנוטרל (חץ לא פעיל) */
@@ -557,6 +571,7 @@
   font-size: 16px; /* חשוב! כדי ליישר את המספרים עם האייקונים */
   height: 40px;   
 }
+
 
 .top-toolbar {
   display: flex;

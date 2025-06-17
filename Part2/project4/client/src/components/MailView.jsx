@@ -227,10 +227,11 @@ const handlePreviewAttachment = (attachment) => {
         </button>
       </div>
       )}
-      <h1 className="mailview-subject">{mail.subject}</h1>
+      
 
       <div className="mailview-actions-sender">
         <div className="actions">
+          <h1 className="mailview-subject">{mail.subject}</h1>
           
           <div className="dropdown-wrapper">
           <button className="icon-btn" onClick={() => setShowMenu(prev => !prev)}>
@@ -243,7 +244,6 @@ const handlePreviewAttachment = (attachment) => {
               <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
          {selectedCategory === 'trash' &&  <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>}
          {selectedCategory === 'drafts' && <button onClick={() => {handleResend();  setShowMenu(false);}}>Resend</button>}
-
         </div>
       )}
 </div>
