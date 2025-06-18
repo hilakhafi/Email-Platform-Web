@@ -246,10 +246,9 @@ const handlePreviewAttachment = (attachment) => {
          {selectedCategory === 'drafts' && <button onClick={() => {handleResend();  setShowMenu(false);}}>Resend</button>}
         </div>
       )}
-</div>
-        </div>
+      </div>
 
-        <div className="sender-info">
+      <div className="sender-info">
           <div className="sender-avatar">{fromName.charAt(0) || '?'}</div>
           <div className="sender-details">
             <div className="sender-name">{fromName}</div>
@@ -260,6 +259,9 @@ const handlePreviewAttachment = (attachment) => {
           </div>
         </div>
       </div>
+    </div>
+
+        
 
       {mail.spam && (
         <div className="spam-warning">
