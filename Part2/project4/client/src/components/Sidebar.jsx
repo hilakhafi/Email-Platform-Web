@@ -1,11 +1,13 @@
-import { Edit, Plus } from 'lucide-react';
+import { Edit, Plus, Minus } from 'lucide-react';
 import '../styles/Sidebar.css';
 import React, { useState, useEffect } from 'react';
 import LabelDropdown from './LabelDropdown';
 
 
-function Sidebar({ onCompose, selectedCategory, onCategorySelect, categories, darkMode, onLabelSelect, selectedLabel }) {
+function Sidebar({ onCompose, selectedCategory, setSelectedCategory, onCategorySelect, categories, darkMode, onLabelSelect, selectedLabel }) {
   const [labels, setLabels] = useState([]);
+  const [allMails, setAllMails] = useState([]); // לא undefined!
+
   const fetchLabels = async () => {
         try {
           const token = localStorage.getItem("token");
@@ -70,6 +72,68 @@ const handleAddLabel = async () => {
   }
 };
 
+const handleDeleteLabel = async (labelName) => {
+  try {
+    const labelToDelete = labels.find((l) => l.name === labelName);
+    if (!labelToDelete) return;
+    const token = localStorage.getItem('token');
+    console.log('Deleting label:', labelToDelete);
+    const allMailsRes = await fetch(`http://localhost:4000/api/mails`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+    });
+
+    if (!allMailsRes.ok) {
+      throw new Error("Failed to get mail");
+    }
+    const allMails = await allMailsRes.json();
+    console.log('allMails:', allMails.mails);
+    const mailsWithLabel = allMails.mails.filter(mail => mail.label?.includes(labelToDelete.name));
+    console.log('mailsWithLabel:', mailsWithLabel);
+    for (const mail of mailsWithLabel) {
+      const updatedLabelIds = mail.label.filter(name => name !== labelToDelete.name);
+      console.log('Updating mail:', mail.id, 'with labels:', updatedLabelIds);
+      const res2 = await fetch(`http://localhost:4000/api/mails/${mail.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ label: updatedLabelIds }),
+        });
+      
+        if (!res2.ok) {
+          throw new Error("Failed to updat mail");
+        }
+      }
+
+    const res3 = await fetch(`http://localhost:4000/api/labels/${labelToDelete.id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'user-id': labelToDelete.userId, // אם את בודקת את זה בשרת
+      },
+    });
+
+    if (!res3.ok) {
+      throw new Error('Failed to delete label');
+    }
+
+    
+
+    // עדכון סטייט
+    setLabels((prev) => prev.filter((l) => l.id !== labelToDelete.id));
+    onLabelSelect(null); // ביטול בחירה
+    setSelectedCategory('inbox'); // או כל קטגוריה אחרת שאת רוצה להחזיר לברירת מחד
+  } catch (err) {
+    console.error(err);
+    alert('שגיאה במחיקת לייבל');
+  }
+};
+
 
   return (
     <div className={`sidebar ${darkMode ? 'dark' : 'light'}`}>
@@ -107,6 +171,15 @@ const handleAddLabel = async () => {
           <div className="labels-section">
             <div className="labels-header">
               <span className="labels-title">Labels</span>
+              {selectedLabel && (
+                <button
+                  className="delete-label-btn"
+                  onClick={() => handleDeleteLabel(selectedLabel)}
+                  title="Delete label"
+                >
+                  <Minus size={22} />
+                </button>
+              )}
               <button className="add-label-btn" onClick={handleAddLabel}>
                 <Plus size={22} />
               </button>

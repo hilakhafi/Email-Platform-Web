@@ -75,7 +75,6 @@
   padding: 1.5rem;
   margin-bottom: 1rem;
   color: inherit;
-  align-items: center;
 }
 
 /* Section containing actions and sender info */
@@ -124,18 +123,24 @@
 
 /* Sender avatar circle with initials */
 .sender-avatar {
-  width: 2.5rem;
-  height: 2.5rem;
-  background-color: #2563eb; /* blue-600 */
+  width: 40px;
+  height: 40px;
   border-radius: 9999px;
-  color: white;
+  overflow: hidden;
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-weight: 600;
+  justify-content: center;
+  background-color: #2563eb;
+  color: white;
+  font-weight: bold;
   font-size: 1.25rem;
 }
 
+.sender-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 /* Sender name and time column */
 .sender-details {
   display: flex;
@@ -461,4 +466,20 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+.standalone-back {
+  margin: 1rem;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s ease;
+}
+
+.standalone-back:hover {
+  opacity: 0.7;
+  background-color: transparent;
 }

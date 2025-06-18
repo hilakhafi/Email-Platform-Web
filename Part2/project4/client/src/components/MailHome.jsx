@@ -601,6 +601,7 @@ const moveToSpam = async (mail) => {
         setSelectedCategory(category);
         setSelectedLabel('');
       }}
+      setSelectedCategory={setSelectedCategory}
       categories={categories}
       labels={labels}
       darkMode={darkMode}
@@ -643,6 +644,7 @@ const moveToSpam = async (mail) => {
               onUpdateMail={handleUpdateMail}
               setSelectedMail={setSelectedMail}         
               setSelectedCategory={setSelectedCategory}  
+              
             />
           )}
         </div>

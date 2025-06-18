@@ -183,6 +183,10 @@
 /* חובה לוודא שטענת את הגופן Inter או Poppins ב־HTML */
 
 .user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
   font-family: 'Inter', sans-serif;
   background-color: #fff;
   border: 1px solid #ddd;
@@ -257,4 +261,8 @@
 
 .user-menu-item.logout:hover {
   background-color: #fce8e6;
+}
+.user-menu-container {
+  position: relative; /* חשוב */
+  display: inline-block;
 }

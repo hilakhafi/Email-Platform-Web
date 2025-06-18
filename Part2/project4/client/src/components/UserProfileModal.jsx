@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, User, Mail, Calendar, Users, Camera, Save, AlertCircle } from 'lucide-react';
-
+import '../styles/UserProfileModal.css';
 const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
   const [formData, setFormData] = useState({
     first_name: '',
@@ -16,23 +16,27 @@ const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
   const [success, setSuccess] = useState('');
   const [imagePreview, setImagePreview] = useState(userInfo.avatar || null);
 
-  useEffect(() => {
-    if (userInfo) {
-      const fixedAvatarUrl = userInfo.avatar ? `http://localhost:4000/${userInfo.avatar.replace(/\\/g, '/')}` : null;
-      setImagePreview(fixedAvatarUrl);
-      const nameParts = userInfo.name.split(' ');
-      setFormData({
-        first_name: nameParts[0] || '',
-        last_name: nameParts.slice(1).join(' ') || '',
-        username: userInfo.username || '',
-        mail: userInfo.mail || '',
-        birth_date: userInfo.birthDate ? userInfo.birthDate.split('T')[0] : '',
-        gender: userInfo.gender || '',
-        profileImage: null
-      });
-    //setImagePreview(userInfo.avatar || null);
-    }
-  }, [userInfo]);
+useEffect(() => {
+  if (userInfo) {
+    const fixedAvatarUrl = userInfo.avatar
+      ? `http://localhost:4000/${userInfo.avatar.replace(/\\/g, '/')}`
+      : null;
+
+    // רק אם אין תצוגה קיימת (למשל כי המשתמש לא בחר עדיין קובץ)
+    setImagePreview(prev => prev || fixedAvatarUrl);
+
+    const nameParts = userInfo.name.split(' ');
+    setFormData({
+      first_name: nameParts[0] || '',
+      last_name: nameParts.slice(1).join(' ') || '',
+      username: userInfo.username || '',
+      mail: userInfo.mail || '',
+      birth_date: userInfo.birthDate ? userInfo.birthDate.split('T')[0] : '',
+      gender: userInfo.gender || '',
+      profileImage: null
+    });
+  }
+}, [userInfo]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -137,6 +141,13 @@ const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
 
         <form onSubmit={handleSubmit} className="profile-form">
           {/* Profile Image */}
+          <div className="image-preview">
+            {imagePreview ? (
+              <img src={imagePreview} alt="Profile" />
+            ) : (
+              <span>?</span> // או אייקון ברירת מחדל
+            )}
+          </div>
           <div className="image-section">
             
             <label className="image-upload-btn">
