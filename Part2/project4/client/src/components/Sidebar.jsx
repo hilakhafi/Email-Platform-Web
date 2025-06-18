@@ -1,8 +1,10 @@
 import { Edit, Plus } from 'lucide-react';
 import '../styles/Sidebar.css';
 import React, { useState, useEffect } from 'react';
+import LabelDropdown from './LabelDropdown';
 
-function Sidebar({ onCompose, selectedCategory, onCategorySelect, categories, darkMode }) {
+
+function Sidebar({ onCompose, selectedCategory, onCategorySelect, categories, darkMode, onLabelSelect, selectedLabel }) {
   const [labels, setLabels] = useState([]);
   const fetchLabels = async () => {
         try {
@@ -29,6 +31,10 @@ function Sidebar({ onCompose, selectedCategory, onCategorySelect, categories, da
     fetchLabels();
   }, []);
 
+  const handleSelectLabel = (labelName) => {
+    console.log("Selected label:", labelName);
+    onCategorySelect(labelName); // כאן תוכל להתאים לפעולה הרצויה
+  };
 
 const handleAddLabel = async () => {
   const name = prompt("Enter label name:");
@@ -105,15 +111,22 @@ const handleAddLabel = async () => {
                 <Plus size={22} />
               </button>
             </div>
-            {labels.map(label => (
-              <div key={label.name} className="label-item">
-                <div
-                  className="label-color"
-                  style={{ backgroundColor: label.color }}
-                ></div>
-                <span className="label-name">{label.name}</span>
-              </div>
-            ))}
+          {labels.map(label => {
+            const isSelectedLabel = selectedLabel === label.name;
+            return (
+            <button
+              key={label.name}
+              onClick={() => onLabelSelect(label.name)}
+              className={`label-item ${isSelectedLabel ? 'selected' : ''}`}
+            >
+              <div
+                className="label-color"
+                style={{ backgroundColor: label.color }}
+              ></div>
+              <span className="label-name">{label.name}</span>
+            </button>
+            );
+          })}
           </div>
         )}
       </div>

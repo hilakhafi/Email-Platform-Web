@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Mail, Star, RefreshCw, MoreHorizontal, CircleSlash, Trash2, Paperclip, Circle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Mail, Star, RefreshCw, MoreHorizontal, CircleSlash, Trash2, Paperclip, Circle,Tag } from 'lucide-react';
 import '../styles/MailList.css';
+import LabelDropdown from './LabelDropdown';
 
 // קומפוננטה לטעינת פרטי משתמש בודד
-function MailItemWithUser({ mail, selectedMail, onSelect, darkMode, toggleStar, moveToTrash }) {
+function MailItemWithUser({ mail, selectedMail, onSelect, darkMode, 
+  toggleStar, moveToTrash, onAddLabelToMail, onRemoveLabelFromMail }) {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(false);
+  const [showLabelDropdown, setShowLabelDropdown] = useState(false);
 
   useEffect(() => {
     if (!mail.from) return;
@@ -70,6 +73,29 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode, toggleStar, 
             </button>
           )}
           {mail.category !== 'trash' && (
+            <div className="relative">
+              <button
+                className="label-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowLabelDropdown(!showLabelDropdown);
+                }}
+                title="Manage labels"
+              >
+                <Tag size={16} />
+              </button>
+              
+              <LabelDropdown
+                // isOpen={showLabelDropdown}
+                // onClose={() => setShowLabelDropdown(false)}
+                // onAddToLabel={(labelId) => togglelabel(mail.id, labelId)}
+                // onRemoveFromLabel={(labelName) => onRemoveLabelFromMail(mail.id, labelName)}
+                // currentLabels={mail.labels || []}
+                // position="bottom-left"
+              />
+            </div>
+          )}
+          {mail.category !== 'trash' && (
           <button
             className="trash-button"
             onClick={(e) => {
@@ -105,6 +131,27 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode, toggleStar, 
             )}
           </div>
           <div className="mail-preview">{mail.preview}</div>
+          {mail.labels && mail.labels.length > 0 && (
+            <div className="mail-labels">
+              {mail.labels.map((label, index) => (
+                <span 
+                  key={index}
+                  className="label-tag"
+                  style={{ 
+                    backgroundColor: label.color || '#4285f4',
+                    color: 'white',
+                    fontSize: '11px',
+                    padding: '2px 6px',
+                    borderRadius: '10px',
+                    marginRight: '4px',
+                    display: 'inline-block'
+                  }}
+                >
+                  {typeof label === 'string' ? label : label.name}
+                </span>
+              ))}
+            </div>
+          )}
 
           {mail.spam && (
             <div className="mail-category">
@@ -136,8 +183,15 @@ function MailList({ mails,
   handlePermanentDelete,
   currentPage,
   totalPages,
-  setCurrentPage}) {
+  setCurrentPage,
+  onAddLabelToMail,
+  onRemoveLabelFromMail,
+  onRemoveLabelFromMails,
+  setMails,
+  selectedLabel
+  }) {
   const [selectedMails, setSelectedMails] = useState([]);
+  const [showBulkLabelDropdown, setShowBulkLabelDropdown] = useState(false);
 
   const toggleSelectMail = (mailId) => {
   setSelectedMails(prev =>
@@ -197,12 +251,54 @@ const clearSelection = () => setSelectedMails([]);
     );
   }
 
- const filteredMails = mails.filter((mail) => {
+  const togglelabel = async (mailId, label) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No token found.");
+    const mailToMove = mails.find(mail => mail.id === mailId);
+    console.log('mailToMove:', mailToMove);
+    console.log('label:', label);
+    console.log('mailToMove.labelId:', mailToMove.labelId);
+
+    const updatedLabelIds = [...mailToMove.labelId, label];
+    console.log('updatedLabelIds:', updatedLabelIds);
+
+
+    const res = await fetch(`http://localhost:4000/api/mails/${mailId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ labelId: updatedLabelIds }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to toggle label");
+    }
+
+    setMails((prevMails) =>
+      prevMails.map((mail) =>
+        mail.id === mailId ? { ...mail, labelId: updatedLabelIds } : mail
+      )
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+  const filteredMails = mails.filter((mail) => {
   const category = selectedCategory.toLowerCase();
+  const label = selectedLabel;
+  
   if (category === 'starred') {
     return mail.isStarred === true;
   }
-  return mail.category?.toLowerCase() === category;
+  const categoryMatch = mail.category?.toLowerCase() === category;
+  const labelMatch = !label || (mail.labelId && mail.labelId.includes(label));
+
+  return categoryMatch && labelMatch;
 });
 
   return (
@@ -234,6 +330,32 @@ const clearSelection = () => setSelectedMails([]);
                   <Star size={18} />
                 </button>
               )} */}
+              <div className="relative">
+                <button
+                  className="icon-button"
+                  onClick={() => setShowBulkLabelDropdown(prev => !prev)}
+                  aria-label="ניהול תוויות"
+                  title="ניהול תוויות"
+                >
+                  <Tag size={18} />
+                </button>
+
+                <LabelDropdown
+                  isOpen={showBulkLabelDropdown}
+                  onClose={() => setShowBulkLabelDropdown(false)}
+                  onAddToLabel={(labelId) => {
+                    selectedMails.forEach((id) => togglelabel(id, labelId));
+                    clearSelection(); // אופציונלי
+                  }}
+                  onRemoveFromLabel={(labelName) => {
+                    selectedMails.forEach((id) => onRemoveLabelFromMails(id, labelName));
+                    clearSelection(); // אופציונלי
+                  }}
+                  currentLabels={[]} // אפשר להשאיר ריק או לחשב לפי המכנה המשותף בין המיילים
+                  position="bottom-left"
+                />
+              </div>
+
 
               <button
                 className="icon-button"
