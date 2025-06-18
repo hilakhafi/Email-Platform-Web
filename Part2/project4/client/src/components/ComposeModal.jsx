@@ -71,7 +71,7 @@ const handleSend = async () => {
         formData.append('sendTo', to);
         formData.append('subject', subject);
         formData.append('body', body);
-        
+        formData.append('isSpam', isSpam);
         // הוספת כל הקבצים החדשים ל-FormData
         attachments.forEach((file) => {
           formData.append('attachments', file);

@@ -388,14 +388,6 @@ const clearSelection = () => setSelectedMails([]);
               </button>
 
               <button
-                className="icon-button"
-                aria-label="עוד פעולות"
-                title="עוד פעולות"
-              >
-                <MoreHorizontal size={18} />
-              </button>
-
-              <button
                 onClick={() => setSelectedMails(filteredMails.map(m => m.id))}
                 className="icon-button"
                 aria-label="בחר הכל"
@@ -458,6 +450,7 @@ const clearSelection = () => setSelectedMails([]);
                 ${mail.spam ? 'spam' : ''}`}
             >
               <div className="mail-item-content">
+                <div className="mail-item-meta">
                   <input
                     type="checkbox"
                     checked={selectedMails.includes(mail.id)}
@@ -469,7 +462,6 @@ const clearSelection = () => setSelectedMails([]);
 
                     className="mail-checkbox"
                   />
-                <div className="mail-item-meta">
                   {mail.category !== 'trash' && (
                     <button
                       className="star-button"
@@ -484,23 +476,30 @@ const clearSelection = () => setSelectedMails([]);
                       />
                     </button>
                   )}
-                  {/* {mail.category !== 'trash' && (
-                  <button
-                    className="trash-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      moveToTrash(mail.id);
-                    }}
-                  >
-                    <Trash2 size={20} />
-                  </button>
-                  )} */} 
+                  <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>
+                    {mail.category === 'inbox' ? (mail.fromMail || 'Unknown') : (mail.toMail || 'Unknown')}
+                  </span>
+
+                  <span className={`mail-subject ${isUnread ? 'bold' : ''}`}>
+                    {mail.subject}
+                  </span>
+
+                  <span className="mail-preview">
+                    {mail.preview}
+                  </span>
+
+                  <span className="mail-date">
+                    {new Date(mail.timestamp).toLocaleString("en-US", {
+                      dateStyle: "medium",
+                      timeStyle: "short"
+                    })}
+                  </span>
                   {mail.isImportant && <div className="important-dot"></div>}
                 </div>
+              </div>
 
-                <div className="mail-details">
+                {/* <div className="mail-details">
                   <div className="mail-header">
-                    <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>{mail.category === 'inbox' ? mail.fromMail : mail.toMail}</span>
                     <span className="mail-date">{new Date(mail.timestamp).toLocaleString("en-US", {
                       dateStyle: "medium",
                       timeStyle: "short"
@@ -520,10 +519,9 @@ const clearSelection = () => setSelectedMails([]);
                     <div className="mail-category">
                       <span className={`category-label ${mail.category.toLowerCase()}`}>{mail.category}</span>
                     </div>
-                  )}
-                </div>
+                  )} */}
+                {/* </div> */}
               </div>
-            </div>
           );
         })}
       </div>

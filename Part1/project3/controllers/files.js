@@ -2,7 +2,10 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
+const Emails = require('../models/mails');
+const Users = require('../models/users');
 
+    
 // הגדרת multer - שמירה ישירות ב-uploads (ללא תיקיית files)
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -48,7 +51,15 @@ const sendMail = async (req, res) => {
     }
 
     const userId = decoded.userId;
-
+    const user = Users.getUser(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    // בדיקה שהמשתמש קיים
+    const recipient = sendTo ? Users.getUserByMail(sendTo) : null;
+    if (!recipient) {
+      return res.status(404).json({ success: false, message: 'Recipient not found' });
+    }
     // וידוא שיש את כל הנתונים הנדרשים
     if (!sendTo || !subject || !body) {
       return res.status(400).json({ 
@@ -66,7 +77,9 @@ const sendMail = async (req, res) => {
     const mailData = {
       ownerId: userId,
       from: userId,
+      fromMail: user.mail,
       to: parseInt(sendTo),
+      toMail: recipient.mail,
       subject,
       body,
       timestamp: new Date().toISOString(),
@@ -90,14 +103,7 @@ const sendMail = async (req, res) => {
     };
 
     // שמירת המיילים בקבצי JSON (כמו בmails.js הקיים)
-    const Emails = require('../models/mails');
-    const Users = require('../models/users');
-
-    // בדיקה שהמשתמש קיים
-    const recipient = Users.getUserByMail(sendTo);
-    if (!recipient) {
-      return res.status(404).json({ success: false, message: 'Recipient not found' });
-    }
+    
 
     // עדכון ה-mailData עם ID של הנמען
     mailData.to = recipient.id;

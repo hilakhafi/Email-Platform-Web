@@ -8,7 +8,7 @@ function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose, handlePerm
   const [loadingUser, setLoadingUser] = useState(false);
   const [errorUser, setErrorUser] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
-  const [showForwardModal, setShowForwardModal] = useState(false); // הוספת state לforward modal
+  const [showForwardModal, setShowForwardModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showComposeModal, setShowComposeModal] = useState(false);
   const [draftToDeleteAfterSend, setDraftToDeleteAfterSend] = useState(null);
@@ -227,21 +227,12 @@ const handlePreviewAttachment = (attachment) => {
         </button>
       </div>
       )}
-      <h1 className="mailview-subject">{mail.subject}</h1>
+      
 
       <div className="mailview-actions-sender">
         <div className="actions">
-          <button className="icon-btn"><Archive size={18} /></button>
-          {/* {selectedCategory === 'Trash' && (
-            <button
-              className="permanent-delete-btn icon-btn"
-              onClick={() => handlePermanentDelete(mail)}
-              aria-label="מחק לצמיתות"
-              title="מחק לצמיתות"
-            >
-              <Trash2 size={20} />
-            </button>
-          )} */}
+          <h1 className="mailview-subject">{mail.subject}</h1>
+          
           <div className="dropdown-wrapper">
           <button className="icon-btn" onClick={() => setShowMenu(prev => !prev)}>
             <MoreHorizontal size={18} />
@@ -249,17 +240,15 @@ const handlePreviewAttachment = (attachment) => {
 
       {showMenu && (
         <div className="dropdown-menu">
-          <button onClick={() => moveToSpam(mail)}>Mark as Spam</button>
-          <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
-          <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>
-          <button onClick={() => {handleResend();  setShowMenu(false);}}>Resend</button>
-
+              <button onClick={() => moveToSpam(mail)}>Mark as Spam</button>
+              <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
+         {selectedCategory === 'trash' &&  <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>}
+         {selectedCategory === 'drafts' && <button onClick={() => {handleResend();  setShowMenu(false);}}>Resend</button>}
         </div>
       )}
-</div>
-        </div>
+      </div>
 
-        <div className="sender-info">
+      <div className="sender-info">
           <div className="sender-avatar">{fromName.charAt(0) || '?'}</div>
           <div className="sender-details">
             <div className="sender-name">{fromName}</div>
@@ -270,6 +259,9 @@ const handlePreviewAttachment = (attachment) => {
           </div>
         </div>
       </div>
+    </div>
+
+        
 
       {mail.spam && (
         <div className="spam-warning">
@@ -328,11 +320,11 @@ const handlePreviewAttachment = (attachment) => {
       <div className="mailview-footer">
         <div className="footer-buttons">
           <button className="btn primary" onClick={() => setShowReplyModal(true)}>Reply</button>
-          <button className="btn secondary" onClick={() => setShowForwardModal(true)}>Forward</button>
+                    <button className="btn secondary" onClick={() => setShowForwardModal(true)}>Forward</button>
+
         </div>
       </div>
 
-      {/* Modal למענה */}
       {showReplyModal && (
         <ComposeModal
           onClose={() => setShowReplyModal(false)}
@@ -343,7 +335,7 @@ const handlePreviewAttachment = (attachment) => {
           prefillBody={`\n\n--- Original message from ${user?.mail || 'unknown'} ---\n${mail.body}`}
         />
       )}
-
+      
       {/* Modal להעברה */}
       {showForwardModal && (
         <ComposeModal
@@ -357,7 +349,6 @@ const handlePreviewAttachment = (attachment) => {
         />
       )}
 
-      {/* Modal לשליחה מחדש */}
       {showComposeModal && (
         <ComposeModal
           onClose={() => {
