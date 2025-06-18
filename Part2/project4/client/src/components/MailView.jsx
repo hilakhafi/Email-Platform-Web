@@ -22,26 +22,34 @@ useEffect(() => {
     return;
   }
 
-  async function fetchUser() {
-    setLoadingUser(true);
-    setErrorUser(null);
+    async function fetchUser() {
+      setLoadingUser(true);
+      setErrorUser(null);
+      console.log("Fetching user for mail from:", mail.from);
+      try {
+        const res = await fetch(`http://localhost:4000/api/users/${mail.from}`, {
+          method: 'GET',
+          headers: {
+            'user-id': mail.from,
+            'Authorization': localStorage.getItem('token'), // הוספת טוקן אם נדרש
+          },
+        });
 
-    try {
-      const res = await fetch(`http://localhost:4000/api/users/${mail.from}`, {
-        headers: {
-          'user-id': mail.from,
-          'Authorization': localStorage.getItem('token'),
-        },
-      });
+        console.log("Response status:", res.status);
 
-      if (!res.ok) {
-        const errorText = await res.text();
-        throw new Error(`Failed to fetch user: ${res.status} - ${errorText}`);
-      }
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.log("Error response:", errorText);
+          throw new Error(`Failed to fetch user: ${res.status} - ${errorText}`);
+        }
 
-      const data = await res.json();
-      setUser(data);
-    } catch (err) {
+        const data = await res.json();
+        console.log("user data received:", data);
+        setUser(data);       
+         console.log("user:", user);
+        console.log("user.profileImage:", user.profileImage);
+
+       } catch (err) {
       console.error("Error fetching user:", err);
       setErrorUser(err.message);
       setUser(null);
@@ -267,13 +275,9 @@ const handlePreviewAttachment = (attachment) => {
   return (
     
     <div className="mailview-header">
-      {!showReplyModal && !showComposeModal && !showForwardModal && (
-      <div className={`mailview-topbar ${darkMode ? 'dark' : 'light'}`}>
-        <button className="back-arrow" onClick={onClose}>
-          <ArrowLeft size={20} />
-        </button>
-      </div>
-      )}
+      <button className="back-arrow standalone-back" onClick={onClose}>
+        <ArrowLeft size={20} />
+      </button>
       
 
       <div className="mailview-actions-sender">
@@ -312,7 +316,16 @@ const handlePreviewAttachment = (attachment) => {
       </div>
 
       <div className="sender-info">
-          <div className="sender-avatar">{fromName.charAt(0) || '?'}</div>
+          <div className="sender-avatar">
+            {user?.profileImage ? (
+              <img
+                src={`http://localhost:4000/${user.profileImage.replace(/\\/g, '/')}`}
+                alt="avatar"
+              />
+            ) : (
+              fromName?.charAt(0).toUpperCase() || '?'
+            )}
+          </div>
           <div className="sender-details">
             <div className="sender-name">{fromName}</div>
             <div className="send-time">
