@@ -75,6 +75,7 @@
   padding: 1.5rem;
   margin-bottom: 1rem;
   color: inherit;
+  align-items: center;
 }
 
 /* Section containing actions and sender info */
@@ -114,6 +115,8 @@
 
 /* Sender info section */
 .sender-info {
+  padding: 20px ;
+  font-family: 'Inter', sans-serif;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -187,6 +190,7 @@
   padding: 1rem 1.5rem;
   transition: border-color 0.3s ease;
   background-color: inherit;
+  margin-top: 150px;
 }
 
 .mailview-footer.dark {
@@ -196,7 +200,7 @@
 /* Wrapper for footer buttons */
 .footer-buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.5rem; 
 }
 
 /* Generic button styles */
@@ -268,6 +272,7 @@
 /* Wrapper for dropdown menu */
 .dropdown-wrapper {
   position: relative;
+  align-items: center;
 }
 
 /* Dropdown menu container */

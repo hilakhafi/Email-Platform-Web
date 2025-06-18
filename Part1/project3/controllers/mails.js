@@ -63,7 +63,7 @@ exports.patchMail = (req, res) => {
 }
 
   // change body
-  const allowedFields = ['subject', 'body', 'isRead', 'link', 'category', 'isStarred', 'previousCategory'];
+  const allowedFields = ['subject', 'body', 'isRead', 'link', 'category', 'isStarred', 'previousCategory', 'labelId'];
   for (const field of allowedFields) {
     if (req.body[field] !== undefined) {
       mail[field] = req.body[field];
@@ -166,6 +166,7 @@ exports.postMail = async (req, res) => {
       category: 'sent',
       previousCategory: 'sent',
       isStarred: false,
+      labelId: [],
     };
 
     const InboxMail = {
@@ -183,6 +184,7 @@ exports.postMail = async (req, res) => {
       category: category || (isSpam ? 'spam' : 'inbox'),
       previousCategory: isSpam ? 'spam' : 'inbox',
       isStarred: false,
+      labelId: [],
     };
 
     Emails.addMail(SentMail);
@@ -212,4 +214,36 @@ exports.searchEmails = (req, res) => {
   }
   const results = Emails.search(query);
   res.status(200).json(results);
+};
+
+exports.toggleLabelOnMail = (req, res) => {
+  const userId = req.user.userId;
+  const mailId = parseInt(req.params.id);
+  const labelId = parseInt(req.body.labelId);
+  const shouldAdd = req.body.shouldAdd;
+
+  const mail = Emails.getMail(mailId);
+  if (!mail) {
+    return res.status(404).json({ error: "Mail not found" });
+  }
+
+  if (mail.ownerId !== userId) {
+    return res.status(403).json({ error: "Access denied" });
+  }
+
+  // ודא שיש לו את השדה labeldId
+  if (!Array.isArray(mail.labelId)) {
+    mail.labelId = [];
+  }
+
+  if (shouldAdd) {
+    if (!mail.labelId.includes(labelId)) {
+      mail.labelId.push(labelId);
+    }
+  } else {
+    mail.labelId = mail.labelId.filter(id => id !== labelId);
+  }
+
+  Emails.patchMail(mailId, mail);
+  res.status(200).json({ message: `Label ${shouldAdd ? 'added' : 'removed'} successfully` });
 };

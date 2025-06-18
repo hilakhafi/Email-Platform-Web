@@ -32,6 +32,7 @@ export default function MailHome() {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedLabel, setSelectedLabel] = useState('');
 
   // User menu states
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -600,6 +601,8 @@ const moveToSpam = async (mail) => {
       categories={categories}
       labels={labels}
       darkMode={darkMode}
+      selectedLabel={selectedLabel}
+      onLabelSelect={setSelectedLabel}
     />
   )}
 
@@ -621,6 +624,8 @@ const moveToSpam = async (mail) => {
               currentPage={currentPage}
               totalPages={totalPages}
               setCurrentPage={setCurrentPage}
+              setMails={setMails}
+              selectedLabel={selectedLabel}
             />
           ) : (
             <MailView 

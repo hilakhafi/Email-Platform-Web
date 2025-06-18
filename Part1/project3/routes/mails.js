@@ -16,5 +16,8 @@ router.patch('/:id', auth, mailsController.patchMail)
 // Send a new email
 router.post('/', auth, mailsController.postMail)
 
+router.patch('/:id/labels', auth, mailsController.toggleLabelOnMail);
+
+
 
 module.exports = router
