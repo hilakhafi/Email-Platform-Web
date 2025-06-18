@@ -25,7 +25,6 @@ useEffect(() => {
     async function fetchUser() {
       setLoadingUser(true);
       setErrorUser(null);
-      console.log("Fetching user for mail from:", mail.from);
       try {
         const res = await fetch(`http://localhost:4000/api/users/${mail.from}`, {
           method: 'GET',
@@ -35,19 +34,15 @@ useEffect(() => {
           },
         });
 
-        console.log("Response status:", res.status);
 
         if (!res.ok) {
           const errorText = await res.text();
-          console.log("Error response:", errorText);
           throw new Error(`Failed to fetch user: ${res.status} - ${errorText}`);
         }
 
         const data = await res.json();
         console.log("user data received:", data);
         setUser(data);       
-         console.log("user:", user);
-        console.log("user.profileImage:", user.profileImage);
 
        } catch (err) {
       console.error("Error fetching user:", err);
@@ -60,6 +55,13 @@ useEffect(() => {
 
   fetchUser();
 }, [mail?.from]); // שימוש ב-optional chaining
+
+useEffect(() => {
+  if (user) {
+    console.log("Updated user:", user);
+    console.log("Updated profileImage:", user.profileImage);
+  }
+}, [user]);
 
 // useEffect נפרד לסימון כנקרא
 useEffect(() => {
