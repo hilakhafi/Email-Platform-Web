@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import LabelDropdown from './LabelDropdown';
 
 
-function Sidebar({ onCompose, selectedCategory, setSelectedCategory, onCategorySelect, categories, darkMode, onLabelSelect, selectedLabel }) {
+function Sidebar({ onCompose, selectedCategory, setSelectedCategory, onCategorySelect, categories, darkMode, onLabelSelect, selectedLabel, setMails }) {
   const [labels, setLabels] = useState([]);
   const [allMails, setAllMails] = useState([]); // לא undefined!
 
@@ -108,7 +108,13 @@ const handleDeleteLabel = async (labelName) => {
         if (!res2.ok) {
           throw new Error("Failed to updat mail");
         }
-      }
+        setMails((prevMails) =>
+        prevMails.map((mailnew) =>
+        mailnew.id === mail.id ? { ...mailnew, label: updatedLabelIds } : mailnew
+      )
+    );
+      console.log('Mail :', mail.label);
+    }
 
     const res3 = await fetch(`http://localhost:4000/api/labels/${labelToDelete.id}`, {
       method: 'DELETE',

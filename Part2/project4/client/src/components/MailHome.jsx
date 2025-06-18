@@ -592,6 +592,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
         setSelectedLabel('');
       }}
       setSelectedCategory={setSelectedCategory}
+      setMails={setMails}
       categories={categories}
       labels={labels}
       darkMode={darkMode}
