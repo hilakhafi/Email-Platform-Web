@@ -611,15 +611,19 @@ const handlePermanentDelete = async (mailsToDelete) => {
     <Sidebar
       onCompose={() => setShowCompose(true)}
       selectedCategory={selectedCategory}
-      onCategorySelect={setSelectedCategory}
+      onCategorySelect={(category) => {
+        setSelectedCategory(category);
+        setSelectedLabel('');
+      }}
       categories={categories}
       labels={labels}
       darkMode={darkMode}
       selectedLabel={selectedLabel}
-      onLabelSelect={setSelectedLabel}
-    />
-  )}
-
+      onLabelSelect={(labelName) => {
+        setSelectedLabel(labelName);
+        setSelectedCategory('');
+      }} />
+      )}
         {/* תוכן מיילים - או רשימה או מייל אחד */}
         <div className="mail-content">
           {!selectedMail && mails.length > 0  ? (

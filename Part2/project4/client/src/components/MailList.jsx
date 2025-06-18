@@ -251,16 +251,15 @@ const clearSelection = () => setSelectedMails([]);
     );
   }
 
-  const togglelabel = async (mailId, label) => {
+  const togglelabel = async (mailId, labelname) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No token found.");
-    const mailToMove = mails.find(mail => mail.id === mailId);
+    const mailToMove = mails.find(mail => mail.id === mailId);
     console.log('mailToMove:', mailToMove);
-    console.log('label:', label);
-    console.log('mailToMove.labelId:', mailToMove.labelId);
+    console.log('mailToMove.labelId:', mailToMove.labelname);
 
-    const updatedLabelIds = [...mailToMove.labelId, label];
+    const updatedLabelIds = [...mailToMove.label, labelname];
     console.log('updatedLabelIds:', updatedLabelIds);
 
 
@@ -270,7 +269,7 @@ const clearSelection = () => setSelectedMails([]);
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ labelId: updatedLabelIds }),
+      body: JSON.stringify({ label: updatedLabelIds }),
     });
 
     if (!res.ok) {
@@ -279,7 +278,7 @@ const clearSelection = () => setSelectedMails([]);
 
     setMails((prevMails) =>
       prevMails.map((mail) =>
-        mail.id === mailId ? { ...mail, labelId: updatedLabelIds } : mail
+        mail.id === mailId ? { ...mail, label: updatedLabelIds } : mail
       )
     );
   } catch (err) {
@@ -288,25 +287,35 @@ const clearSelection = () => setSelectedMails([]);
 };
 
 
-  const filteredMails = mails.filter((mail) => {
-  const category = selectedCategory.toLowerCase();
+const filteredMails = mails.filter((mail) => {
+  const category = selectedCategory?.toLowerCase();
   const label = selectedLabel;
-  
+  // אם הקטגוריה היא 'starred' — בדיקה מיוחדת
   if (category === 'starred') {
     return mail.isStarred === true;
   }
-  const categoryMatch = mail.category?.toLowerCase() === category;
-  const labelMatch = !label || (mail.labelId && mail.labelId.includes(label));
 
-  return categoryMatch && labelMatch;
+  // אם יש קטגוריה שנבחרה, סנן רק לפי קטגוריה
+  if (category) {
+    return mail.category?.toLowerCase() === category;
+  }
+
+  // אם אין קטגוריה — סנן לפי label
+  if (label) {
+    return mail.label && mail.label.includes(label);
+  }
+
+  // אם אין לא קטגוריה ולא label — החזר את כל המיילים
+  return true;
 });
+
 
   return (
     <div className={`mail-list-wrapper ${themeClass}`}>
      <div className="mail-list-header">
         {/* צד שמאל – רק הכותרת */}
         <div className="header-left">
-          <h2 className="header-title">{selectedCategory}</h2>
+          <h2 className="header-title">{selectedLabel || selectedCategory}</h2>
         </div>
 
         {/* צד ימין – רענון + bulk actions */}
@@ -343,8 +352,8 @@ const clearSelection = () => setSelectedMails([]);
                 <LabelDropdown
                   isOpen={showBulkLabelDropdown}
                   onClose={() => setShowBulkLabelDropdown(false)}
-                  onAddToLabel={(labelId) => {
-                    selectedMails.forEach((id) => togglelabel(id, labelId));
+                  onAddToLabel={(labelname) => {
+                    selectedMails.forEach((id) => togglelabel(id, labelname));
                     clearSelection(); // אופציונלי
                   }}
                   onRemoveFromLabel={(labelName) => {

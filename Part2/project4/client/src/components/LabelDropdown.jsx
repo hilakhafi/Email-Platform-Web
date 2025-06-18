@@ -47,11 +47,11 @@ function LabelDropdown({
     }
   };
 
-  const handleLabelToggle = (labelId) => {
-    if (currentLabels.includes(labelId)) {
-      onRemoveFromLabel(labelId);
+  const handleLabelToggle = (labelname) => {
+    if (currentLabels.includes(labelname)) {
+      onRemoveFromLabel(labelname);
     } else {
-      onAddToLabel(labelId);
+      onAddToLabel(labelname);
     }
   };
 
@@ -91,7 +91,7 @@ function LabelDropdown({
             return (
               <button
                 key={label.name}
-                onClick={() => handleLabelToggle(label.id)}
+                onClick={() => handleLabelToggle(label.name)}
                 className="w-full px-4 py-2 flex items-center gap-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
                 <div
