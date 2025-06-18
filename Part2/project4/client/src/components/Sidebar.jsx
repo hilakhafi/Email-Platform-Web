@@ -73,11 +73,12 @@ const handleAddLabel = async () => {
 };
 
 const handleDeleteLabel = async (labelName) => {
+  const confirmDelete = window.confirm("Are you sure you want to permanently delete the selected label?");
+  if (!confirmDelete) return;
   try {
     const labelToDelete = labels.find((l) => l.name === labelName);
     if (!labelToDelete) return;
     const token = localStorage.getItem('token');
-    console.log('Deleting label:', labelToDelete);
     const allMailsRes = await fetch(`http://localhost:4000/api/mails`, {
           method: "GET",
           headers: {
@@ -90,12 +91,9 @@ const handleDeleteLabel = async (labelName) => {
       throw new Error("Failed to get mail");
     }
     const allMails = await allMailsRes.json();
-    console.log('allMails:', allMails.mails);
     const mailsWithLabel = allMails.mails.filter(mail => mail.label?.includes(labelToDelete.name));
-    console.log('mailsWithLabel:', mailsWithLabel);
     for (const mail of mailsWithLabel) {
       const updatedLabelIds = mail.label.filter(name => name !== labelToDelete.name);
-      console.log('Updating mail:', mail.id, 'with labels:', updatedLabelIds);
       const res2 = await fetch(`http://localhost:4000/api/mails/${mail.id}`, {
           method: "PATCH",
           headers: {
@@ -113,7 +111,6 @@ const handleDeleteLabel = async (labelName) => {
         mailnew.id === mail.id ? { ...mailnew, label: updatedLabelIds } : mailnew
       )
     );
-      console.log('Mail :', mail.label);
     }
 
     const res3 = await fetch(`http://localhost:4000/api/labels/${labelToDelete.id}`, {
