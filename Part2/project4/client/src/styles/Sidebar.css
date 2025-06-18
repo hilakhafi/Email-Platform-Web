@@ -108,6 +108,7 @@
 }
 
 .labels-header {
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
@@ -126,7 +127,7 @@
   border-radius: 0.5rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
-}
+  background-color: transparent;}
 
 .label-item:hover {
   background-color: rgba(243, 244, 246, 0.8);
@@ -188,4 +189,15 @@
 
 .add-label-btn:hover {
   color: #0a58ca;
+}
+.delete-label-btn {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: color 0.2s;
+}
+.delete-label-btn:hover {
+  color: #b91c1c;
 }

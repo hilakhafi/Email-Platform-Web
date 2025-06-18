@@ -290,6 +290,7 @@ const clearSelection = () => setSelectedMails([]);
 const filteredMails = mails.filter((mail) => {
   const category = selectedCategory?.toLowerCase();
   const label = selectedLabel;
+  console.log('label:', label);
   // אם הקטגוריה היא 'starred' — בדיקה מיוחדת
   if (category === 'starred') {
     return mail.isStarred === true;
@@ -362,6 +363,7 @@ const filteredMails = mails.filter((mail) => {
                   }}
                   currentLabels={[]} // אפשר להשאיר ריק או לחשב לפי המכנה המשותף בין המיילים
                   position="bottom-left"
+                  darkMode={darkMode}
                 />
               </div>
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Check } from 'lucide-react';
+import '../styles/LabelDropdown.css';
 
 function LabelDropdown({ 
   isOpen, 
@@ -7,7 +8,8 @@ function LabelDropdown({
   onAddToLabel, 
   onRemoveFromLabel,
   currentLabels = [],
-  position = 'bottom-left'
+  position = 'bottom-left',
+  darkMode
 }) {
   const [labels, setLabels] = useState([]);
   const dropdownRef = useRef(null);
@@ -68,21 +70,21 @@ function LabelDropdown({
   return (
     <div
       ref={dropdownRef}
-      className={`absolute z-50 w-60 bg-white dark:bg-[#2b2b2b] border border-gray-300 dark:border-gray-600 rounded-md shadow-md ${positionClasses[position]}`}
+      className={`label-dropdown ${positionClasses[position]} ${darkMode ? 'dark' : ''}`}
       onClick={(e) => e.stopPropagation()}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-600">
-        <span className="text-sm font-medium text-gray-700 dark:text-gray-200">Labels</span>
-        <button onClick={onClose} className="text-gray-500 hover:text-black dark:hover:text-white">
+      <div className="label-dropdown-header">
+      <span className="label-dropdown-title">Labels</span>
+      <button onClick={onClose} className="label-dropdown-close">
           <X size={16} />
         </button>
       </div>
 
       {/* Labels */}
-      <div className="py-1">
-        {labels.length === 0 ? (
-          <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 italic text-center">
+      <div className="label-dropdown-list">
+      {labels.length === 0 ? (
+        <div className="label-dropdown-empty">
             No labels available
           </div>
         ) : (
@@ -92,14 +94,14 @@ function LabelDropdown({
               <button
                 key={label.name}
                 onClick={() => handleLabelToggle(label.name)}
-                className="w-full px-4 py-2 flex items-center gap-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="label-dropdown-item"
               >
                 <div
-                  className="w-3 h-3 rounded-full border border-gray-300"
+                className="label-dropdown-color"
                   style={{ backgroundColor: label.color }}
                 ></div>
-                <span className="flex-grow text-gray-800 dark:text-gray-200">{label.name}</span>
-                {isApplied && <Check size={16} className="text-green-600 dark:text-green-400" />}
+              <span className="label-dropdown-label">{label.name}</span>
+              {isApplied && <Check size={16} className="label-dropdown-check" />}
               </button>
             );
           })
