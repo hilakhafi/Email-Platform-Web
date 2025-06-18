@@ -153,6 +153,7 @@ const handleSend = async () => {
     }
   };
 
+// תיקון של הפונקציה moveToDraft ב-ComposeModal.js
 const moveToDraft = async (mailData) => {
   try {
     const token = localStorage.getItem("token");
@@ -164,25 +165,31 @@ const moveToDraft = async (mailData) => {
         'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({
-        
         sendTo: mailData.to || '',
-        subject: mailData.subject,
-        body: mailData.body,
-        category: 'drafts',       // חשוב לשלוח את הקטגוריה
+        subject: mailData.subject || '',
+        body: mailData.body || '',
+        category: 'drafts',
       }),
     });
 
     if (response.ok) {
       const newDraft = await response.json();
-      onMailSent(newDraft);
+      console.log("Draft saved successfully:", newDraft);
+      
+      // קריאה לפונקציה שמעדכנת את רשימת המיילים
+      if (onMailSent) {
+        onMailSent(newDraft);
+      }
+      
       alert("Email saved as draft");
     } else {
       const err = await response.json();
-      alert("Failed to save draft:" + err.message);
+      console.error("Server error:", err);
+      alert("Failed to save draft: " + (err.message || err.error));
     }
   } catch (error) {
-    alert("Error saving draft:" + error.message);
-
+    console.error("Network error:", error);
+    alert("Error saving draft: " + error.message);
   }
 };
 
