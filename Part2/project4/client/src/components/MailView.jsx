@@ -15,11 +15,12 @@ function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose, handlePerm
   const [draftToDeleteAfterSend, setDraftToDeleteAfterSend] = useState(null);
 
 
-  useEffect(() => {
-    if (!mail || !mail.from) {
-      setUser(null);
-      return;
-    }
+useEffect(() => {
+  // בדיקה בתחילת useEffect
+  if (!mail || !mail.from) {
+    setUser(null);
+    return;
+  }
 
     async function fetchUser() {
       setLoadingUser(true);
@@ -48,54 +49,61 @@ function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose, handlePerm
          console.log("user:", user);
         console.log("user.profileImage:", user.profileImage);
 
-      } catch (err) {
-        console.error("Error fetching user:", err);
-        setErrorUser(err.message);
-        setUser(null);
-      } finally {
-        setLoadingUser(false);
-      }
+       } catch (err) {
+      console.error("Error fetching user:", err);
+      setErrorUser(err.message);
+      setUser(null);
+    } finally {
+      setLoadingUser(false);
     }
-     // סימון המייל כנקרא
-      async function markMailAsRead() {
-        if (!mail.isRead) {
-          try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-              console.error('No authorization token found');
-              return;
-            }
-            const res = await fetch(`http://localhost:4000/api/mails/${mail.id}`, {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,  // לשים "Bearer " לפני הטוקן, אם השרת דורש
-              },
-              body: JSON.stringify({ isRead: true }),
-            });
+  }
 
-            if (res.ok) {
-              try {
-                const updatedMail = await res.json();
-                onUpdateMail?.(updatedMail);
-              } catch (e) {
-                console.warn('Response was empty, using local update');
-                onUpdateMail?.({ ...mail, isRead: true }); // לעדכן מתוך הסטייט הקיים
-              }
-            } else {
-              // אפשר לקרוא טקסט של הודעת שגיאה מהשרת ולוג אותו
-              const errorText = await res.text();
-              console.error(`Failed to mark mail as read: ${res.status} ${res.statusText} - ${errorText}`);
-            }
-          } catch (err) {
-            console.error("Network or fetch error:", err);
-          }
-        }
+  fetchUser();
+}, [mail?.from]); // שימוש ב-optional chaining
+
+// useEffect נפרד לסימון כנקרא
+useEffect(() => {
+  // בדיקה שמייל קיים לפני כל דבר
+  if (!mail || !mail.id || mail.isRead) {
+    return;
+  }
+
+  async function markMailAsRead() {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No authorization token found');
+        return;
       }
-    fetchUser();
-    markMailAsRead();
-  }, [mail]);
+      
+      const res = await fetch(`http://localhost:4000/api/mails/${mail.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ isRead: true }),
+      });
 
+      if (res.ok) {
+        try {
+          const updatedMail = await res.json();
+          onUpdateMail?.(updatedMail);
+        } catch (e) {
+          console.warn('Response was empty, using local update');
+          onUpdateMail?.({ ...mail, isRead: true });
+        }
+      } else {
+        const errorText = await res.text();
+        console.error(`Failed to mark mail as read: ${res.status} ${res.statusText} - ${errorText}`);
+      }
+    } catch (err) {
+      console.error("Network or fetch error:", err);
+    }
+  }
+
+  markMailAsRead();
+}, [mail?.id, mail?.isRead]); // שימוש ב-optional chaining
 
 const handleResend = () => {
   setDraftToDeleteAfterSend(mail); // שומרים את ה־id למחיקה רק אם השליחה תתבצע
