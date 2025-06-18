@@ -369,7 +369,7 @@ const filteredMails = mails.filter((mail) => {
               <button
                 className="icon-button"
                 onClick={() => {
-                  if (selectedCategory === 'trash') {
+                  if (selectedCategory === 'trash' || selectedCategory === 'drafts') {
                     const mailsToDelete = selectedMails
                       .map((id) => mails.find((m) => m.id === id))
                       .filter(Boolean);

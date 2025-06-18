@@ -431,30 +431,6 @@ const moveToSpam = async (mail) => {
   }
 };
 
-// const handlePermanentDelete = async (mail) => {
-//   if(mail.category !== 'drafts') {
-//     const confirmDelete = window.confirm("Are you sure you want to permanently delete this email?");
-//     if (!confirmDelete) return;
-//   }
-//   // אם המייל הוא טיוטה, לא נבקש אישור
-//   try {
-//     const res = await fetch(`/api/mails/${mail.id}`, {
-//       method: 'DELETE',
-//       headers: {
-//         Authorization: `Bearer ${localStorage.getItem('token')}`,
-//       },
-//     });
-
-//     if (!res.ok) throw new Error("Failed to delete email");
-
-//     // מסננים את המייל שנמחק מה-state
-//     setMails(prev => prev.filter(deleteMail => deleteMail.id !== mail.id));
-//     setSelectedMail(null); // ניקוי הבחירה
-//   } catch (err) {
-//     console.error(err);
-//     alert("Failed to delete the email permanently");
-//   }
-// };
 // תיקון של הפונקציה handlePermanentDelete ב-MailHome.js
 const handlePermanentDelete = async (mailsToDelete) => {
   // תמיכה במייל אחד או במערך של מיילים
