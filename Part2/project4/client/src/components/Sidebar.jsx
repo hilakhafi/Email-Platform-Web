@@ -116,7 +116,10 @@ const handleAddLabel = async () => {
             return (
             <button
               key={label.name}
-              onClick={() => onLabelSelect(label.name)}
+              onClick={() => {
+                onCategorySelect(null); // או "" תלוי איך את מגדירה ברירת מחדל
+                onLabelSelect(label.name);
+              }}
               className={`label-item ${isSelectedLabel ? 'selected' : ''}`}
             >
               <div
