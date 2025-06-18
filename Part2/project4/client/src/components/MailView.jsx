@@ -3,7 +3,8 @@ import { Mail, Archive, Trash2, MoreHorizontal, AlertTriangle, Paperclip, Downlo
 import ComposeModal from './ComposeModal';
 import '../styles/MailView.css';
 
-function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose, handlePermanentDelete,selectedCategory, onUpdateMail}) {
+function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose, handlePermanentDelete,selectedCategory,
+   onUpdateMail, setSelectedMail, setSelectedCategory     }) {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(false);
   const [errorUser, setErrorUser] = useState(null);
@@ -100,6 +101,11 @@ const handleResend = () => {
 async function handleMarkAsUnread(id) {
   try {
     const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No authorization token found');
+      return;
+    }
+
     const res = await fetch(`http://localhost:4000/api/mails/${id}`, {
       method: 'PATCH',
       headers: {
@@ -108,15 +114,52 @@ async function handleMarkAsUnread(id) {
       },
       body: JSON.stringify({ isRead: false }),
     });
+
     if (res.ok) {
-      const updatedMail = await res.json();
+      console.log('Mail marked as unread successfully');
+      
+      // בדיקה אם יש תוכן בתגובה
+      const responseText = await res.text();
+      let updatedMail;
+      
+      if (responseText.trim()) {
+        try {
+          updatedMail = JSON.parse(responseText);
+        } catch (parseError) {
+          console.warn('Response was not valid JSON, using local update');
+          updatedMail = { ...mail, isRead: false };
+        }
+      } else {
+        console.warn('Empty response from server, using local update');
+        updatedMail = { ...mail, isRead: false };
+      }
+      
+      // עדכון הסטייט המקומי
       setShowMenu(false);
-      onUpdateMail(updatedMail);  // מעדכן את ה-mail ב-parent
+      
+      // עדכון ה-parent component
+      if (onUpdateMail) {
+        onUpdateMail(updatedMail);
+      }
+      
+      // **חזרה לרשימת המיילים - כמו שעשית**
+      // סוגר את המייל הנוכחי ועובר לקטגוריה שאליה המייל חזר
+      setSelectedMail(null);
+      
+      // אם המייל עבר לקטגוריה אחרת, עבור אליה
+      if (updatedMail.category && updatedMail.category !== selectedCategory) {
+        setSelectedCategory(updatedMail.category);
+      }
+      }
+      
+     else {
+      const errorText = await res.text();
+      console.error(`Failed to mark as unread: ${res.status} ${res.statusText} - ${errorText}`);
+      alert('שגיאה בסימון המייל כלא נקרא');
     }
-    // setShowMenu(false);
-    // window.location.reload(); // או עדכון סטייט
   } catch (error) {
-    console.error('Failed to mark as unread:', error);
+    console.error('Network error when marking as unread:', error);
+    alert('שגיאה ברשת');
   }
 }
 

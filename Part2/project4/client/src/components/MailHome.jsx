@@ -632,7 +632,7 @@ const moveToSpam = async (mail) => {
               selectedLabel={selectedLabel}
             />
           ) : (
-            <MailView
+            <MailView 
               mail={selectedMail}
               darkMode={darkMode}
               restoreMail={restoreMail}
@@ -641,6 +641,8 @@ const moveToSpam = async (mail) => {
               handlePermanentDelete={handlePermanentDelete}
               selectedCategory={selectedCategory}
               onUpdateMail={handleUpdateMail}
+              setSelectedMail={setSelectedMail}         
+              setSelectedCategory={setSelectedCategory}  
             />
           )}
         </div>
