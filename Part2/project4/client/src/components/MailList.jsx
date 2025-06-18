@@ -368,19 +368,25 @@ const filteredMails = mails.filter((mail) => {
 
               <button
                 className="icon-button"
-                onClick={() => {
-                  if (selectedCategory === 'trash' || selectedCategory === 'drafts') {
-                    const mailsToDelete = selectedMails
-                      .map((id) => mails.find((m) => m.id === id))
-                      .filter(Boolean);
-                    handlePermanentDelete(mailsToDelete);
-                  } else {
-                    selectedMails.forEach((id) => {
-                      moveToTrash(id);
-                    });
-                    clearSelection();
+                onClick={async () => {
+                  try {
+                    if (selectedCategory === 'trash' || selectedCategory === 'drafts') {
+                      const mailsToDelete = selectedMails
+                        .map((id) => mails.find((m) => m.id === id))
+                        .filter(Boolean);
+                      
+                      await handlePermanentDelete(mailsToDelete);
+                    } else {
+                      selectedMails.forEach((id) => {
+                        moveToTrash(id);
+                      });
+                      clearSelection();
+                    }
+                  } catch (error) {
+                    console.error('Error deleting mails:', error);
                   }
                 }}
+                disabled={selectedMails.length === 0}
                 aria-label={selectedCategory === 'trash' ? "מחק לצמיתות" : "העבר לאשפה"}
                 title={selectedCategory === 'trash' ? "מחק לצמיתות" : "העבר לאשפה"}
               >
