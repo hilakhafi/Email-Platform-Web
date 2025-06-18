@@ -283,10 +283,26 @@ const handlePreviewAttachment = (attachment) => {
 
       {showMenu && (
         <div className="dropdown-menu">
-              <button onClick={() => moveToSpam(mail)}>Mark as Spam</button>
-              <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
-         {selectedCategory === 'trash' &&  <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>}
-         {selectedCategory === 'drafts' && <button onClick={() => {handleResend();  setShowMenu(false);}}>Resend</button>}
+          <button onClick={() => moveToSpam(mail)}>Mark as Spam</button>
+          <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
+          {selectedCategory === 'trash' && (
+            <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>
+          )}
+          {selectedCategory === 'drafts' && (
+            <>
+              <button onClick={() => {handleResend(); setShowMenu(false);}}>Resend</button>
+              <button 
+                onClick={() => {
+                  // מחיקה אוטומטית של טיוטה בלי אישור
+                  handlePermanentDelete(mail);
+                  setShowMenu(false);
+                }}
+                className="delete-draft-btn"
+              >
+                Delete Draft
+              </button>
+            </>
+          )}
         </div>
       )}
       </div>
@@ -393,25 +409,28 @@ const handlePreviewAttachment = (attachment) => {
       )}
 
       {showComposeModal && (
-        <ComposeModal
-          onClose={() => {
-            setShowComposeModal(false);     
-            setDraftToDeleteAfterSend(null);
-          }}         
-          darkMode={darkMode}
-          onMailSent={() => {
+      <ComposeModal
+        onClose={() => {
+          setShowComposeModal(false);     
+          setDraftToDeleteAfterSend(null); // מנקים את המצב
+        }}         
+        darkMode={darkMode}
+        onMailSent={() => {
+          // כאשר המייל נשלח בהצלחה:
           if (draftToDeleteAfterSend) {
+            console.log("Deleting draft after successful send:", draftToDeleteAfterSend.id);
             handlePermanentDelete(draftToDeleteAfterSend);
           }
-            setShowComposeModal(false);
-            setDraftToDeleteAfterSend(null);
-            onClose(); // סוגר את ה-MailView, אם תרצי
-          }}
-          prefillTo={mail.toMail || ''}            // שימי לב! משתמשת ב־toMail
-          prefillSubject={mail.subject || ''}
-          prefillBody={mail.body || ''}
-        />
-      )}
+          setShowComposeModal(false);
+          setDraftToDeleteAfterSend(null);
+          onClose(); // סוגר את ה-MailView
+        }}
+        prefillTo={mail.toMail || ''}            
+        prefillSubject={mail.subject || ''}
+        prefillBody={mail.body || ''}
+        forwardAttachments={mail.attachments || []} // אם יש קבצים מצורפים בטיוטה
+      />
+    )}
 
     </div>
   );

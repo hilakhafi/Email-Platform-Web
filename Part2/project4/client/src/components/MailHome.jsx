@@ -455,36 +455,50 @@ const moveToSpam = async (mail) => {
 //     alert("Failed to delete the email permanently");
 //   }
 // };
-  const handlePermanentDelete = async (mailsToDelete) => {
-  // תמיכה במייל אחד בלבד
+// תיקון של הפונקציה handlePermanentDelete ב-MailHome.js
+const handlePermanentDelete = async (mailsToDelete) => {
+  // תמיכה במייל אחד או במערך של מיילים
   const mailsArray = Array.isArray(mailsToDelete) ? mailsToDelete : [mailsToDelete];
 
   const hasNonDraft = mailsArray.some(mail => mail.category !== 'drafts');
 
-  // בקשת אישור אם יש מייל לא מטיוטה
+  // בקשת אישור רק אם יש מייל שלא מטיוטה
   if (hasNonDraft) {
     const confirmDelete = window.confirm("Are you sure you want to permanently delete the selected email(s)?");
     if (!confirmDelete) return;
   }
 
   try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No token found.");
+
     for (const mail of mailsArray) {
-      const res = await fetch(`/api/mails/${mail.id}`, {
+      // תיקון: הוספת הכתובת המלאה של השרת
+      const res = await fetch(`http://localhost:4000/api/mails/${mail.id}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
-      if (!res.ok) throw new Error("Failed to delete email");
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Failed to delete email: ${res.status} - ${errorText}`);
+      }
     }
 
+    // עדכון ה-state המקומי - הסרת המיילים שנמחקו
     setMails(prev => prev.filter(mail => !mailsArray.some(toDelete => toDelete.id === mail.id)));
-    setSelectedMail(null);
-    // setSelectedMails([]); // נקה בחירה מרובה אם צריך
+    
+    // אם המייל הנוכחי נמחק, נסגור את התצוגה
+    if (selectedMail && mailsArray.some(mail => mail.id === selectedMail.id)) {
+      setSelectedMail(null);
+    }
+
+    console.log("Emails deleted successfully");
   } catch (err) {
-    console.error(err);
-    alert("Failed to delete one or more emails permanently");
+    console.error("Delete error:", err);
+    alert("Failed to delete one or more emails permanently: " + err.message);
   }
 };
 
