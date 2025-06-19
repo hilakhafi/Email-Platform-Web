@@ -17,6 +17,7 @@ const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
   const [imagePreview, setImagePreview] = useState(userInfo.avatar || null);
 
 useEffect(() => {
+  console.log('ddarkmode:', darkMode);
   if (userInfo) {
     const fixedAvatarUrl = userInfo.avatar
       ? `http://localhost:4000/${userInfo.avatar.replace(/\\/g, '/')}`
@@ -127,9 +128,9 @@ useEffect(() => {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className={`modal-overlay ${darkMode ? 'dark' : ''}`} onClick={onClose}>
       <div 
-        className={`profile-modal ${darkMode ? 'dark' : 'light'}`}
+        className={`profile-modal ${darkMode ? 'dark' : ''}`}
         onClick={e => e.stopPropagation()}
       >
         <div className="modal-header">

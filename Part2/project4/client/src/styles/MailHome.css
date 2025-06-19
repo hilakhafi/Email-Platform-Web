@@ -197,6 +197,13 @@
   color: #333;
 }
 
+.dark .user-dropdown {
+  background-color: #1f1f1f;
+  border-color: #444;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+  color: #eee;
+}
+
 .user-info {
   display: flex;
   align-items: center;
@@ -262,6 +269,27 @@
 .user-menu-item.logout:hover {
   background-color: #fce8e6;
 }
+
+.dark .user-menu-item {
+  color: #eee;
+}
+
+.dark .user-menu-item:hover {
+  background-color: #333;
+}
+
+.dark .user-menu-item svg {
+  color: #ccc;
+}
+
+.dark .user-menu-item.logout {
+  color: #f28b82;
+}
+
+.dark .user-menu-item.logout:hover {
+  background-color: #3c2c2b;
+}
+
 .user-menu-container {
   position: relative; /* חשוב */
   display: inline-block;

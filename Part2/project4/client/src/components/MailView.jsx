@@ -290,7 +290,7 @@ const handlePreviewAttachment = (attachment) => {
           </button>
 
       {showMenu && (
-        <div className="dropdown-menu">
+        <div className={`dropdown-menu ${darkMode ? 'dark' : 'light'}`}>
           
           { mail.category !== 'spam' && (
             <button onClick={() => {

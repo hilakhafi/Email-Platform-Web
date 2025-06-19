@@ -16,6 +16,11 @@
   backdrop-filter: blur(4px);
 }
 
+.modal-overlay.dark {
+  background: rgba(0, 0, 0, 0.7); /* כהה יותר מהרגיל */
+  backdrop-filter: blur(6px);
+}
+
 .profile-modal {
   font-family: 'Inter', sans-serif;
   background: white;
@@ -27,6 +32,11 @@
   animation: modalSlideIn 0.3s ease-out;
 }
 
+.profile-modal.dark {
+  background: #2d3748;
+  color: #f1f5f9; 
+}
+
 .profile-form {
   font-family: inherit;
   padding: 1rem;
@@ -35,9 +45,8 @@
   overflow-y: auto;
 }
 
-.profile-modal.dark {
-  background: #2d3748;
-  color: #f7fafc;
+.profile-modal.dark .profile-form {
+  background-color: transparent; /* או צבע כהה לפי טעמך */
 }
 
 
@@ -73,11 +82,11 @@
   font-weight: 600;
   color: #1a202c;
 }
-/*
+
 .profile-modal.dark .modal-header h2 {
   color: #f7fafc;
 }
-*/
+
 .close-btn {
   background: none;
   border: none;
