@@ -87,6 +87,10 @@
   font-size: 1rem; /* גודל האייקון */
   color: #9ca3af;
 }
+.search-icon:hover {
+  color:#9ca3af ; /* צבע האייקון בהובר */
+  background-color: transparent;
+}
 
 .search-input {
   width: 100%;
