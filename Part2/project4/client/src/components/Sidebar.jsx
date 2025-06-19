@@ -6,7 +6,7 @@ import LabelDropdown from './LabelDropdown';
 
 function Sidebar({ onCompose, selectedCategory, setSelectedCategory, onCategorySelect, categories, darkMode, onLabelSelect, selectedLabel, setMails }) {
   const [labels, setLabels] = useState([]);
-  const [allMails, setAllMails] = useState([]); // לא undefined!
+  const [allMails, setAllMails] = useState([]);
 
   const fetchLabels = async () => {
         try {
@@ -28,14 +28,14 @@ function Sidebar({ onCompose, selectedCategory, setSelectedCategory, onCategoryS
           console.error("Error fetching labels:", err);
         }
       };
-  // טען את הלייבלים כשהקומפוננטה נטענת
+  // fetch all labels when the component mounts
   useEffect(() => {
     fetchLabels();
   }, []);
 
   const handleSelectLabel = (labelName) => {
     console.log("Selected label:", labelName);
-    onCategorySelect(labelName); // כאן תוכל להתאים לפעולה הרצויה
+    onCategorySelect(labelName);
   };
 
 const handleAddLabel = async () => {
@@ -47,7 +47,7 @@ const handleAddLabel = async () => {
   try {
     console.log('name:', name);
     console.log('color:', color);
-    const token = localStorage.getItem("token"); // או איפה ששמרת את ה־JWT
+    const token = localStorage.getItem("token");
     console.log('token:', token);
     const response = await fetch("http://localhost:4000/api/labels", {
       method: "POST",
@@ -59,11 +59,10 @@ const handleAddLabel = async () => {
     });
 
     if (response.ok) {
-      // עדכן את התוויות מחדש
-      const newLabels = await response.json(); // אולי תרצה פשוט לקרוא שוב ל־GET /labels
+      // update the labels state with the new label
+      const newLabels = await response.json();
       console.log('Label added:', newLabels);
       await fetchLabels();
-      //window.location.reload(); // פתרון זמני — עדיף להשתמש ב־setLabels או callback מה־App
     } else {
       console.error("Failed to add label", response.status, await response.text());
     }
@@ -72,6 +71,7 @@ const handleAddLabel = async () => {
   }
 };
 
+// Function to handle label deletion
 const handleDeleteLabel = async (labelName) => {
   const confirmDelete = window.confirm("Are you sure you want to permanently delete the selected label?");
   if (!confirmDelete) return;
@@ -117,7 +117,7 @@ const handleDeleteLabel = async (labelName) => {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
-        'user-id': labelToDelete.userId, // אם את בודקת את זה בשרת
+        'user-id': labelToDelete.userId,
       },
     });
 
@@ -126,11 +126,10 @@ const handleDeleteLabel = async (labelName) => {
     }
 
     
-
-    // עדכון סטייט
+// Update the labels state to remove the deleted label
     setLabels((prev) => prev.filter((l) => l.id !== labelToDelete.id));
-    onLabelSelect(null); // ביטול בחירה
-    setSelectedCategory('inbox'); // או כל קטגוריה אחרת שאת רוצה להחזיר לברירת מחד
+    onLabelSelect(null); 
+    setSelectedCategory('inbox'); // inbox as default category
   } catch (err) {
     console.error(err);
     alert('שגיאה במחיקת לייבל');
@@ -193,7 +192,7 @@ const handleDeleteLabel = async (labelName) => {
             <button
               key={label.name}
               onClick={() => {
-                onCategorySelect(null); // או "" תלוי איך את מגדירה ברירת מחדל
+                onCategorySelect(null);
                 onLabelSelect(label.name);
               }}
               className={`label-item ${isSelectedLabel ? 'selected' : ''}`}

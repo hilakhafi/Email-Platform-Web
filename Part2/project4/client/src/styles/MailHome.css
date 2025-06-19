@@ -137,15 +137,15 @@
 }
 
 .user-avatar {
-  width: 52px; /* או יותר גדול לפי טעמך */
+  width: 52px; 
   height: 52px;
   border-radius: 50%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none; /* מסיר רקע */
-  border: none;     /* מסיר מסגרת אם יש */
+  background: none; 
+  border: none;    
   padding: 0;
   cursor: pointer;
 }
@@ -163,7 +163,7 @@
   flex: 1;
   display: flex;
   overflow: hidden;
-  width: 100vw; /* הוסף שורה זו */
+  width: 100vw;
 
 }
 
@@ -180,7 +180,6 @@
   outline: none;
   box-shadow: none;
 }
-/* חובה לוודא שטענת את הגופן Inter או Poppins ב־HTML */
 
 .user-dropdown {
   position: absolute;
@@ -263,6 +262,6 @@
   background-color: #fce8e6;
 }
 .user-menu-container {
-  position: relative; /* חשוב */
+  position: relative;
   display: inline-block;
 }

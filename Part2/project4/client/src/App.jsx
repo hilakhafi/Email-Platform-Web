@@ -1,18 +1,3 @@
-// import { useState } from "react";
-// import LoginScreen from "./components/LoginScreen";
-
-// function App() {
-//   const [userId, setUserId] = useState(null);
-
-//   if (!userId) {
-//     return <LoginScreen onLogin={setUserId} />;
-//   }
-
-//   return <h1>ברוך הבא, משתמש {userId}!</h1>; // בהמשך תחליפי במסך ה־Inbox
-// }
-
-// export default App;
-
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LoginScreen from "./components/LoginScreen";
@@ -29,7 +14,7 @@ function App() {
           <>
             <Route path="/login" element={<LoginScreen onLogin={setUserId} />} />
             <Route path="/register" element={<Register />} />
-            {/* אם מישהו ניגש לכתובת אחרת, נשלח אותו ל-login */}
+            {/* if someone try to get a diiferent path we will navigate him to login page */}
             <Route path="*" element={<Navigate to="/login" />} />
           </>
         ) : (

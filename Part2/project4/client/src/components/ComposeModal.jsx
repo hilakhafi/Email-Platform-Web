@@ -11,7 +11,7 @@ function ComposeModal({
   prefillTo = '', 
   prefillSubject = '', 
   prefillBody = '',
-  forwardAttachments = [] // קבצים מצורפים מהמייל המועבר
+  forwardAttachments = [] // attachments from the forwarded email
 }) {
   const [to, setTo] = useState(prefillTo);
   const [subject, setSubject] = useState(prefillSubject);
@@ -19,19 +19,18 @@ function ComposeModal({
   const [mails, setMails] = useState([]);
   const [sending, setSending] = useState(false);
 
-  // שימוש ב-hook לניהול קבצים
+  // using custom hook for file uploads
   const { 
     attachments, 
     handleFileUpload, 
     removeAttachment, 
     clearAttachments,
-    addAttachmentsFromForward // פונקציה חדשה להוספת קבצים מועברים
-  } = useFileUpload(10); // מקסימום 10MB
+    addAttachmentsFromForward
+  } = useFileUpload(10); // maximum size 10MB
 
-  // הוספת קבצים מצורפים מהמייל המועבר בעת טעינת הקומפוננטה
+  // adding forwarded attachments to the attachments list
   useEffect(() => {
     if (forwardAttachments && forwardAttachments.length > 0) {
-      // אם יש פונקציה להוספת קבצים מועברים, השתמש בה
       if (addAttachmentsFromForward) {
         addAttachmentsFromForward(forwardAttachments);
       }
@@ -49,7 +48,7 @@ const handleSend = async () => {
   try {
     const token = localStorage.getItem("token");
 
-    // נבדוק האם יש קישור זדוני, אבל לא נעצור
+    // check if the email is spam using the blacklist API
     const spamResponse = await fetch('http://localhost:4000/api/blacklist/check', {
       method: 'POST',
       headers: {
@@ -62,25 +61,23 @@ const handleSend = async () => {
     const spamResult = await spamResponse.json();
     const isSpam = spamResult.spam;
 
-    // שולחים מייל כולל מידע האם הוא ספאם
+    // send the email even if it's marked as spam
       
-      // אם יש קבצים מצורפים (חדשים או מועברים), שלח ל-files endpoint
       if (attachments.length > 0 || forwardAttachments.length > 0) {
-        // יצירת FormData להעלאת קבצים
+        // create FormData for file uploads
         const formData = new FormData();
         formData.append('sendTo', to);
         formData.append('subject', subject);
         formData.append('body', body);
         formData.append('isSpam', isSpam);
-        // הוספת כל הקבצים החדשים ל-FormData
+        // adding attachments to FormData
         attachments.forEach((file) => {
           formData.append('attachments', file);
         });
 
-        // הוספת קבצים מועברים אם יש
         if (forwardAttachments && forwardAttachments.length > 0) {
           forwardAttachments.forEach((attachment) => {
-            // אם יש data (base64), המר אותו חזרה לקובץ
+            // Convert base64 data to Blob/File if necessary
             if (attachment.data) {
               try {
                 const byteCharacters = atob(attachment.data);
@@ -103,14 +100,13 @@ const handleSend = async () => {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
-            // אל תוסיפי Content-Type כאשר משתמשים ב-FormData
           },
           body: formData
         });
 
         if (response.ok) {
           const result = await response.json();
-            console.log("Server response:", result); // ← הוסיפי את זה לראות מה חוזר
+            console.log("Server response:", result); 
           const totalAttachments = attachments.length + (forwardAttachments?.length || 0);
           alert("Email sent successfully with " + totalAttachments + " attachments!");
           clearAttachments();
@@ -121,7 +117,7 @@ const handleSend = async () => {
           alert("Error: " + (error.message || error.error));
         }
       } else {
-        // אם אין קבצים מצורפים, שלח JSON רגיל ל-mails endpoint
+        // send email without attachments
       const response = await fetch('http://localhost:4000/api/mails', {
         method: 'POST',
         headers: {
@@ -153,7 +149,7 @@ const handleSend = async () => {
     }
   };
 
-// תיקון של הפונקציה moveToDraft ב-ComposeModal.js
+// function to move the email to drafts - the function is called when the user clicks "Cancel"
 const moveToDraft = async (mailData) => {
   try {
     const token = localStorage.getItem("token");
@@ -176,7 +172,6 @@ const moveToDraft = async (mailData) => {
       const newDraft = await response.json();
       console.log("Draft saved successfully:", newDraft);
       
-      // קריאה לפונקציה שמעדכנת את רשימת המיילים
       if (onMailSent) {
         onMailSent(newDraft);
       }
@@ -193,7 +188,7 @@ const moveToDraft = async (mailData) => {
   }
 };
 
-  // קביעת כותרת המודל בהתאם לסוג הפעולה
+  // get the modal title based on the prefillSubject
   const getModalTitle = () => {
     if (prefillSubject.startsWith('Re:')) return 'Reply';
     if (prefillSubject.startsWith('Fwd:')) return 'Forward';
@@ -226,12 +221,12 @@ const moveToDraft = async (mailData) => {
             className="compose-input"
           />
 
-          {/* קומפוננטת קבצים מצורפים */}
+          {/* componenets AttachmentsList*/}
           <AttachmentsList 
             attachments={attachments}
             onRemoveAttachment={removeAttachment}
             darkMode={darkMode}
-            forwardedAttachments={forwardAttachments} // העברת הקבצים המועברים
+            forwardedAttachments={forwardAttachments}
           />
 
           <textarea
@@ -243,7 +238,7 @@ const moveToDraft = async (mailData) => {
         </div>
 
         <div className="compose-footer">
-          {/* כפתור להעלאת קבצים */}
+          {/* button to upload file */}
           <label className="icon-button attach-button">
             <Paperclip size={20} />
             <input

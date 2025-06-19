@@ -172,10 +172,10 @@
   padding: 0;
   margin-left: 10px;
   color: inherit;
-  outline: none;          /* ✅ מונע מסגרת כחולה בדפדפנים */
+  outline: none;       
   box-shadow: none;
   -webkit-tap-highlight-color: transparent;
-  appearance: none;             /* ✅ מסיר סגנון כפתור דיפולטי */
+  appearance: none;        
   -webkit-appearance: none;
 }
 

@@ -73,11 +73,7 @@
   font-weight: 600;
   color: #1a202c;
 }
-/*
-.profile-modal.dark .modal-header h2 {
-  color: #f7fafc;
-}
-*/
+
 .close-btn {
   background: none;
   border: none;
@@ -111,7 +107,7 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: #f3f4f6; /* אפור בהיר */
+  background: #f3f4f6;
   border: 2px solid #e5e7eb;
   display: flex;
   align-items: center;

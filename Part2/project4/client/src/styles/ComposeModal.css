@@ -1,16 +1,16 @@
 .compose-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.55); /* קצת יותר כהה */
+  background-color: rgba(0, 0, 0, 0.55); 
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999; /* העלאת z-index משמעותית */
-  backdrop-filter: blur(4px); /* טשטוש רקע */
+  z-index: 9999;
+  backdrop-filter: blur(4px);
 }
 
 .compose-modal {
-  border-radius: 0.75rem; /* עיגול קל יותר */
+  border-radius: 0.75rem;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
   width: 100%;
   max-width: 44rem;
@@ -19,8 +19,8 @@
   flex-direction: column;
   transition: background-color 0.3s;
   overflow: hidden;
-  position: relative; /* הוספה */
-  z-index: 10000; /* הוספה - גבוה יותר מה-overlay */
+  position: relative; 
+  z-index: 10000; 
 }
 
 .compose-modal.light {
@@ -189,7 +189,7 @@
   transition: all 0.25s ease;
 }
 
-/* סטייל לכפתור השליחה כשהוא disabled */
+
 .send-button:disabled {
   background-color: #9ca3af;
   cursor: not-allowed;
