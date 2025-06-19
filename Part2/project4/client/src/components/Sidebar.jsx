@@ -157,13 +157,13 @@ const handleDeleteLabel = async (labelName) => {
                 onClick={() => onCategorySelect(category.name)}
                 className={`category-btn ${isSelected ? 'selected' : ''}`}
               >
+                <div className="category-info">
+                  <IconComponent size={18} className="category-icon" />
+                  <span className="category-name">{category.name}</span>
+                </div>
                 <span className={`count ${category.count > 0 ? 'has-count' : ''}`}>
                   {category.count > 0 ? category.count : ''}
                 </span>
-                <div className="category-info">
-                  <span className="category-name">{category.name}</span>
-                  <IconComponent size={18} />
-                </div>
               </button>
             );
           })}

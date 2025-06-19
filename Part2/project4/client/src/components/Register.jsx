@@ -29,6 +29,17 @@ function Register() {
     };
   }, [previewImage]);
 
+  const checkUsernameUnique = async (username) => {
+  try {
+    const res = await fetch(`http://localhost:4000/api/users/check-username/${username}`);
+    const data = await res.json();
+    return data.isUnique;
+  } catch (err) {
+    console.error("Error checking username:", err);
+    return false; // נניח שזה לא ייחודי אם הייתה שגיאה
+  }
+};
+
   // validateStep
   const validateStep = () => {
     const newErrors = {};
@@ -77,16 +88,28 @@ function Register() {
     return newErrors;
   };
 
-  const handleNext = (e) => {
-    e.preventDefault();
-    const validationErrors = validateStep();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+  const handleNext = async (e) => {
+  e.preventDefault();
+  const validationErrors = validateStep();
+
+  // אם יש שגיאות ולידציה בסיסיות, עצור
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    return;
+  }
+
+  // נניח ששם המשתמש נמצא ב-state בשם formData.username
+  if (step === 1) {
+    const isUnique = await checkUsernameUnique(formData.username);
+    if (!isUnique) {
+      setErrors({ username: "Username already exists" });
       return;
     }
-    setErrors({});
-    setStep(step + 1);
-  };
+  }
+
+  setErrors({});
+  setStep(step + 1);
+};
 
   const handleBack = (e) => {
     e.preventDefault();
@@ -308,13 +331,13 @@ return (
 
     {/* כפתורי ניווט */}
     <div className="buttons">
-      {step > 1 && <button type="button" onClick={handleBack}>Back</button>}
-      {step < 3 ? (
-        <button type="button" onClick={handleNext}>Next</button>
-      ) : (
-        <button type="submit">Register</button>
-      )}
-    </div>
+  {step < 3 ? (
+    <button type="button" onClick={handleNext}>Next</button>
+  ) : (
+    <button type="submit">Register</button>
+  )}
+  {step > 1 && <button type="button" onClick={handleBack}>Back</button>}
+</div>
 
     {serverError && <div className="error-text">{serverError}</div>}
   </form>

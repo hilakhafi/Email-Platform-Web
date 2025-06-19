@@ -49,16 +49,17 @@
 .category-btn {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* האייקון + שם בצד אחד, המספר בצד שני */
   align-items: center;
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
   background-color: transparent;
-  color: #374151; /* gray-700 */
-  font-size: 0.875rem; /* text-sm */
+  color: #374151;
+  font-size: 0.875rem;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
   border: none;
+  text-align: left;
 }
 
 .category-btn:hover {
@@ -99,6 +100,11 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-grow: 1;
+}
+
+.category-icon {
+  flex-shrink: 0;
 }
 
 /* Labels section */
@@ -204,4 +210,15 @@
 .delete-label-btn:hover {
   background: none !important;
 
+}
+
+.count {
+  min-width: 1.25rem;
+  text-align: right;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.sidebar.dark .count {
+  color: #d1d5db;
 }
