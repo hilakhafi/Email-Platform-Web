@@ -69,16 +69,17 @@
 
 /* Mail subject text */
 .mailview-subject {
-  margin: 0;
-  flex: 1;
   font-family: 'Poppins', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 600;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  color: inherit;
+  font-size: 1.5rem; /* יותר בולט */
+  font-weight: 700;
+  margin-bottom: 0;
+  padding: 0;
+  color: #1f2937;
 }
 
+.dark .mailview-subject {
+  color: #f3f4f6;
+}
 /* Section containing actions and sender info */
 .mailview-actions-sender {
   padding: 1rem 1.5rem;
@@ -175,13 +176,13 @@
 /* Mail text content */
 .mailview-text {
   font-family: 'Inter', sans-serif;
+   font-size: 15px;
   line-height: 1.6;
   color: #1f2937;
-  margin-top: 1rem;
-  padding: 1rem ;
-  align-items: center;
 }
-
+.dark .mailview-text {
+  color: #d1d5db;
+}
 /* Preview text style (used if necessary) */
 .mailview-text.preview-text {
   margin-top: 0;
@@ -197,7 +198,7 @@
   padding: 1rem 1.5rem;
   transition: border-color 0.3s ease;
   background-color: inherit;
-  margin-top: 100px;
+  margin-top: 40px;
 }
 
 .mailview-footer.dark {
@@ -207,12 +208,17 @@
 /* Wrapper for footer buttons */
 .footer-buttons {
   display: flex;
-  justify-content: center;  /* מרכז את הכפתורים */
-  gap: 0.75rem; 
+  justify-content: center;    /* מרכז את הכפתורים */
+  gap: 1rem;                  /* רווח ברור ביניהם */
+  padding-top: 0.5rem;
 }
+
 .footer-buttons .btn {
-  width: auto;               /* מבטל מתיחה על פני כל הרוחב */
-  flex: 0;                   /* לא ימתח את עצמו */
+  min-width: 120px;           /* לא חובה, אבל נותן מראה אחיד */
+  text-align: center;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  border-radius: 8px;
 }
 /* Generic button styles */
 .btn {
@@ -224,28 +230,22 @@
   border: 1px solid transparent;
 }
 
-/* Primary button (e.g., reply/send) */
 .btn.primary {
-  padding: 0.25rem 0.5rem; /* קטן יותר – פחות ריווח פנימי */
-  font-size: 0.875rem;      /* שווה ל־14px */
-  border-radius: 0.375rem;  /* עיגול פינות קטן יותר */
-  background-color: #2563eb; /* blue-600 */
+  background-color: #2563eb;
   color: white;
-  border-color: transparent;
+  border: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
-
 .btn.primary:hover {
   background-color: #1d4ed8; /* blue-700 */
 }
 
 /* Secondary button (e.g., cancel) */
 .btn.secondary {
-  padding: 0.25rem 0.5rem; /* קטן יותר – פחות ריווח פנימי */
-  font-size: 0.875rem;      /* שווה ל־14px */
-  border-radius: 0.375rem;  /* עיגול פינות קטן יותר */
-  background-color: transparent;
-  border-color: #d1d5db;
+  background-color: #f9fafb;
   color: #374151;
+  border: 1px solid #d1d5db;
 }
 
 .mailview-container.dark .btn.secondary {
@@ -254,7 +254,7 @@
 }
 
 .btn.secondary:hover {
-  background-color: #eff6ff;
+  background-color: #f3f4f6;
 }
 
 .mailview-container.dark .btn.secondary:hover {
@@ -416,17 +416,15 @@
 }
 
 .attachment-btn {
-  color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background-color: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  width: auto;
+  height: auto;
+  padding: 6px;
+  font-size: 0;
+}
+
+.attachment-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
 .attachment-btn:hover {

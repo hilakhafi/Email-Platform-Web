@@ -19,7 +19,6 @@ function Sidebar({ onCompose, selectedCategory, setSelectedCategory, onCategoryS
 
           if (response.ok) {
             const data = await response.json();
-            console.log('data:', data);
             setLabels(data);
           } else {
             console.error("Failed to fetch labels", response.status);
@@ -34,7 +33,6 @@ function Sidebar({ onCompose, selectedCategory, setSelectedCategory, onCategoryS
   }, []);
 
   const handleSelectLabel = (labelName) => {
-    console.log("Selected label:", labelName);
     onCategorySelect(labelName);
   };
 
@@ -45,10 +43,7 @@ const handleAddLabel = async () => {
   if (!name || !color) return;
 
   try {
-    console.log('name:', name);
-    console.log('color:', color);
     const token = localStorage.getItem("token");
-    console.log('token:', token);
     const response = await fetch("http://localhost:4000/api/labels", {
       method: "POST",
       headers: {
@@ -61,7 +56,6 @@ const handleAddLabel = async () => {
     if (response.ok) {
       // update the labels state with the new label
       const newLabels = await response.json();
-      console.log('Label added:', newLabels);
       await fetchLabels();
     } else {
       console.error("Failed to add label", response.status, await response.text());

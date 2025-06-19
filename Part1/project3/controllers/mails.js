@@ -147,10 +147,7 @@ exports.postMail = async (req, res) => {
     if (!recipient) {
       return res.status(404).json({ error: 'Recipient user not found' });
     }
-    console.log("User:", user);
-    console.log("Recipient:", recipient);
-    console.log("user.mail === sendTo:", user.mail === sendTo);
-    
+
     const SentMail = {
       id: Emails.emails.length + 1,
       ownerId: userId,
@@ -189,7 +186,7 @@ exports.postMail = async (req, res) => {
 
     Emails.addMail(SentMail);
     Emails.addMail(InboxMail);
-    console.log("All mails:");
+
     console.log(Emails.emails.map(m => ({
       id: m.id,
       ownerId: m.ownerId,

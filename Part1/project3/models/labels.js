@@ -1,18 +1,14 @@
-console.log("labelsModel loaded");
 
 let labels = [];
 // Returns all labels - filtered by userId
 const getAllLabels = (userId) => {
-    console.log('models- userId:', userId);
-    console.log('models- labels:', labels);
+
     return labels.filter(label => label.userId === userId);
 };
 
 // Adds a new label to the array
 const addLabel = (label) => {
-    console.log('before models- labels:', labels);
     labels.push(label);
-    console.log('after models- labels:', labels);
 }
 
 // Finds a label by its ID

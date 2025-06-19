@@ -253,9 +253,6 @@ const clearSelection = () => setSelectedMails([]);
     if (!token) throw new Error("No token found.");
     const mailToMove = mails.find(mail => mail.id === mailId);
     const updatedLabelIds = [...mailToMove.label, labelname];
-    console.log('updatedLabelIds:', updatedLabelIds);
-
-
     const res = await fetch(`http://localhost:4000/api/mails/${mailId}`, {
       method: "PATCH",
       headers: {
@@ -281,15 +278,11 @@ const clearSelection = () => setSelectedMails([]);
 
 // removes a label from a mail by its ID
 const deleteMilFromLabel = async (mailId, labelname) => {
-  console.log('start delete');
   try {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No token found.");
     const mailToMove = mails.find(mail => mail.id === mailId);
-    console.log('mailToMove:', mailToMove);
     const updatedLabelIds = mailToMove.label.filter(l => l !== labelname);
-    console.log('updatedLabelIds:', updatedLabelIds);
-
 
     const res = await fetch(`http://localhost:4000/api/mails/${mailId}`, {
       method: "PATCH",
@@ -319,7 +312,6 @@ const deleteMilFromLabel = async (mailId, labelname) => {
 const filteredMails = mails.filter((mail) => {
   const category = selectedCategory?.toLowerCase();
   const label = selectedLabel;
-  console.log('label:', label);
   // check if the mail is in starred category
   if (category === 'starred') {
     return mail.isStarred === true;

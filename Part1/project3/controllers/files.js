@@ -30,8 +30,6 @@ const upload = multer({
 
 const sendMail = async (req, res) => {
   try {
-    console.log('Received body:', req.body);
-    console.log('Received files:', req.files);
     
     const { sendTo, subject, body } = req.body; 
     const attachments = req.files || [];
@@ -113,9 +111,7 @@ const sendMail = async (req, res) => {
     // saving mails like in mails.js
     Emails.addMail(mailData);
     Emails.addMail(inboxMail);
-    
-    console.log('Mail saved successfully with attachments:', mailData);
-
+    // save attachments to the database
     res.json({ 
       success: true, 
       message: 'Email sent successfully',

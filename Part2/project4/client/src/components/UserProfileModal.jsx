@@ -17,7 +17,6 @@ const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
   const [imagePreview, setImagePreview] = useState(userInfo.avatar || null);
 
 useEffect(() => {
-  console.log('ddarkmode:', darkMode);
   if (userInfo) {
     const fixedAvatarUrl = userInfo.avatar
       ? `http://localhost:4000/${userInfo.avatar.replace(/\\/g, '/')}`
