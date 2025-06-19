@@ -400,7 +400,7 @@ const removeFromSpam = async (mail) => {
     });
 
     if (!res.ok) {
-      throw new Error("Failed to move mail to trash");
+      throw new Error("Failed to move mail from spam");
     }
 
     setMails((prevMails) =>
