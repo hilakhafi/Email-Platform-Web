@@ -384,6 +384,48 @@ const restoreMail = async (mailId, previousCategory) => {
   }
 };
 
+const removeFromSpam = async (mail) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No token found.");
+
+    const res = await fetch(`http://localhost:4000/api/mails/${mail.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ category: mail.previousCategory }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to move mail to trash");
+    }
+
+    // אם העדכון הצליח, נעדכן גם ב־state המקומי:
+    setMails((prevMails) =>
+      prevMails.map((mailcheck) =>
+        mailcheck.id === mail.id ? { ...mailcheck, category: mail.previousCategory } : mailcheck
+      )
+    );
+    
+      const res2 = await fetch(`http://localhost:4000/api/blacklist/${mail.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res2.ok) {
+      throw new Error("Failed to remove mail from blacklist");
+    }
+  } catch (err) {
+    console.error(err);
+    // אפשר להראות הודעת שגיאה למשתמש
+  }
+};
+
 const moveToSpam = async (mail) => {
   try {
     const token = localStorage.getItem("token");
@@ -399,7 +441,7 @@ const moveToSpam = async (mail) => {
     });
 
     if (!res.ok) {
-      throw new Error("Failed to move mail to trash");
+      throw new Error("Failed to move mail to spam");
     }
 
     // אם העדכון הצליח, נעדכן גם ב־state המקומי:
@@ -635,6 +677,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
               onUpdateMail={handleUpdateMail}
               setSelectedMail={setSelectedMail}         
               setSelectedCategory={setSelectedCategory}  
+              removeFromSpam={removeFromSpam}
               
             />
           )}
