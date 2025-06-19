@@ -361,23 +361,7 @@ function highlightSearch(text, searchTerm) {
         <div className="header-actions">
           
             <div className="bulk-actions-buttons">
-              {/*               
-              {selectedCategory !== 'trash' && (
-                <button
-                  onClick={() => {
-                    selectedMails.forEach((mailId) => {
-                      const mail = mails.find((m) => m.id === mailId);
-                      if (mail) {
-                        toggleStar(mail.id, mail.isStarred);
-                      }
-                    });
-                  }}
-                  className="icon-button"
-                  aria-label="סמן בכוכב"
-                >
-                  <Star size={18} />
-                </button>
-              )} */}
+              
               {selectedLabel ? (
                 <button
                   className="icon-button"
