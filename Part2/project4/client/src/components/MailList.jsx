@@ -400,6 +400,7 @@ const filteredMails = mails.filter((mail) => {
                     }}
                     currentLabels={[]}
                     position="bottom-left"
+                    darkMode={darkMode}
                   />
                 </div>
               )}

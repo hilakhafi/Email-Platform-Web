@@ -12,6 +12,7 @@ function LabelDropdown({
   position = 'bottom-left',
   darkMode
 }) {
+  console.log('darkMode:', darkMode);
   const [labels, setLabels] = useState([]);
   const dropdownRef = useRef(null);
 
@@ -70,10 +71,11 @@ function LabelDropdown({
   };
 
   
+  
   return (
     <div
       ref={dropdownRef}
-      className={`label-dropdown ${positionClasses[position]} ${darkMode ? 'dark' : ''}`}
+      className={`label-dropdown ${darkMode ? 'dark' : ''}`}
       onClick={(e) => e.stopPropagation()}
     >
       {/* Header */}
