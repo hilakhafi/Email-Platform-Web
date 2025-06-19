@@ -61,7 +61,7 @@
   transform: scale(1.1);
 }
 
-/* עבור מצב כהה */
+/* dark mode */
 .attachments-section.dark .attachments-list {
   background-color: #2f3640;
   border-color: #4b5563;

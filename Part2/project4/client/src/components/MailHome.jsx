@@ -17,22 +17,21 @@ const defaultCategories = [
 ];
 
 export default function MailHome() {
-  const [mails, setMails] = useState([]);
-  const [selectedMail, setSelectedMail] = useState(null);
-  const [showCompose, setShowCompose] = useState(false);
-  //first state for selected category
-  const [selectedCategory, setSelectedCategory] = useState('inbox');
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
-  const [categories, setCategories] = useState(defaultCategories);
-  const [labels, setLabels] = useState([]);
-  const [searchInput, setSearchInput] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [selectedLabel, setSelectedLabel] = useState('');
+  const [mails, setMails] = useState([]); // all mails list
+  const [selectedMail, setSelectedMail] = useState(null); // currently selected mail
+  const [showCompose, setShowCompose] = useState(false); // state to control compose modal visibility
+  const [selectedCategory, setSelectedCategory] = useState('inbox'); // selected category
+  const [error, setError] = useState(""); // error message state
+  const [loading, setLoading] = useState(false); // loading state
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false); // state to control sidebar visibility
+  const [darkMode, setDarkMode] = useState(false); // dark mode state
+  const [categories, setCategories] = useState(defaultCategories); // categories state
+  const [labels, setLabels] = useState([]); // labels state
+  const [searchInput, setSearchInput] = useState(''); // search input state
+  const [searchTerm, setSearchTerm] = useState(''); // search term state
+  const [currentPage, setCurrentPage] = useState(1); // current page for pagination
+  const [totalPages, setTotalPages] = useState(1); // total pages for pagination
+  const [selectedLabel, setSelectedLabel] = useState(''); // selected label for filtering mails
 
   // User menu states
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -45,26 +44,21 @@ export default function MailHome() {
     birthDate: "",
     gender: ""
   });
-
+// Function to handle mail updates 
   const handleUpdateMail = (updatedMail) => {
   console.log('handleUpdateMail', updatedMail);
   setMails(prev =>
     prev.map(mail => (mail.id === updatedMail.id ? updatedMail : mail))
   );
-  setSelectedMail(updatedMail); // גם המייל הנבחר מתעדכן
+  setSelectedMail(updatedMail);
 };
   
   const userMenuRef = useRef(null);
-//   const handleMailSent = () => {
-//   // מחכים רגע כדי שהמייל ייכנס גם לנמען
-//   setTimeout(() => {
-//     fetchMails();
-//   }, 300); // או אפילו פחות
-// };
   useEffect(() => {
   fetchMails(currentPage);
 }, [currentPage]);
 
+// Function to fetch mails from the server
   async function fetchMails(page = 1) {
   setLoading(true);
   setError(null);
@@ -89,10 +83,10 @@ export default function MailHome() {
     setCurrentPage(data.currentPage);
     setTotalPages(data.totalPages);
     
-    //כאן נעדכן את selectedMail:
+  
     if (selectedMail) {
       const updatedMail = data.find(mail => mail.id === selectedMail.id);
-      setSelectedMail(updatedMail || null);  // אם לא נמצא, מאפסים ל-null
+      setSelectedMail(updatedMail || null);  
     }
     
   } catch (err) {
@@ -104,13 +98,13 @@ export default function MailHome() {
 }
 
 
-  // Handle new mail event (e.g., from WebSocket or similar)
+  // Handle new mail function
 function handleNewMail(newMail) {
-  // בדוק אם המייל תקין
+  // check if newMail is a valid object
   if (newMail && typeof newMail === 'object' && newMail.id) {
     setMails(prevMails => [newMail, ...prevMails]);
   } else {
-    // אם לא - רענן את כל המיילים
+    // if newMail is not valid, log an error and refresh all mails
     console.log("Invalid mail object received, refreshing all mails");
     fetchMails();
   }
@@ -135,7 +129,7 @@ function handleNewMail(newMail) {
     async function fetchUserInfo() {
       try {
         const token = localStorage.getItem("token");
-        const userId = localStorage.getItem("userId"); // נניח שאתה שומר את ה-ID גם כן
+        const userId = localStorage.getItem("userId"); 
 
         if (!token || !userId) return;
 
@@ -155,7 +149,6 @@ function handleNewMail(newMail) {
 
             console.log('Profile image URL:', avatarUrl);
           setUserInfo({
-            // name: `${userData.first_name} ${userData.last_name}` || "User",
             name: userData.first_name && userData.last_name
             ? `${userData.first_name} ${userData.last_name}`
             : "User",
@@ -200,11 +193,9 @@ function handleNewMail(newMail) {
   }, []);
 
 useEffect(() => {
-  console.log('fromMail:', mails.fromMail);
-  console.log('toMail:', mails.toMail);
-  console.log('email', userInfo.email);
+  // update categories count based on user mails
 
-  if (!userInfo) return; // אם אין משתמש, לא עושים כלום
+  if (!userInfo) return; // check if there is a user
 
   const userMails = mails.filter(mail => mail.toMail === userInfo.email);
   const userDraft = mails.filter(mail => mail.fromMail === userInfo.email);
@@ -266,6 +257,7 @@ function filterMailsByCategory() {
     default:
       filtered = mails;
   }
+  // serch functionality - if searchTerm is not empty, filter mails by subject or body
   if (searchTerm.trim()) {
     const lower = searchTerm.toLowerCase();
     filtered = filtered.filter(mail => {
@@ -289,7 +281,7 @@ function filterMailsByCategory() {
 
   return filtered;
 }
-
+// Function to toggle star status of a mail
 const toggleStar = async (mailId, currentStarred) => {
   try {
     const token = localStorage.getItem("token");
@@ -317,12 +309,14 @@ const toggleStar = async (mailId, currentStarred) => {
     console.error(err);
   }
 };
+
+// Function to move a mail to trash
 const moveToTrash = async (mailId) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No token found.");
 
-    // מוצא את המייל כדי לקבל את הקטגוריה הנוכחית שלו
+    // first, find the mail to move
     const mailToMove = mails.find(mail => mail.id === mailId);
     if (!mailToMove) throw new Error("Mail not found.");
 
@@ -334,7 +328,7 @@ const moveToTrash = async (mailId) => {
       },
       body: JSON.stringify({ 
         category: "trash", 
-        previousCategory: mailToMove.category // שומר את הקטגוריה הנוכחית
+        previousCategory: mailToMove.category // save the previous category
       }),
     });
 
@@ -342,7 +336,7 @@ const moveToTrash = async (mailId) => {
       throw new Error("Failed to move mail to trash");
     }
 
-    // אם העדכון הצליח, נעדכן גם ב־state המקומי:
+    // if the update was successful, update the local state
     setMails((prevMails) =>
       prevMails.map((mail) =>
         mail.id === mailId 
@@ -357,10 +351,10 @@ const moveToTrash = async (mailId) => {
     );
   } catch (err) {
     console.error(err);
-    // אפשר להראות הודעת שגיאה למשתמש
   }
 };
 
+// Function to restore a mail to its previous category from trash
 const restoreMail = async (mailId, previousCategory) => {
   try {
     const token = localStorage.getItem("token");
@@ -387,7 +381,7 @@ const restoreMail = async (mailId, previousCategory) => {
       )
     );
     
-    // סוגר את המייל הנוכחי ועובר לקטגוריה שאליה המייל חזר
+    // close the mail view and reset selected category
     setSelectedMail(null);
     setSelectedCategory(previousCategory);
     
@@ -396,6 +390,7 @@ const restoreMail = async (mailId, previousCategory) => {
   }
 };
 
+// Function to remove a mail from spam and get it out from the blacklist
 const removeFromSpam = async (mail) => {
   try {
     const token = localStorage.getItem("token");
@@ -414,7 +409,6 @@ const removeFromSpam = async (mail) => {
       throw new Error("Failed to move mail to trash");
     }
 
-    // אם העדכון הצליח, נעדכן גם ב־state המקומי:
     setMails((prevMails) =>
       prevMails.map((mailcheck) =>
         mailcheck.id === mail.id ? { ...mailcheck, category: mail.previousCategory } : mailcheck
@@ -434,10 +428,10 @@ const removeFromSpam = async (mail) => {
     }
   } catch (err) {
     console.error(err);
-    // אפשר להראות הודעת שגיאה למשתמש
   }
 };
 
+// Function to move a mail to spam and add it to the blacklist
 const moveToSpam = async (mail) => {
   try {
     const token = localStorage.getItem("token");
@@ -456,17 +450,12 @@ const moveToSpam = async (mail) => {
       throw new Error("Failed to move mail to spam");
     }
 
-    // אם העדכון הצליח, נעדכן גם ב־state המקומי:
     setMails((prevMails) =>
       prevMails.map((mailcheck) =>
         mailcheck.id === mail.id ? { ...mailcheck, category: "spam" , isStarred: false } : mailcheck
       )
     );
     
-    // 3. Extract + Add URLs to blacklist
-    // const blockedUrls = await BlacklistService.check(subject, body); // השתמשי בגרסה החדשה של check
-    // for (const url of blockedUrls) {
-
       const res2 = await fetch("http://localhost:4000/api/blacklist", {
         method: "POST",
         headers: {
@@ -483,18 +472,17 @@ const moveToSpam = async (mail) => {
     
   } catch (err) {
     console.error(err);
-    // אפשר להראות הודעת שגיאה למשתמש
   }
 };
 
-// תיקון של הפונקציה handlePermanentDelete ב-MailHome.js
+// Function to handle permanent deletion of mails
 const handlePermanentDelete = async (mailsToDelete) => {
-  // תמיכה במייל אחד או במערך של מיילים
+
   const mailsArray = Array.isArray(mailsToDelete) ? mailsToDelete : [mailsToDelete];
 
   const hasNonDraft = mailsArray.some(mail => mail.category !== 'drafts');
 
-  // בקשת אישור רק אם יש מייל שלא מטיוטה
+// If there are non-draft mails, confirm with the user before deletion
   if (hasNonDraft) {
     const confirmDelete = window.confirm("Are you sure you want to permanently delete the selected email(s)?");
     if (!confirmDelete) return;
@@ -505,7 +493,6 @@ const handlePermanentDelete = async (mailsToDelete) => {
     if (!token) throw new Error("No token found.");
 
     for (const mail of mailsArray) {
-      // תיקון: הוספת הכתובת המלאה של השרת
       const res = await fetch(`http://localhost:4000/api/mails/${mail.id}`, {
         method: 'DELETE',
         headers: {
@@ -519,10 +506,8 @@ const handlePermanentDelete = async (mailsToDelete) => {
       }
     }
 
-    // עדכון ה-state המקומי - הסרת המיילים שנמחקו
     setMails(prev => prev.filter(mail => !mailsArray.some(toDelete => toDelete.id === mail.id)));
     
-    // אם המייל הנוכחי נמחק, נסגור את התצוגה
     if (selectedMail && mailsArray.some(mail => mail.id === selectedMail.id)) {
       setSelectedMail(null);
     }
@@ -638,7 +623,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
 
       {/* Main Content */}
       <main className="main-content">
-  {/* Sidebar - תמיד מוצג */}
+  {/* Sidebar*/}
   {!sidebarCollapsed && (
     <Sidebar
       onCompose={() => setShowCompose(true)}
@@ -658,7 +643,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
         setSelectedCategory('');
       }} />
       )}
-        {/* תוכן מיילים - או רשימה או מייל אחד */}
+        {/* Mail content */}
         <div className="mail-content">
           {!selectedMail && mails.length > 0  ? (
             <MailList
@@ -703,9 +688,6 @@ const handlePermanentDelete = async (mailsToDelete) => {
             onClose={() => setShowCompose(false)} 
             darkMode={darkMode} 
             onMailSent={handleNewMail} 
-            // moveToDraft={moveToDraft}
-            // mail={selectedMail}
-            // updateDraftCategory={updateDraftCategory}
           />        
         )}
 

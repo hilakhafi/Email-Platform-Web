@@ -9,24 +9,22 @@ export default function LoginScreen({ onLogin }) {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // function to handle email submission, it sends the email to the server to verify if it exists
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    //172.20.10.2
-    // את יכולה לשנות את זה לפי איך השרת שלך בנוי
     const res = await fetch("http://localhost:4000/api/tokens/verify-mail", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ mail }),
     });
-    console.log("here");
     if (res.ok) {
       setStep("password");
     } else {
       setError("Email not found");
     }
   };
-
+// function to handle password submissio, it sends the email and password to the server to get a token
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     setError("");

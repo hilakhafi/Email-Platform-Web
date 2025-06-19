@@ -16,7 +16,7 @@ function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose, handlePerm
 
 
 useEffect(() => {
-  // בדיקה בתחילת useEffect
+  // check if mail exists and has a valid from field
   if (!mail || !mail.from) {
     setUser(null);
     return;
@@ -30,7 +30,7 @@ useEffect(() => {
           method: 'GET',
           headers: {
             'user-id': mail.from,
-            'Authorization': localStorage.getItem('token'), // הוספת טוקן אם נדרש
+            'Authorization': localStorage.getItem('token'), // adqding authorization token
           },
         });
 
@@ -54,7 +54,7 @@ useEffect(() => {
   }
 
   fetchUser();
-}, [mail?.from]); // שימוש ב-optional chaining
+}, [mail?.from]); 
 
 useEffect(() => {
   if (user) {
@@ -63,13 +63,13 @@ useEffect(() => {
   }
 }, [user]);
 
-// useEffect נפרד לסימון כנקרא
+// useEffect to mark mail as read when it is opened
 useEffect(() => {
-  // בדיקה שמייל קיים לפני כל דבר
+  // check if mail exists
   if (!mail || !mail.id || mail.isRead) {
     return;
   }
-
+// function to mark mail as read
   async function markMailAsRead() {
     try {
       const token = localStorage.getItem('token');
@@ -105,13 +105,14 @@ useEffect(() => {
   }
 
   markMailAsRead();
-}, [mail?.id, mail?.isRead]); // שימוש ב-optional chaining
+}, [mail?.id, mail?.isRead])
 
 const handleResend = () => {
-  setDraftToDeleteAfterSend(mail); // שומרים את ה־id למחיקה רק אם השליחה תתבצע
+  setDraftToDeleteAfterSend(mail); // delete the draft after sending
   setShowComposeModal(true);
 }; 
 
+// function to handle marking mail as unread
 async function handleMarkAsUnread(id) {
   try {
     const token = localStorage.getItem('token');
@@ -132,7 +133,6 @@ async function handleMarkAsUnread(id) {
     if (res.ok) {
       console.log('Mail marked as unread successfully');
       
-      // בדיקה אם יש תוכן בתגובה
       const responseText = await res.text();
       let updatedMail;
       
@@ -148,19 +148,16 @@ async function handleMarkAsUnread(id) {
         updatedMail = { ...mail, isRead: false };
       }
       
-      // עדכון הסטייט המקומי
+      // update the mail state
       setShowMenu(false);
       
-      // עדכון ה-parent component
+    
       if (onUpdateMail) {
         onUpdateMail(updatedMail);
       }
       
-      // **חזרה לרשימת המיילים - כמו שעשית**
-      // סוגר את המייל הנוכחי ועובר לקטגוריה שאליה המייל חזר
       setSelectedMail(null);
       
-      // אם המייל עבר לקטגוריה אחרת, עבור אליה
       if (updatedMail.category && updatedMail.category !== selectedCategory) {
         setSelectedCategory(updatedMail.category);
       }
@@ -175,10 +172,9 @@ async function handleMarkAsUnread(id) {
   }
 }
 
-// פונקציה להורדת קובץ - מתוקנת
+// function to handle danloading attachments
 const handleDownloadAttachment = (attachment) => {
   try {
-    // אם יש base64 data
     if (attachment.data) {
       const byteCharacters = atob(attachment.data);
       const byteNumbers = new Array(byteCharacters.length);
@@ -197,10 +193,9 @@ const handleDownloadAttachment = (attachment) => {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     }
-    // אם יש path לקובץ בשרת
+  
     else if (attachment.path) {
       const link = document.createElement('a');
-      // תיקון הנתיב - הסרת files/ מהנתיב
       link.href = `http://localhost:4000/uploads/${attachment.filename}`;
       link.download = attachment.filename || 'attachment';
       link.click();
@@ -211,7 +206,7 @@ const handleDownloadAttachment = (attachment) => {
   }
 };
 
-// פונקציה לתצוגה מקדימה של קובץ - מתוקנת
+//  function to handle previewing attachments
 const handlePreviewAttachment = (attachment) => {
   try {
     if (attachment.data) {
@@ -226,7 +221,6 @@ const handlePreviewAttachment = (attachment) => {
       const url = window.URL.createObjectURL(blob);
       window.open(url, '_blank');
     } else if (attachment.path) {
-      // תיקון הנתיב - השתמש ב-uploads/ ישירות
       window.open(`http://localhost:4000/uploads/${attachment.filename}`, '_blank');
     }
   } catch (error) {
@@ -235,7 +229,7 @@ const handlePreviewAttachment = (attachment) => {
   }
 };
 
-  // פונקציה לקבלת איקון לפי סוג קובץ
+  // get file icon based on filename and content type
   const getFileIcon = (filename, contentType) => {
     const extension = filename?.split('.').pop()?.toLowerCase();
     const type = contentType?.toLowerCase();
@@ -315,7 +309,7 @@ const handlePreviewAttachment = (attachment) => {
               <button onClick={() => {handleResend(); setShowMenu(false);}}>Resend</button>
               <button 
                 onClick={() => {
-                  // מחיקה אוטומטית של טיוטה בלי אישור
+                  // otomatically delete the draft after sending
                   handlePermanentDelete(mail);
                   setShowMenu(false);
                 }}
@@ -363,7 +357,7 @@ const handlePreviewAttachment = (attachment) => {
       <div className="mailview-body">
         <p className="mailview-text">{mail.body}</p>
         
-        {/* הצגת קבצים מצורפים */}
+        {/* showing attachments files */}
         {mail.attachments && mail.attachments.length > 0 && (
           <div className="attachments-section">
             <div className="attachments-header">
@@ -420,22 +414,22 @@ const handlePreviewAttachment = (attachment) => {
           onClose={() => setShowReplyModal(false)}
           darkMode={darkMode}
           onMailSent={() => setShowReplyModal(false)}
-          prefillTo={user?.mail || ''} // תיקון עיקרי - השתמשי ב-user.mail במקום user.email
+          prefillTo={user?.mail || ''} 
           prefillSubject={`Re: ${mail.subject}`}
           prefillBody={`\n\n--- Original message from ${user?.mail || 'unknown'} ---\n${mail.body}`}
         />
       )}
       
-      {/* Modal להעברה */}
+      {/* Foward */}
       {showForwardModal && (
         <ComposeModal
           onClose={() => setShowForwardModal(false)}
           darkMode={darkMode}
           onMailSent={() => setShowForwardModal(false)}
-          prefillTo="" // נשאיר ריק כדי שהמשתמש יוכל למלא
+          prefillTo="" 
           prefillSubject={`Fwd: ${mail.subject}`}
           prefillBody={`\n\n--- Forwarded message ---\nFrom: ${user?.mail || 'unknown'}\nDate: ${new Date(mail.timestamp).toLocaleString()}\nSubject: ${mail.subject}\n\n${mail.body}`}
-          forwardAttachments={mail.attachments} // העברת הקבצים המצורפים
+          forwardAttachments={mail.attachments} // foward attachments
         />
       )}
 
@@ -443,23 +437,22 @@ const handlePreviewAttachment = (attachment) => {
       <ComposeModal
         onClose={() => {
           setShowComposeModal(false);     
-          setDraftToDeleteAfterSend(null); // מנקים את המצב
+          setDraftToDeleteAfterSend(null); 
         }}         
         darkMode={darkMode}
         onMailSent={() => {
-          // כאשר המייל נשלח בהצלחה:
           if (draftToDeleteAfterSend) {
             console.log("Deleting draft after successful send:", draftToDeleteAfterSend.id);
             handlePermanentDelete(draftToDeleteAfterSend);
           }
           setShowComposeModal(false);
           setDraftToDeleteAfterSend(null);
-          onClose(); // סוגר את ה-MailView
+          onClose();
         }}
         prefillTo={mail.toMail || ''}            
         prefillSubject={mail.subject || ''}
         prefillBody={mail.body || ''}
-        forwardAttachments={mail.attachments || []} // אם יש קבצים מצורפים בטיוטה
+        forwardAttachments={mail.attachments || []} // attachments files in draft
       />
     )}
 

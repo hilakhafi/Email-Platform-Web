@@ -285,7 +285,7 @@
 .dropdown-menu {
   position: absolute;
   top: 100%;
-  right: -80px; /* הזחה ימינה נוספת */
+  right: -80px; 
   background: white;
   border: 1px solid #ddd;
   border-radius: 14px;
@@ -298,7 +298,6 @@
   min-width: 180px;
 }
 
-/* כפתורים בתוך הדרופדאון */
 .dropdown-menu button {
   background-color: #4285f4;
   color: white;
@@ -312,7 +311,6 @@
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-/* אפקט מעבר */
 .dropdown-menu button:hover {
   background-color: #3367d6;
   transform: scale(1.04);
@@ -450,15 +448,15 @@
   justify-content: space-between;
   padding: 6px 16px;
   margin: 8px auto;
-  background-color: #ffffffcc; /* לבן חצי שקוף */
-  backdrop-filter: blur(6px); /* טשטוש קל */
+  background-color: #ffffffcc; 
+  backdrop-filter: blur(6px); 
   color: #111827;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 8px;
   z-index: 100;
-  width: calc(100% - 32px); /* ריווח מהקצוות */
+  width: calc(100% - 32px); 
   transition: all 0.3s ease;
 }
 

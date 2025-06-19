@@ -1,4 +1,4 @@
-/* === Base dropdown styling === */
+/* Base dropdown styling */
 .label-dropdown {
   position: absolute;
   z-index: 50;
@@ -10,7 +10,7 @@
   transition: transform 0.2s ease, opacity 0.2s ease; /* Smooth transitions */
 }
 
-/* === Dark mode support === */
+/* Dark mode support */
 .label-dropdown.dark {
   background-color: #2b2b2b;
   border-color: #4b5563;
@@ -34,43 +34,43 @@
     padding: 1rem;
     
 } 
-/* === Header styling === */
+/* Header styling */
 .label-dropdown-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 1rem; /* Vertical and horizontal padding */
-  border-bottom: 1px solid #e5e7eb; /* Divider */
+  padding: 0.5rem 1rem; 
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .label-dropdown.dark .label-dropdown-header {
-  border-color: #4b5563; /* Dark mode border */
+  border-color: #4b5563; 
 }
 .label-dropdown-close {
-  background-color: transparent; /* Transparent background */
-  border: none;                  /* No border */
-  padding: 0.25rem;              /* Slight padding for clickable area */
-  cursor: pointer;               /* Pointer cursor on hover */
-  color: #6b7280;                /* Tailwind gray-500 for normal mode */
+  background-color: transparent; 
+  border: none;                  
+  padding: 0.25rem;            
+  cursor: pointer;               
+  color: #6b7280;                
   transition: color 0.2s ease;
   
 }
 
 .label-dropdown-close:hover {
-  color: #111827; /* Darker on hover (gray-900) */
+  color: #111827; 
   background-color: transparent;
 
 
 }
 
 .label-dropdown.dark .label-dropdown-close {
-  color: #9ca3af; /* Tailwind gray-400 */
+  color: #9ca3af; 
   background-color: transparent;
 
 }
 
 .label-dropdown.dark .label-dropdown-close:hover {
-  color: #ffffff; /* White hover in dark mode */
+  color: #ffffff; 
   background-color: transparent;
 
 }
@@ -79,19 +79,19 @@
   font-family: 'Poppins', sans-serif;
   font-size: 1.1rem;
   font-weight: 500;
-  color: #374151; /* Dark gray text */
+  color: #374151;
 }
 
 .label-dropdown.dark .label-dropdown-title {
-  color: #e5e7eb; /* Light text for dark mode */
+  color: #e5e7eb; 
 }
 
-/* === Label list container === */
+/* Label list container */
 .label-dropdown-list {
-  padding: 0.25rem 0; /* Vertical padding */
+  padding: 0.25rem 0; 
 }
 
-/* === Each label item === */
+/* Each label item */
 .label-dropdown-item {
   width: 100%;
   padding: 0.5rem 1rem;
@@ -103,36 +103,36 @@
   border: none;
   text-align: left;
   cursor: pointer;
-  transition: background-color 0.2s ease; /* Smooth hover effect */
+  transition: background-color 0.2s ease;
 }
 
 .label-dropdown-item:hover {
-  background-color: #f3f4f6; /* Light hover background */
+  background-color: #f3f4f6; 
 }
 
 .label-dropdown.dark .label-dropdown-item:hover {
-  background-color: #3b3b3b; /* Dark mode hover */
+  background-color: #3b3b3b; 
 }
 
-/* === Colored dot indicator for label === */
+/* Colored dot indicator for label */
 .label-dropdown-color {
   width: 0.75rem;
   height: 0.75rem;
-  border-radius: 9999px; /* Fully round */
-  border: 1px solid #d1d5db; /* Light border */
+  border-radius: 9999px; 
+  border: 1px solid #d1d5db; 
 }
 
-/* === Label text === */
+/* Label text */
 .label-dropdown-label {
   flex-grow: 1;
-  color: #1f2937; /* Almost black */
+  color: #1f2937; 
 }
 
 .label-dropdown.dark .label-dropdown-label {
-  color: #e5e7eb; /* Light text for dark mode */
+  color: #e5e7eb;
 }
 
-/* === Checkmark icon when label is applied === */
+/* Checkmark icon when label is applied */
 .label-dropdown-check {
-  color: #16a34a; /* Green checkmark */
+  color: #16a34a;
 }

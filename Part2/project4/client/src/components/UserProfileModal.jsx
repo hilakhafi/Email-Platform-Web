@@ -23,7 +23,7 @@ useEffect(() => {
       ? `http://localhost:4000/${userInfo.avatar.replace(/\\/g, '/')}`
       : null;
 
-    // רק אם אין תצוגה קיימת (למשל כי המשתמש לא בחר עדיין קובץ)
+    // if the picture is not set, use a default picture
     setImagePreview(prev => prev || fixedAvatarUrl);
 
     const nameParts = userInfo.name.split(' ');
@@ -47,6 +47,7 @@ useEffect(() => {
     }));
   };
 
+  // Handle image change
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -146,7 +147,7 @@ useEffect(() => {
             {imagePreview ? (
               <img src={imagePreview} alt="Profile" />
             ) : (
-              <span>?</span> // או אייקון ברירת מחדל
+              <span>?</span>
             )}
           </div>
           <div className="image-section">
@@ -197,17 +198,6 @@ useEffect(() => {
                 required
               />
             </div>
-
-            {/* <div className="form-group">
-              <label>Email</label>
-              <input
-                type="mail"
-                name="mail"
-                value={formData.mail}
-                onChange={handleInputChange}
-                required
-              />
-            </div> */}
 
             <div className="form-group">
               <label>Birth date</label>

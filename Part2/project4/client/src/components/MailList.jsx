@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, Mail, Star, RefreshCw, MoreHorizontal, Circl
 import '../styles/MailList.css';
 import LabelDropdown from './LabelDropdown';
 
-// קומפוננטה לטעינת פרטי משתמש בודד
+// Represents a single mail item, including logic for loading the sender's user info and label management.
 function MailItemWithUser({ mail, selectedMail, onSelect, darkMode, 
   toggleStar, moveToTrash, onAddLabelToMail, onRemoveLabelFromMail }) {
   const [user, setUser] = useState(null);
@@ -41,7 +41,7 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode,
   const isUnread = !mail.isRead;
   const hasAttachments = mail.attachments && mail.attachments.length > 0;
   
-  // הצגת שם המשתמש או מצב טעינה
+  // Determine the sender's name, showing "Loading..." if the user is still being fetched
   const senderName = loadingUser 
     ? 'Loading...' 
     : user 
@@ -87,12 +87,6 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode,
               </button>
               
               <LabelDropdown
-                // isOpen={showLabelDropdown}
-                // onClose={() => setShowLabelDropdown(false)}
-                // onAddToLabel={(labelId) => togglelabel(mail.id, labelId)}
-                // onRemoveFromLabel={(labelName) => onRemoveLabelFromMail(mail.id, labelName)}
-                // currentLabels={mail.labels || []}
-                // position="bottom-left"
               />
             </div>
           )}
@@ -252,7 +246,7 @@ const clearSelection = () => setSelectedMails([]);
       </div>
     );
   }
-
+// dds a label to a mail by its ID
   const togglelabel = async (mailId, labelname) => {
   try {
     const token = localStorage.getItem("token");
@@ -285,6 +279,7 @@ const clearSelection = () => setSelectedMails([]);
   }
 };
 
+// removes a label from a mail by its ID
 const deleteMilFromLabel = async (mailId, labelname) => {
   console.log('start delete');
   try {
@@ -320,27 +315,27 @@ const deleteMilFromLabel = async (mailId, labelname) => {
   }
 };
 
-
+// Filter mails based on selected category and label
 const filteredMails = mails.filter((mail) => {
   const category = selectedCategory?.toLowerCase();
   const label = selectedLabel;
   console.log('label:', label);
-  // אם הקטגוריה היא 'starred' — בדיקה מיוחדת
+  // check if the mail is in starred category
   if (category === 'starred') {
     return mail.isStarred === true;
   }
 
-  // אם יש קטגוריה שנבחרה, סנן רק לפי קטגוריה
+  // if there is a selected category — filter by category
   if (category) {
     return mail.category?.toLowerCase() === category;
   }
 
-  // אם אין קטגוריה — סנן לפי label
+  // if there isn't a selected category— filter by label
   if (label) {
     return mail.label && mail.label.includes(label);
   }
 
-  // אם אין לא קטגוריה ולא label — החזר את כל המיילים
+  // if there is no selected category or label, return all mails
   return true;
 });
 
@@ -352,16 +347,15 @@ function highlightSearch(text, searchTerm) {
   return (
     <div className={`mail-list-wrapper ${themeClass}`}>
      <div className="mail-list-header">
-        {/* צד שמאל – רק הכותרת */}
+        {/* left side */}
         <div className="header-left">
           <h2 className="header-title">{selectedLabel || selectedCategory}</h2>
         </div>
 
-        {/* צד ימין – רענון + bulk actions */}
+        {/* right side */}
         <div className="header-actions">
           
             <div className="bulk-actions-buttons">
-              
               {selectedLabel ? (
                 <button
                   className="icon-button"
@@ -582,30 +576,6 @@ function highlightSearch(text, searchTerm) {
                   {mail.isImportant && <div className="important-dot"></div>}
                 </div>
               </div>
-
-                {/* <div className="mail-details">
-                  <div className="mail-header">
-                    <span className="mail-date">{new Date(mail.timestamp).toLocaleString("en-US", {
-                      dateStyle: "medium",
-                      timeStyle: "short"
-                    })}</span>
-                  </div>
-
-                  <div className={`mail-subject ${isUnread ? 'bold' : ''}`}>{mail.subject}</div>
-                  <div className="mail-preview">{mail.preview}</div>
-
-                  {mail.spam && (
-                    <div className="mail-category">
-                      <span className="category-label spam">Spam</span>
-                    </div>
-                  )}
-
-                  {mail.category && !mail.spam && (
-                    <div className="mail-category">
-                      <span className={`category-label ${mail.category.toLowerCase()}`}>{mail.category}</span>
-                    </div>
-                  )} */}
-                {/* </div> */}
               </div>
           );
         })}

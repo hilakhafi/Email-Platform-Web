@@ -6,8 +6,8 @@ function useFileUpload(maxSizeInMB = 10) {
   const handleFileUpload = (event) => {
     const files = Array.from(event.target.files);
     
-    // בדיקת גודל קבצים
-    const maxSize = maxSizeInMB * 1024 * 1024; // המרה ל-bytes
+    // check file size
+    const maxSize = maxSizeInMB * 1024 * 1024; // convert MB to bytes
     const validFiles = files.filter(file => {
       if (file.size > maxSize) {
         alert(`File ${file.name} is too large. Maximum size is ${maxSizeInMB}MB.`);
@@ -16,10 +16,10 @@ function useFileUpload(maxSizeInMB = 10) {
       return true;
     });
 
-    // הוספת קבצים חדשים לרשימה
+    // add new valid files to attachments
     setAttachments(prev => [...prev, ...validFiles]);
     
-    // איפוס ה-input
+    // clear the input field
     event.target.value = '';
   };
 

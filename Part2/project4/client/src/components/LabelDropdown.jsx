@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Check } from 'lucide-react';
 import '../styles/LabelDropdown.css';
 
+// This component displays a dropdown for selecting labels to apply to an email.
 function LabelDropdown({ 
   isOpen, 
   onClose, 
@@ -32,6 +33,7 @@ function LabelDropdown({
     }
   }, [isOpen, onClose]);
 
+// Fetch labels from the server when the dropdown is opened
   const fetchLabels = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -50,6 +52,7 @@ function LabelDropdown({
     }
   };
 
+// get a label, if it exists it will be removed, otherwise it will be added
   const handleLabelToggle = (labelname) => {
     if (currentLabels.includes(labelname)) {
       onRemoveFromLabel(labelname);

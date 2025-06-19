@@ -25,14 +25,14 @@
 
 
 }
-/* מרכז מסך */
+/* center of the screen */
 .center {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* טעינה ושגיאה */
+/*load & error */
 .loading-message,
 .error-message {
   display: flex;
@@ -57,7 +57,6 @@
   font-size: 0.875rem;
 }
 
-/* כותרת רשימה */
 .mail-list-header {
   border-bottom: 1px solid;
   padding: 1rem;
@@ -109,7 +108,6 @@
   color: white;
 }
 
-/* מצב ריק */
 .empty-state {
   flex-direction: column;
   text-align: center;
@@ -143,7 +141,6 @@
   color: #9ca3af;
 }
 
-/* רשימת הודעות */
 .mail-list-scroll {
   overflow-y: auto;
   height: 100%;
@@ -189,7 +186,7 @@
 .mail-item-content {
   display: flex;
   align-items: center;
-  gap: 50rem; /* רווח בין הפריטים */
+  gap: 50rem; 
 }
 
 .mail-item-meta {
@@ -243,7 +240,7 @@
 
 .mail-sender {
   font-weight: 500;
-  width: 200px; /* גודל קבוע */
+  width: 200px; 
 }
 
 .dark .mail-sender {
@@ -257,7 +254,7 @@
 .mail-date {
   font-weight: 500;
   color: #6b7280;
-  width: 200px; /* גודל קבוע */
+  width: 200px; 
 }
 
 .dark .mail-date {
@@ -272,7 +269,7 @@ mark {
 .mail-subject {
   font-weight: 500;
   margin-bottom: 0.25rem;
-  width: 200px; /* גודל קבוע */
+  width: 200px;
 }
 
 .light .mail-subject {
@@ -289,14 +286,14 @@ mark {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 400px; /* גודל קבוע */
+  width: 400px; 
 }
 
 .dark .mail-preview {
   color: #9ca3af;
 }
 
-/* קטגוריות */
+
 .mail-category {
   margin-top: 0.5rem;
 }
@@ -332,7 +329,7 @@ mark {
   color: #374151;
 }
 
-/* אנימציות */
+
 .spin {
   animation: spin 1s linear infinite;
 }
@@ -353,24 +350,24 @@ mark {
   border: none;
   padding: 0;
   cursor: pointer;
-  outline: none; /* מסיר את קו הפוקוס הכחול */
+  outline: none; 
 }
 
 .trash-button:focus {
-  outline: none; /* מונע קו פוקוס גם אחרי לחיצה */
+  outline: none;
 }
 .trash-button svg {
-  color: #9ca3af; /* אפור */
+  color: #9ca3af; 
 }
 
 .trash-button:hover svg {
-  color: #6b7280; /* אפור טיפה כהה יותר בהובר */
+  color: #6b7280; 
 }
 .permanent-delete-btn {
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #e63946; /* אדום בולט */
+  color: #e63946;
   margin-left: 12px;
   display: flex;
   align-items: center;
@@ -392,7 +389,7 @@ mark {
 .header-left {
   display: flex;
   align-items: center;
-  gap: 12px; /* רווח בין הכותרת לכפתור המחיקה */
+  gap: 12px; 
 }
 
 .header-title {
@@ -414,7 +411,6 @@ mark {
 }
 
 
-/* תיקון צבע אייקונים במצב Light */
 .light .icon-button svg {
   color: #6b7280;
 }
@@ -476,7 +472,6 @@ mark {
 }
 
 
-/* רספונסיביות */
 @media (max-width: 768px) {
   .attachment-item {
     flex-direction: column;
@@ -522,51 +517,45 @@ mark {
 }
 .mail-checkbox {
   margin: 0;
-  accent-color: #1a73e8; /* צבע כחול כמו בג'ימייל */
+  accent-color: #1a73e8; 
   cursor: pointer;
-  width: 20px; /* גודל מותאם */
+  width: 20px; 
 }
 
 /*Design butten to move page*/
-/* עיצוב כולל לחצים (svg) */
 .page-arrow svg {
-  color: #c5cfdb; /* מקבל צבע מהכפתור עצמו */
+  color: #c5cfdb; 
 }
 
-/* מצב רגיל */
 .page-arrow {
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 0.25rem;
-  color: #c5cfdb; /* ברירת מחדל - אפור כהה */
+  color: #c5cfdb; 
   transition: transform 0.2s ease;
 }
 
-/* ריחוף */
 .page-arrow:hover:not(:disabled) {
   transform: scale(1.2);
   color: #c5cfdb;
 }
 
-/* כפתור מנוטרל (חץ לא פעיל) */
 .page-arrow:disabled {
   cursor: default;
 }
 
-/* מספרים */
 .page-indicator {
   font-family: 'Inter', sans-serif;
   font-weight: bold;
-  color: inherit; /* כך יקבל צבע כמו החצים */
+  color: inherit;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
-  font-size: 16px; /* או תואם ל־svg */
+  font-size: 16px; 
 }
 
-/* מצב כהה (אם יש לך מחלקת dark על body או root) */
 .dark .page-arrow,
 .dark .page-indicator {
   color: white;
@@ -578,7 +567,7 @@ mark {
   justify-content: center;
   gap: 0.5rem;
   color: #6b7280;
-  font-size: 16px; /* חשוב! כדי ליישר את המספרים עם האייקונים */
+  font-size: 16px;
   height: 40px;   
 }
 
@@ -586,5 +575,5 @@ mark {
 .top-toolbar {
   display: flex;
   align-items: center;
-  gap: 1rem; /* או לפי מה שיש לך */
+  gap: 1rem; 
 }
