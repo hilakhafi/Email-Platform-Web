@@ -6,11 +6,11 @@ const Emails = require('../models/mails');
 const Users = require('../models/users');
 
     
-// הגדרת multer - שמירה ישירות ב-uploads (ללא תיקיית files)
+// This code handles file uploads and downloads in the email system using multer.
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadPath = path.join(__dirname, '..', 'uploads');
-    // יצירת התיקייה אם היא לא קיימת
+    // create the uploads directory if it doesn't exist
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true });
     }
@@ -33,11 +33,10 @@ const sendMail = async (req, res) => {
     console.log('Received body:', req.body);
     console.log('Received files:', req.files);
     
-    // קבלת הנתונים - שים לב לשמות הנכונים
-    const { sendTo, subject, body } = req.body; // שימוש ב-sendTo במקום to
+    const { sendTo, subject, body } = req.body; 
     const attachments = req.files || [];
 
-    // אימות token
+    // validate JWT token
     const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
     if (!token) {
       return res.status(401).json({ success: false, message: 'No token provided' });
@@ -55,12 +54,12 @@ const sendMail = async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
-    // בדיקה שהמשתמש קיים
+    // check if recipient exists
     const recipient = sendTo ? Users.getUserByMail(sendTo) : null;
     if (!recipient) {
       return res.status(404).json({ success: false, message: 'Recipient not found' });
     }
-    // וידוא שיש את כל הנתונים הנדרשים
+    // validate required fields
     if (!sendTo || !subject || !body) {
       return res.status(400).json({ 
         success: false, 
@@ -68,7 +67,7 @@ const sendMail = async (req, res) => {
       });
     }
 
-    // בדיקת פורמט אימייל (כמו במails.js הקיים)
+    // validate email format like mail.js
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(sendTo)) {
       return res.status(400).json({ success: false, message: "Invalid email format" });
@@ -101,11 +100,9 @@ const sendMail = async (req, res) => {
       category: 'inbox',
       ownerId: parseInt(sendTo)
     };
-
-    // שמירת המיילים בקבצי JSON (כמו בmails.js הקיים)
     
 
-    // עדכון ה-mailData עם ID של הנמען
+    // update IDs for mailData and inboxMail
     mailData.to = recipient.id;
     mailData.id = Emails.emails.length + 1;
     
@@ -113,7 +110,7 @@ const sendMail = async (req, res) => {
     inboxMail.ownerId = recipient.id;
     inboxMail.id = Emails.emails.length + 2;
 
-    // שמירת המיילים (כמו בmails.js הקיים)
+    // saving mails like in mails.js
     Emails.addMail(mailData);
     Emails.addMail(inboxMail);
     
@@ -131,11 +128,11 @@ const sendMail = async (req, res) => {
   }
 };
 
-// תיקון הפונקציה downloadAttachment - להסיר את תיקיית files
+
 const downloadAttachment = (req, res) => {
   try {
     const filename = req.params.filename;
-    const filepath = path.join(__dirname, '..', 'uploads', filename); // הסרת 'files' מהנתיב
+    const filepath = path.join(__dirname, '..', 'uploads', filename); 
 
     if (!fs.existsSync(filepath)) {
       return res.status(404).json({ error: 'File not found' });
