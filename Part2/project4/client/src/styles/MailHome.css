@@ -45,6 +45,12 @@
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  color: #1f2937;
+  margin-right: 1rem;
+}
+
+.dark .menu-btn {
+  color: #f9fafb; /* בהיר למצב כהה */
 }
 
 .menu-btn:hover {
