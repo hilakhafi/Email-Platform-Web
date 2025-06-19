@@ -106,7 +106,6 @@ const handleSend = async () => {
 
         if (response.ok) {
           const result = await response.json();
-            console.log("Server response:", result); 
           const totalAttachments = attachments.length + (forwardAttachments?.length || 0);
           alert("Email sent successfully with " + totalAttachments + " attachments!");
           clearAttachments();
@@ -170,7 +169,6 @@ const moveToDraft = async (mailData) => {
 
     if (response.ok) {
       const newDraft = await response.json();
-      console.log("Draft saved successfully:", newDraft);
       
       if (onMailSent) {
         onMailSent(newDraft);

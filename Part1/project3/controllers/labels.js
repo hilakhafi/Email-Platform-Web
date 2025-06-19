@@ -8,10 +8,9 @@ exports.getAllLabels = (req, res) => {
     return res.status(400).json({ error: "Missing or invalid user ID" });
   } //No longer needed, as userId is set by auth middleware
   const userLabels = labelsModel.getAllLabels(userId);
-  console.log('Labels found:', userLabels);
 
   res.json(userLabels);
-  console.log('All labels:', labelsModel.labels);
+
 
 
   // res.status(200).json(userLabels); 
@@ -72,7 +71,6 @@ exports.addLabel = (req, res) => {
   };
 
   labelsModel.addLabel(newLabel);
-  console.log("Labels after add:", labelsModel.labels);
   res.status(201).location(`/api/labels/${newLabel.id}`).json(newLabel);
 };
 
