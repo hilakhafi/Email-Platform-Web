@@ -57,8 +57,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 24px 16px 24px;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  position: relative;  border-bottom: 1px solid #e2e8f0;
 }
 
 .profile-modal.dark .modal-header {
@@ -82,10 +83,14 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
-  border-radius: 8px;
+  padding: 6px;
+  border-radius: 9999px;
   color: #64748b;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease;
+  width: auto;             /* ✅ חשוב - מונע מתיחה */
+  height: auto;
+  flex-shrink: 0;          /* מונע כיווץ בתוך flex */
+  align-self: flex-start;  /* אם יש צורך ליישור */
 }
 
 .close-btn:hover {
