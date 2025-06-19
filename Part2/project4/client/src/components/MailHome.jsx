@@ -266,15 +266,25 @@ function filterMailsByCategory() {
     default:
       filtered = mails;
   }
-  // חיפוש – סינון לפי מחרוזת החיפוש
   if (searchTerm.trim()) {
     const lower = searchTerm.toLowerCase();
-    filtered = filtered.filter(mail =>
-      (mail.subject && mail.subject.toLowerCase().includes(lower)) ||
-      (mail.body && mail.body.toLowerCase().includes(lower)) ||
-      (mail.fromMail && mail.fromMail.toLowerCase().includes(lower)) ||
-      (mail.toMail && mail.toMail.toLowerCase().includes(lower))
-    );
+    filtered = filtered.filter(mail => {
+      const timestampString = new Date(mail.timestamp).toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+      }).toLowerCase();
+
+      return (
+        (mail.subject && mail.subject.toLowerCase().includes(lower)) ||
+        (mail.body && mail.body.toLowerCase().includes(lower)) ||
+        (mail.fromMail && mail.fromMail.toLowerCase().includes(lower)) ||
+        (mail.toMail && mail.toMail.toLowerCase().includes(lower)) ||
+        timestampString.includes(lower)
+      );
+    });
   }
 
   return filtered;

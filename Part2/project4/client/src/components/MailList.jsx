@@ -567,12 +567,18 @@ function highlightSearch(text, searchTerm) {
                   ></span>
 
 
-                  <span className="mail-date">
-                    {new Date(mail.timestamp).toLocaleString("en-US", {
-                      dateStyle: "medium",
-                      timeStyle: "short"
-                    })}
-                  </span>
+                  <span
+                    className="mail-date"
+                    dangerouslySetInnerHTML={{
+                      __html: highlightSearch(
+                        new Date(mail.timestamp).toLocaleString("en-US", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        }),
+                        searchTerm
+                      ),
+                    }}
+                  />
                   {mail.isImportant && <div className="important-dot"></div>}
                 </div>
               </div>
