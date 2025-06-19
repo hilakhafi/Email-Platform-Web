@@ -27,4 +27,6 @@ router.get('/:id', controller.getUser);
 
 router.put('/:id', upload.single('profileImage'), controller.updateUser);
 
+router.get('/check-username/:username', controller.checkUsername);
+
 module.exports = router

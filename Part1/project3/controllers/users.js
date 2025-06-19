@@ -14,6 +14,17 @@ exports.getUser = (req, res) => {
   }
 };
 
+exports.checkUsername = (req, res) => {
+  const username = req.params.username;
+
+  const existingUser = Users.getUserByUsername(username);
+  if (existingUser) {
+    return res.status(200).json({ isUnique: false });
+  }
+
+  return res.status(200).json({ isUnique: true });
+}; 
+
 exports.getUserByUsername = (username) => {
   return Users.users.find(user => user.username === username);
 };

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/LoginScreen.css";
+import { Mail } from "lucide-react";
+
 
 export default function LoginScreen({ onLogin }) {
   const [mail, setMail] = useState("");
@@ -52,8 +54,10 @@ export default function LoginScreen({ onLogin }) {
         className="login-form"
         onSubmit={step === "email" ? handleEmailSubmit : handlePasswordSubmit}
       >
+      <div className="form-header">
+        <Mail size={36} color="#EA4335" />
         <h2>Sign in</h2>
-
+      </div>
         {step === "email" ? (
           <>
             <input
