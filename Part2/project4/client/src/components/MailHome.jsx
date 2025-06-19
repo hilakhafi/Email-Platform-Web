@@ -271,7 +271,9 @@ function filterMailsByCategory() {
     const lower = searchTerm.toLowerCase();
     filtered = filtered.filter(mail =>
       (mail.subject && mail.subject.toLowerCase().includes(lower)) ||
-      (mail.body && mail.body.toLowerCase().includes(lower))
+      (mail.body && mail.body.toLowerCase().includes(lower)) ||
+      (mail.fromMail && mail.fromMail.toLowerCase().includes(lower)) ||
+      (mail.toMail && mail.toMail.toLowerCase().includes(lower))
     );
   }
 
@@ -522,6 +524,8 @@ const handlePermanentDelete = async (mailsToDelete) => {
   }
 };
 
+
+
   return (
     <div className={`mail-home ${darkMode ? 'dark' : 'light'}`}>
       {/* Header */}
@@ -571,9 +575,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
             >
               {darkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
-            <button className="icon-btn" aria-label="Settings">
-              <Settings size={20} />
-            </button>
+            
             
             {/* User Menu */}
             <div className="user-menu-container" ref={userMenuRef}>
@@ -666,6 +668,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
               setCurrentPage={setCurrentPage}
               setMails={setMails}
               selectedLabel={selectedLabel}
+              searchTerm={searchTerm}
             />
           ) : (
             <MailView 

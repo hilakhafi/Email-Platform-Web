@@ -259,6 +259,11 @@
 .dark .mail-date {
   color: #9ca3af;
 }
+mark {
+  background-color: rgb(237, 237, 107);
+  font-weight: bold;
+}
+
 
 .mail-subject {
   font-weight: 500;
@@ -547,6 +552,7 @@
 
 /* מספרים */
 .page-indicator {
+  font-family: 'Inter', sans-serif;
   font-weight: bold;
   color: inherit; /* כך יקבל צבע כמו החצים */
   display: flex;

@@ -1,23 +1,94 @@
-/* לדוגמה בקובץ index.css או Register.css */
-.error-text {
-  color: red;
-  font-size: 0.9rem;
-}
-.register-form input {
-  display: block;
-  margin: 0.5rem 0;
+/* כללי */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
 }
 
 .register-form {
-  border: 1px solid #ccc;
-  padding: 1rem;
   max-width: 400px;
   margin: 2rem auto;
+  padding: 2rem;
   border-radius: 8px;
   background-color: #f9f9f9;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border: 1px solid #ddd;
 }
 
+/* כותרת */
 .register-form h2 {
+  font-family: 'Poppins', sans-serif;
   text-align: center;
   color: #333;
+  margin-bottom: 1.5rem;
+}
+
+/* תוויות */
+label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+/* שדות קלט */
+.register-form input,
+.register-form select {
+  width: 100%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+/* הודעות שגיאה */
+.error-text {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* שורת כפתורים */
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* כפתורים */
+button {
+  flex: 1;
+  padding: 12px;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #155ab6;
+}
+
+/* רספונסיביות */
+@media (max-width: 480px) {
+  .buttons {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
 }

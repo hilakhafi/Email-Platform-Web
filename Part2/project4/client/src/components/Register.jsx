@@ -173,47 +173,56 @@ const generateDefaultProfileImage = (letter) => {
     }
   };
   
+return (
+  <form className="register-form" onSubmit={handleSubmit}>
+    <h2>Register - Step {step}</h2>
 
-  return (
-    <form className="register-form" onSubmit={handleSubmit}>
-      <h2>Register - Step {step}</h2>
-
-      {step === 1 && (
-        <>
+    {/* שלב 1 - פרטים בסיסיים */}
+    {step === 1 && (
+      <>
+        <div className="form-group">
+          <label>First Name</label>
           <input
             type="text"
-            placeholder="First Name"
             value={formData.first_name}
             onChange={(e) =>
               setFormData({ ...formData, first_name: e.target.value })
             }
           />
           {errors.first_name && <p className="error-text">{errors.first_name}</p>}
+        </div>
 
+        <div className="form-group">
+          <label>Last Name</label>
           <input
             type="text"
-            placeholder="Last Name"
             value={formData.last_name}
             onChange={(e) =>
               setFormData({ ...formData, last_name: e.target.value })
             }
           />
           {errors.last_name && <p className="error-text">{errors.last_name}</p>}
+        </div>
 
+        <div className="form-group">
+          <label>Username</label>
           <input
             type="text"
-            placeholder="Username"
             value={formData.username}
             onChange={(e) =>
               setFormData({ ...formData, username: e.target.value })
             }
           />
           {errors.username && <p className="error-text">{errors.username}</p>}
-        </>
-      )}
+        </div>
+      </>
+    )}
 
-      {step === 2 && (
-        <>
+    {/* שלב 2 - תאריך לידה ומגדר */}
+    {step === 2 && (
+      <>
+        <div className="form-group">
+          <label>Birth Date</label>
           <input
             type="date"
             value={formData.birth_date}
@@ -221,10 +230,11 @@ const generateDefaultProfileImage = (letter) => {
               setFormData({ ...formData, birth_date: e.target.value })
             }
           />
-          {errors.birth_date && (
-            <p className="error-text">{errors.birth_date}</p>
-          )}
+          {errors.birth_date && <p className="error-text">{errors.birth_date}</p>}
+        </div>
 
+        <div className="form-group">
+          <label>Gender</label>
           <select
             value={formData.gender}
             onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
@@ -234,88 +244,85 @@ const generateDefaultProfileImage = (letter) => {
             <option value="female">Female</option>
           </select>
           {errors.gender && <p className="error-text">{errors.gender}</p>}
-        </>
-      )}
+        </div>
+      </>
+    )}
 
-      {step === 3 && (
-        <>
+    {/* שלב 3 - אימייל, סיסמה ותמונה */}
+    {step === 3 && (
+      <>
+        <div className="form-group">
+          <label>Email</label>
           <input
             type="email"
-            placeholder="Email"
             value={formData.mail}
             onChange={(e) => setFormData({ ...formData, mail: e.target.value })}
           />
           {errors.mail && <p className="error-text">{errors.mail}</p>}
+        </div>
 
+        <div className="form-group">
+          <label>Password</label>
           <input
             type="password"
-            placeholder="Password"
             value={formData.password}
             onChange={(e) =>
               setFormData({ ...formData, password: e.target.value })
             }
           />
           {errors.password && <p className="error-text">{errors.password}</p>}
+        </div>
 
+        <div className="form-group">
+          <label>Confirm Password</label>
           <input
             type="password"
-            placeholder="Confirm Password"
             value={formData.reWritePass}
             onChange={(e) =>
               setFormData({ ...formData, reWritePass: e.target.value })
             }
           />
-          {errors.reWritePass && (
-            <p className="error-text">{errors.reWritePass}</p>
-          )}
+          {errors.reWritePass && <p className="error-text">{errors.reWritePass}</p>}
+        </div>
 
-          {/* <input
+        <div className="form-group">
+          <label>Profile Image</label>
+          <input
             type="file"
             accept="image/*"
-            onChange={(e) =>
-              setFormData({ ...formData, profileImage: e.target.files[0] })
-            }
-          /> */}
-
-          <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => {
-            const file = e.target.files[0];
-            setFormData({ ...formData, profileImage: file });
-
-            if (file) {
-              setPreviewImage(URL.createObjectURL(file));
-            } else {
-              setPreviewImage(null);
-            }
-          }}
-        />
-        {previewImage && (
-        <div className="image-preview">
-          <img
-            src={previewImage}
-            alt="Preview"
-            style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "10px" }}
+            onChange={(e) => {
+              const file = e.target.files[0];
+              setFormData({ ...formData, profileImage: file });
+              setPreviewImage(file ? URL.createObjectURL(file) : null);
+            }}
           />
+          {previewImage && (
+            <div className="image-preview">
+              <img
+                src={previewImage}
+                alt="Preview"
+                style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "10px" }}
+              />
+            </div>
+          )}
         </div>
+      </>
+    )}
+
+    {/* כפתורי ניווט */}
+    <div className="buttons">
+      {step > 1 && <button type="button" onClick={handleBack}>Back</button>}
+      {step < 3 ? (
+        <button type="button" onClick={handleNext}>Next</button>
+      ) : (
+        <button type="submit">Register</button>
       )}
+    </div>
 
-        </>
-      )}
+    {serverError && <div className="error-text">{serverError}</div>}
+  </form>
+);
 
-      <div className="buttons">
-        {step > 1 && <button onClick={handleBack}>Back</button>}
-        {step < 3 ? (
-          <button onClick={handleNext}>Next</button>
-        ) : (
-          <button type="submit">Register</button>
-        )}
-      </div>
-
-      {serverError && <div className="error-text">{serverError}</div>}
-    </form>
-  );
 }
 
 export default Register;

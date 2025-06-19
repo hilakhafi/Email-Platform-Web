@@ -42,13 +42,18 @@
   padding: 0.5rem;
   border-radius: 9999px;
   background-color: transparent;
-  border: none;
+  border: 1px solid #d1d5db; /* גבול עדין */
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .menu-btn:hover {
-  background-color: #f3f4f6;
+  background-color: #f9fafb; /* רקע כמעט לבן בהובר */
+  border-color: #9ca3af; /* קצת יותר כהה בהובר */
+}
+
+.mail-home.dark .menu-btn {
+  border: none;
 }
 
 .mail-home.dark .menu-btn:hover {

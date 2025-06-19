@@ -189,7 +189,8 @@ function MailList({ mails,
   onRemoveLabelFromMail,
   onRemoveLabelFromMails,
   setMails,
-  selectedLabel
+  selectedLabel,
+  searchTerm
   }) {
   const [selectedMails, setSelectedMails] = useState([]);
   const [showBulkLabelDropdown, setShowBulkLabelDropdown] = useState(false);
@@ -343,7 +344,11 @@ const filteredMails = mails.filter((mail) => {
   return true;
 });
 
-
+function highlightSearch(text, searchTerm) {
+  if (!searchTerm || !text) return text;
+  const regex = new RegExp(`(${searchTerm})`, 'gi');
+  return text.replace(regex, '<mark>$1</mark>');
+}
   return (
     <div className={`mail-list-wrapper ${themeClass}`}>
      <div className="mail-list-header">
@@ -552,17 +557,30 @@ const filteredMails = mails.filter((mail) => {
                       />
                     </button>
                   )}
-                  <span className={`mail-sender ${isUnread ? 'bold' : ''}`}>
-                    {mail.category === 'inbox' ? (mail.fromMail || 'Unknown') : (mail.toMail || 'Unknown')}
-                  </span>
+                  <span
+                    className={`mail-sender ${isUnread ? 'bold' : ''}`}
+                    dangerouslySetInnerHTML={{
+                      __html: highlightSearch(
+                        mail.category === 'inbox' ? (mail.fromMail || 'Unknown') : (mail.toMail || 'Unknown'),
+                        searchTerm
+                      ),
+                    }}
+                  ></span>
 
-                  <span className={`mail-subject ${isUnread ? 'bold' : ''}`}>
-                    {mail.subject}
-                  </span>
+                  <span
+                    className={`mail-subject ${isUnread ? 'bold' : ''}`}
+                    dangerouslySetInnerHTML={{
+                      __html: highlightSearch(mail.subject, searchTerm),
+                    }}
+                  ></span>
 
-                  <span className="mail-preview">
-                    {mail.preview}
-                  </span>
+                  <span
+                    className="mail-preview"
+                    dangerouslySetInnerHTML={{
+                      __html: highlightSearch(mail.preview, searchTerm),
+                    }}
+                  ></span>
+
 
                   <span className="mail-date">
                     {new Date(mail.timestamp).toLocaleString("en-US", {

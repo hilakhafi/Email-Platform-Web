@@ -43,6 +43,7 @@
 
 /* Title text in empty state */
 .empty-title {
+  font-family: 'Inter', sans-serif;
   font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
@@ -50,6 +51,7 @@
 
 /* Subtitle text in empty state */
 .empty-subtitle {
+  font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
   color: inherit;
 }

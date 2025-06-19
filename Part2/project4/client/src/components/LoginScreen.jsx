@@ -51,43 +51,59 @@ export default function LoginScreen({ onLogin }) {
 
   return (
     <div className="login-container">
-      <h2>Sign in</h2>
+      <form
+        className="login-form"
+        onSubmit={step === "email" ? handleEmailSubmit : handlePasswordSubmit}
+      >
+        <h2>Sign in</h2>
 
-      {step === "email" ? (
-        <form onSubmit={handleEmailSubmit}>
-          <input
-            type="email"
-            placeholder="Email address"
-            value={mail}
-            onChange={(e) => setMail(e.target.value)}
-            required
-          />
-          <button type="submit">Next</button>
-          {error && <p className="error">{error}</p>}
-          <p>
-            Don't have an account?{" "}
-            <button type="button" className="link-button" onClick={() => navigate("/register")}>
-              Sign up
-            </button>
-          </p>
-        </form>
-      ) : (
-        <form onSubmit={handlePasswordSubmit}>
-          <p>Email: <strong>{mail}</strong></p>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit">Login</button>
-          {error && <p className="error">{error}</p>}
-          <button type="button" className="back-button" onClick={() => setStep("email")}>
-            Back
-          </button>
-        </form>
-      )}
+        {step === "email" ? (
+          <>
+            <input
+              type="email"
+              placeholder="Email address"
+              value={mail}
+              onChange={(e) => setMail(e.target.value)}
+              required
+            />
+            <button type="submit">Next</button>
+
+            {error && <p className="error">{error}</p>}
+
+            <p className="signup-redirect">
+              Don't have an account?
+              <button
+                type="button"
+                onClick={() => navigate("/register")}
+              >
+                Sign up
+              </button>
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="email-display">Email: <strong>{mail}</strong></p>
+
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            <div className="buttons">
+              <button type="button" onClick={() => setStep("email")}>
+                Back
+              </button>
+              <button type="submit">Login</button>
+            </div>
+
+            {error && <p className="error">{error}</p>}
+          </>
+        )}
+      </form>
     </div>
   );
+
 }
