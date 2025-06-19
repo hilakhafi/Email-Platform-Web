@@ -467,6 +467,8 @@ const moveToSpam = async (mail) => {
       if (!res2.ok) {
       throw new Error("Failed to move mail to blacklist");
     }
+
+    
   } catch (err) {
     console.error(err);
     // אפשר להראות הודעת שגיאה למשתמש

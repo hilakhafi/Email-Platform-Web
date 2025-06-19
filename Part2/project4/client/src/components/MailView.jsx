@@ -293,10 +293,18 @@ const handlePreviewAttachment = (attachment) => {
         <div className="dropdown-menu">
           
           { mail.category !== 'spam' && (
-            <button onClick={() => moveToSpam(mail)}>Mark as Spam</button>
+            <button onClick={() => {
+              moveToSpam(mail);
+              setShowMenu(false);
+              setSelectedMail(null);
+            }}>Mark as Spam</button>
             )}
           {mail.category === 'spam' && (
-            <button onClick={() => removeFromSpam(mail)}>Remove from Spam</button>
+            <button onClick={() => {
+              removeFromSpam(mail);
+              setShowMenu(false);
+              setSelectedMail(null);
+            }}>Remove from Spam</button>
           )}
           <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
           {selectedCategory === 'trash' && (
