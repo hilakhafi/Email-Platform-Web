@@ -535,8 +535,8 @@ const handlePermanentDelete = async (mailsToDelete) => {
               <Menu size={20} />
             </button>
             <div className="logo">
-              <Mail size={24} />
-              <span>Mailo</span>
+              <img src="/favicon.png" alt="Mailo logo" className="logo-image" />
+              <span className="logo-text">Mailo</span>
             </div>
           </div>
 

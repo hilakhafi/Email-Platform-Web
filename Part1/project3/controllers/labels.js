@@ -64,6 +64,14 @@ exports.addLabel = (req, res) => {
     return res.status(400).json({ error: 'Name and valid user ID are required' });
   }
 
+  const existingLabel = labelsModel.labels.find(
+    (label) => label.userId === userId && label.name.toLowerCase() === name.toLowerCase()
+  );
+
+  if (existingLabel) {
+    return res.status(409).json({ error: 'Label name already exists for this user' });
+  }
+
   const newLabel = {
     id: labelsModel.labels.length > 0 ? labelsModel.labels[labelsModel.labels.length - 1].id + 1 : 1,
     name,

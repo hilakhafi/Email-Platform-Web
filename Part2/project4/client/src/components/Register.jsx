@@ -316,7 +316,7 @@ return (
               setPreviewImage(file ? URL.createObjectURL(file) : null);
             }}
           />
-          {previewImage && (
+          {formData.profileImage && previewImage && (
             <div className="image-preview">
               <img
                 src={previewImage}

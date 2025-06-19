@@ -67,9 +67,30 @@
 }
 
 .logo {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Poppins', sans-serif; /* אפשר גם לשנות לפונט אחר */
+  font-size: 1.8rem;
   font-weight: 600;
+  color: #1a1a1a;
+}
+
+.logo-image {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.logo-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.9rem;
+  color: #1a1a1a;
+}
+
+.mail-home.dark .logo-text {
+  color: #f9fafb;
 }
 
 .mail-home.dark .logo {

@@ -56,7 +56,16 @@ export default function LoginScreen({ onLogin }) {
         onSubmit={step === "email" ? handleEmailSubmit : handlePasswordSubmit}
       >
       <div className="form-header">
-        <Mail size={36} color="#EA4335" />
+        <img
+          src="/favicon.png"
+          alt="Logo"
+          style={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "8px", 
+            objectFit: "cover"
+          }}
+        />
         <h2>Sign in</h2>
       </div>
         {step === "email" ? (
@@ -95,12 +104,11 @@ export default function LoginScreen({ onLogin }) {
             />
 
             <div className="buttons">
+              <button type="submit">Login</button>
               <button type="button" onClick={() => setStep("email")}>
                 Back
               </button>
-              <button type="submit">Login</button>
             </div>
-
             {error && <p className="error">{error}</p>}
           </>
         )}

@@ -45,8 +45,6 @@ const handleAddLabel = async () => {
   if (!name || !color) return;
 
   try {
-    console.log('name:', name);
-    console.log('color:', color);
     const token = localStorage.getItem("token");
     console.log('token:', token);
     const response = await fetch("http://localhost:4000/api/labels", {
@@ -64,7 +62,12 @@ const handleAddLabel = async () => {
       console.log('Label added:', newLabels);
       await fetchLabels();
     } else {
-      console.error("Failed to add label", response.status, await response.text());
+      const result = await response.json();
+      if (response.status === 409) {
+        alert(result.error); // "Label name already exists for this user"
+      } else {
+        console.error("Failed to add label", response.status, result);
+      }
     }
   } catch (err) {
     console.error(err);
