@@ -384,14 +384,14 @@ const handlePreviewAttachment = (attachment) => {
                       onClick={() => handlePreviewAttachment(attachment)}
                       title="תצוגה מקדימה"
                     >
-                      <Eye size={14} />
+                      <Eye size={24} />
                     </button>
                     <button
                       className="attachment-btn download-btn"
                       onClick={() => handleDownloadAttachment(attachment)}
                       title="הורד קובץ"
                     >
-                      <Download size={14} />
+                      <Download size={24} />
                     </button>
                   </div>
                 </div>
@@ -404,8 +404,7 @@ const handlePreviewAttachment = (attachment) => {
       <div className="mailview-footer">
         <div className="footer-buttons">
           <button className="btn primary" onClick={() => setShowReplyModal(true)}>Reply</button>
-                    <button className="btn secondary" onClick={() => setShowForwardModal(true)}>Forward</button>
-
+          <button className="btn secondary" onClick={() => setShowForwardModal(true)}>Forward</button>
         </div>
       </div>
 

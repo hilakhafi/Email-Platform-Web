@@ -96,10 +96,11 @@
   border-radius: 9999px;
   color: #64748b;
   transition: background-color 0.2s ease;
-  width: auto;             /* ✅ חשוב - מונע מתיחה */
-  height: auto;
-  flex-shrink: 0;          /* מונע כיווץ בתוך flex */
-  align-self: flex-start;  /* אם יש צורך ליישור */
+  max-width: 40px;
+  max-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .close-btn:hover {
