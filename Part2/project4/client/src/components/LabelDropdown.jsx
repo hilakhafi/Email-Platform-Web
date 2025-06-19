@@ -12,7 +12,6 @@ function LabelDropdown({
   position = 'bottom-left',
   darkMode
 }) {
-  console.log('darkMode:', darkMode);
   const [labels, setLabels] = useState([]);
   const dropdownRef = useRef(null);
 

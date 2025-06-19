@@ -34,8 +34,7 @@ exports.addUser = (req, res) => {
   
   const { mail, first_name, last_name, username, birth_date, gender, password, reWritePass } = req.body;
   let profileImage = req.file ? req.file.path : req.body.profileImage;
-  console.log('received user data', req.body);
-  console.log('received file', req.file);
+
   // validating that all fields are provided
   if (!mail || !first_name || !last_name || !username || !birth_date || !gender || !password || !reWritePass) {
     return res.status(400).json({ error: "All fields are required" });
@@ -101,9 +100,6 @@ exports.updateUser = (req, res) => {
   const { mail, first_name, last_name, username, birth_date, gender } = req.body;
   let profileImage = req.file ? req.file.path : req.body.profileImage;
 
-  console.log('Updating user with ID:', id);
-  console.log('Received update data:', req.body);
-  console.log('Received file:', req.file);
 
   // Find the user
   const userIndex = Users.users.findIndex(user => user.id == id);

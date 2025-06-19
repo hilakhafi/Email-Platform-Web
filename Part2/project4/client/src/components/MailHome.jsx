@@ -46,7 +46,6 @@ export default function MailHome() {
   });
 // Function to handle mail updates 
   const handleUpdateMail = (updatedMail) => {
-  console.log('handleUpdateMail', updatedMail);
   setMails(prev =>
     prev.map(mail => (mail.id === updatedMail.id ? updatedMail : mail))
   );
@@ -78,7 +77,6 @@ export default function MailHome() {
     }
 
     const data = await res.json();
-    console.log("Fetched mails:", data);
     setMails(data.mails);
     setCurrentPage(data.currentPage);
     setTotalPages(data.totalPages);
@@ -105,7 +103,6 @@ function handleNewMail(newMail) {
     setMails(prevMails => [newMail, ...prevMails]);
   } else {
     // if newMail is not valid, log an error and refresh all mails
-    console.log("Invalid mail object received, refreshing all mails");
     fetchMails();
   }
 }
@@ -142,12 +139,10 @@ function handleNewMail(newMail) {
 
         if (res.ok) {
           const userData = await res.json();
-          console.log('User data from server:', userData);
-          console.log('Profile image:', userData.profileImage);
+
           const profileImagePath = userData.profileImage ? userData.profileImage.replace(/\\/g, '/') : null;
             const avatarUrl = profileImagePath ? `http://localhost:4000/${profileImagePath}` : null;
 
-            console.log('Profile image URL:', avatarUrl);
           setUserInfo({
             name: userData.first_name && userData.last_name
             ? `${userData.first_name} ${userData.last_name}`
@@ -232,7 +227,6 @@ function getCurrentUserId() {
 function filterMailsByCategory() {
   const userId = getCurrentUserId();
   if (!userId) return [];
-  console.log("Decoded userId:", getCurrentUserId());
 
   let filtered = [];
 
@@ -406,7 +400,7 @@ const removeFromSpam = async (mail) => {
     });
 
     if (!res.ok) {
-      throw new Error("Failed to move mail to trash");
+      throw new Error("Failed to move mail from spam");
     }
 
     setMails((prevMails) =>
@@ -512,7 +506,6 @@ const handlePermanentDelete = async (mailsToDelete) => {
       setSelectedMail(null);
     }
 
-    console.log("Emails deleted successfully");
   } catch (err) {
     console.error("Delete error:", err);
     alert("Failed to delete one or more emails permanently: " + err.message);

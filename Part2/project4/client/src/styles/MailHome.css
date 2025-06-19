@@ -100,18 +100,17 @@
 /* Search */
 .search-wrapper {
   position: relative;
-  flex: 1;
-  max-width: 32rem; /* ~512px */
-  margin: 0 2rem;
+  display: flex;
+  align-items: center;
 }
 
 .search-icon {
-  align-items: center;
-  position: absolute;
-  top: 50%;
-  left: 0.75rem;
-  transform: translateY(-50%);
+  font-size: 1rem; /* גודל האייקון */
   color: #9ca3af;
+}
+.search-icon:hover {
+  color:#9ca3af ; /* צבע האייקון בהובר */
+  background-color: transparent;
 }
 
 .search-input {
@@ -201,15 +200,21 @@
 }
 
 .search-icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   padding: 0;
   margin: 0;
   cursor: pointer;
   outline: none;
-  align-items: center;
+  height: 100%;
+  width: 32px; /* או הגודל שמתאים לשטח שמסביב לאייקון */
+  position: absolute;
+  left: 0;
+  top: 0;
 }
-
 .search-icon-button:focus {
   outline: none;
   box-shadow: none;

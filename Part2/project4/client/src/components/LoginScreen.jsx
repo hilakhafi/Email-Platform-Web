@@ -45,7 +45,6 @@ export default function LoginScreen({ onLogin }) {
     } else {
       setError("Incorrect password");
     }
-    console.log("Saved token:", localStorage.getItem("token"));
 
   };
 
