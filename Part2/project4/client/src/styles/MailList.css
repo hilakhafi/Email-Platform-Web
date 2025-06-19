@@ -246,6 +246,10 @@
   width: 200px; /* גודל קבוע */
 }
 
+.dark .mail-sender {
+  color: #f1f5f9; /* טקסט בהיר */
+}
+
 .bold {
   font-weight: bold;
 }

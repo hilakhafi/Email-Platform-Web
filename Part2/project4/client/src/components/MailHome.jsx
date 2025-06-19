@@ -578,7 +578,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
             
             
             {/* User Menu */}
-            <div className="user-menu-container" ref={userMenuRef}>
+            <div className={`user-menu-container ${darkMode ? 'dark' : ''}`} ref={userMenuRef}>
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
                 className="user-avatar"
@@ -592,7 +592,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
               </button>
 
               {showUserMenu && (
-                <div className="user-dropdown">
+                <div className={`user-dropdown ${darkMode ? 'dark' : ''}`}>
                   <div className="user-info">
                     <div className="user-details">
                       <h3>{userInfo.username}</h3>

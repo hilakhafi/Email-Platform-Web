@@ -427,6 +427,7 @@ function highlightSearch(text, searchTerm) {
                     }}
                     currentLabels={[]}
                     position="bottom-left"
+                    darkMode={darkMode}
                   />
                 </div>
               )}
