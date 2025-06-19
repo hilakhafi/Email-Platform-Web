@@ -4,7 +4,7 @@ import ComposeModal from './ComposeModal';
 import '../styles/MailView.css';
 
 function MailView({ mail, darkMode, restoreMail, moveToSpam, onClose, handlePermanentDelete,selectedCategory,
-   onUpdateMail, setSelectedMail, setSelectedCategory     }) {
+   onUpdateMail, setSelectedMail, setSelectedCategory, removeFromSpam     }) {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(false);
   const [errorUser, setErrorUser] = useState(null);
@@ -164,16 +164,14 @@ async function handleMarkAsUnread(id) {
       if (updatedMail.category && updatedMail.category !== selectedCategory) {
         setSelectedCategory(updatedMail.category);
       }
-      }
-      
-     else {
+    } else {
       const errorText = await res.text();
       console.error(`Failed to mark as unread: ${res.status} ${res.statusText} - ${errorText}`);
-      alert('שגיאה בסימון המייל כלא נקרא');
+      alert('failed to mark as unread');
     }
   } catch (error) {
     console.error('Network error when marking as unread:', error);
-    alert('שגיאה ברשת');
+    alert('network error when marking as unread');
   }
 }
 
@@ -293,7 +291,13 @@ const handlePreviewAttachment = (attachment) => {
 
       {showMenu && (
         <div className="dropdown-menu">
-          <button onClick={() => moveToSpam(mail)}>Mark as Spam</button>
+          
+          { mail.category !== 'spam' && (
+            <button onClick={() => moveToSpam(mail)}>Mark as Spam</button>
+            )}
+          {mail.category === 'spam' && (
+            <button onClick={() => removeFromSpam(mail)}>Remove from Spam</button>
+          )}
           <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
           {selectedCategory === 'trash' && (
             <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>

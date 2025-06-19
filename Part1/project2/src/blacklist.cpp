@@ -13,7 +13,6 @@ Blacklist::Blacklist(shared_ptr<BloomFilter> bloomFilter)
 void Blacklist::addUrl(const string& url) {
     bloomFilter->add(url);
     exactBlacklist.insert(url);
-    cout << "Added URL to blacklist: " << url << endl;
 }
 
 // check if a url is in the bloom filter using might contain (bloom filter)
