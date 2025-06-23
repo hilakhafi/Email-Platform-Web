@@ -18,7 +18,7 @@ body {
   max-width: 400px;
   margin: 2rem auto;
   padding: 2rem;
-  border-radius: 8px;
+  border-radius: 20px; /* יותר מעוגל */
   background-color: #f9f9f9;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   border: 1px solid #ddd;
@@ -34,7 +34,7 @@ body {
 
 /* תוויות */
 label {
-  display: block;
+  display: none;
   margin-bottom: 0.4rem;
   font-weight: 500;
   color: #333;
@@ -45,10 +45,10 @@ label {
 .register-form input,
 .register-form select {
   width: 100%;
-  padding: 0.6rem;
+  padding: 0.75rem 1rem;
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 12px; /* יותר מעוגל */
   margin-bottom: 1rem;
   box-sizing: border-box;
 }
@@ -76,7 +76,7 @@ button {
   background-color: #1a73e8;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 20px; /* יותר מעוגל */
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s;
