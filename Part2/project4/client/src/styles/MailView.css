@@ -25,6 +25,7 @@
   text-align: center;
   padding: 2rem;
 }
+
 .mail-view {
   font-family: "Google Sans", Roboto, Arial, sans-serif;
   color: #202124;
@@ -71,36 +72,48 @@
   color: inherit;
 }
 
-/* Mail header (subject area) */
+/* Mail header - עיצוב חדש כמו Gmail */
 .mailview-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between; /* החץ בצד אחד, הנושא והשולח בצד שני */
-  gap: 0; /* אין רווח מיותר */
-  padding-bottom: 8px;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 16px;
   border-bottom: 1px solid #e5e7eb;
 }
 
 .mailview-header.dark {
   border-color: #374151;
 }
+
+/* השורה העליונה - חץ, נושא ותפריט */
 .mailview-header-left {
   display: flex;
   align-items: center;
-  gap: 12px; /* רווח בין החץ לנושא */
+  justify-content: space-between;
+  width: 100%;
 }
+
+/* קבוצת חץ ונושא */
+.back-and-subject {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
 /* Mail subject text */
 .mailview-subject {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 600;
   margin: 0;
-  white-space: nowrap;
+  flex: 1;
+  font-weight: 700;
+  font-size: 1.5rem;
 }
 
 .dark .mailview-subject {
   color: #f3f4f6;
 }
+
 /* Section containing actions and sender info */
 .mailview-actions-sender {
   display: flex;
@@ -112,44 +125,61 @@
 .actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  gap: 8px;
 }
 
 /* Generic icon button */
 .icon-btn {
-  padding: 1rem;
-  border-radius: 9999px;
+  padding: 8px;
+  border-radius: 50%;
   background-color: transparent;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
   color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Hover style for icon buttons */
 .icon-btn:hover {
-  background-color: rgba(243, 244, 246, 0.8);
+  background-color: rgba(60, 64, 67, 0.08);
 }
 
 .mailview-container.dark .icon-btn:hover {
   background-color: #374151;
 }
 
-/* Sender info section */
+/* Sender info section - עיצוב חדש */
 .sender-info {
-  padding: 20px ;
-  font-family: 'Inter', sans-serif;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: space-between;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* חלק שמאל - פרטי השולח */
+.sender-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* חלק ימין - מייל ותאריך */
+.sender-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
 }
 
 /* Sender avatar circle with initials */
 .sender-avatar {
   width: 40px;
   height: 40px;
-  border-radius: 9999px;
+  border-radius: 50%;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -158,6 +188,7 @@
   color: white;
   font-weight: bold;
   font-size: 1.25rem;
+  flex-shrink: 0;
 }
 
 .sender-avatar img {
@@ -165,45 +196,61 @@
   height: 100%;
   object-fit: cover;
 }
+
 /* Sender name and time column */
 .sender-details {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
 /* Sender name text */
 .sender-name {
   font-weight: 600;
   color: inherit;
+  font-size: 14px;
+}
+
+/* Email address */
+.sender-email {
+  font-size: 12px;
+  color: #5f6368;
+  margin-top: 2px;
+}
+
+.mailview-container.dark .sender-email {
+  color: #9aa0a6;
 }
 
 /* Timestamp of the mail */
 .send-time {
-  font-size: 0.875rem;
-  color: #6b7280;
+  font-size: 12px;
+  color: #5f6368;
+  margin-top: 4px;
 }
 
 .mailview-container.dark .send-time {
-  color: #9ca3af;
+  color: #9aa0a6;
 }
 
 /* Mail body content */
 .mailview-body {
   flex: 1;
-  padding: 1.5rem;
-  /*overflow-y: auto;*/
+  padding: 24px 0;
 }
 
 /* Mail text content */
 .mailview-text {
   font-family: 'Inter', sans-serif;
-   font-size: 15px;
+  font-size: 15px;
   line-height: 1.6;
   color: #1f2937;
 }
+
 .dark .mailview-text {
   color: #d1d5db;
 }
+
 /* Preview text style (used if necessary) */
 .mailview-text.preview-text {
   margin-top: 0;
@@ -215,10 +262,10 @@
 
 /* Footer section with buttons */
 .mailview-footer {
-   display: flex;
-  justify-content: flex-start; /* הצד הימני */
+  display: flex;
+  justify-content: flex-start;
   gap: 1rem;
-  padding: 2rem 2rem 2rem 0; /* יותר רווח מלמטה ומימין */
+  padding: 2rem 0 1rem 0;
   background-color: transparent;
   border-top: none;
   box-shadow: none;
@@ -233,39 +280,43 @@
 /* Wrapper for footer buttons */
 .footer-buttons {
   display: flex;
-  justify-content: center;    /* מרכז את הכפתורים */
-  gap: 1rem;                  /* רווח ברור ביניהם */
-  padding-top: 0.5rem;
+  gap: 12px;
 }
 
 .footer-buttons .btn {
-  min-width: 120px;           /* לא חובה, אבל נותן מראה אחיד */
+  min-width: 100px;
   text-align: center;
-  padding: 0.5rem 1.25rem;
-  font-size: 1rem;
-  border-radius: 8px;
+  padding: 8px 24px;
+  font-size: 14px;
+  border-radius: 20px;
+  font-weight: 500;
 }
+
 /* Generic button styles */
 .btn {
-  border: 1px solid #d1d5db;
-  background-color: #fff;
-  color: #202124;
+  border: 1px solid #dadce0;
+  background-color: #f8f9fa;
+  color: #3c4043;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn.primary {
-  background-color: #f1f3f4;   /* דומה יותר לג׳ימייל */
-  color: #202124;
+  background-color: #f8f9fa;
+  color: #3c4043;
   border: 1px solid #dadce0;
   box-shadow: 0 1px 2px rgba(60, 64, 67, 0.15);
 }
+
 .btn.primary:hover {
-  background-color: #e8eaed;
+  background-color: #f1f3f4;
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3);
 }
 
 /* Secondary button (e.g., cancel) */
 .btn.secondary {
-  background-color: #f1f3f4;   /* דומה יותר לג׳ימייל */
-  color: #202124;
+  background-color: #f8f9fa;
+  color: #3c4043;
   border: 1px solid #dadce0;
   box-shadow: 0 1px 2px rgba(60, 64, 67, 0.15);
 }
@@ -273,14 +324,16 @@
 .mailview-container.dark .btn.secondary {
   border-color: #4b5563;
   color: #d1d5db;
+  background-color: #374151;
 }
 
 .btn.secondary:hover {
-  background-color: #e8eaed;
+  background-color: #f1f3f4;
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3);
 }
 
 .mailview-container.dark .btn.secondary:hover {
-  background-color: #374151;
+  background-color: #4b5563;
 }
 
 /* Spam warning box */
@@ -315,69 +368,108 @@
 }
 
 .dropdown-menu {
-  box-sizing: border-box;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 200px;
+  background-color: #fff;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(60, 64, 67, 0.15);
+  z-index: 1000;
   overflow: hidden;
 }
+
 .dropdown-menu button {
   all: unset;
   box-sizing: border-box;
-  padding: 0.75rem 1.25rem;
-  font-size: 0.875rem;
-  color: #202124;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #3c4043;
   cursor: pointer;
   transition: background-color 0.2s ease;
   text-align: start;
   width: 100%;
-  border-radius: 0; /* ללא עיגול קצוות */
+  border-radius: 0;
 }
 
 .dropdown-menu button:hover {
-  background-color: #f1f3f4;
+  background-color: #f8f9fa;
 }
+
 .dark .dropdown-menu {
-  background-color: #2c2c2c;
-  border-color: #444;
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+  background-color: #2d3748;
+  border-color: #4a5568;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .dark .dropdown-menu button {
-  color: #e8eaed;
+  color: #e2e8f0;
 }
 
 .dark .dropdown-menu button:hover {
-  background-color: #3c4043;
+  background-color: #4a5568;
 }
 
+/* Attachments section */
+.attachments-section {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e8eaed;
+}
+
+.dark .attachments-section {
+  background-color: #2d3748;
+  border-color: #4a5568;
+}
+
+.attachments-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #5f6368;
+}
+
+.dark .attachments-header {
+  color: #9aa0a6;
+}
+
+.attachments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
 .attachment-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #e2e8f0;
+  padding: 12px;
+  border: 1px solid #e8eaed;
   border-radius: 8px;
-  background-color: #fafafa;
-  margin-bottom: 0.5rem;
-
-  max-width: 500px; /* גבול רוחב */
-  margin-left: auto;
-  margin-right: auto;
+  background-color: #fff;
+  transition: all 0.2s ease;
 }
 
 .attachment-item:hover {
-  background-color: #f0f0f0;
-  border-color: #d0d0d0;
+  background-color: #f8f9fa;
+  border-color: #dadce0;
 }
 
 .dark .attachment-item {
-  background-color: #2a2a2a;
-  border-color: #404040;
+  background-color: #374151;
+  border-color: #4b5563;
   color: #e0e0e0;
 }
 
 .dark .attachment-item:hover {
-  background-color: #333;
-  border-color: #555;
+  background-color: #4b5563;
+  border-color: #6b7280;
 }
 
 .attachment-info {
@@ -401,7 +493,7 @@
 .attachment-name {
   font-weight: 500;
   font-size: 14px;
-  color: #333;
+  color: #3c4043;
 }
 
 .dark .attachment-name {
@@ -410,45 +502,51 @@
 
 .attachment-size {
   font-size: 12px;
-  color: #666;
+  color: #5f6368;
 }
 
 .dark .attachment-size {
-  color: #aaa;
+  color: #9aa0a6;
 }
 
 .attachment-actions {
-  color: black;
   display: flex;
   gap: 8px;
 }
 
 .attachment-btn {
-  width: auto;
-  height: auto;
+  width: 32px;
+  height: 32px;
   padding: 6px;
-  font-size: 0;
+  border: 1px solid #dadce0;
+  background-color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .attachment-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 }
 
 .attachment-btn:hover {
-  background-color: #f0f0f0;
-  border-color: #bbb;
+  background-color: #f8f9fa;
+  border-color: #70757a;
 }
 
 .dark .attachment-btn {
-  background-color: #404040;
-  border-color: #555;
+  background-color: #4b5563;
+  border-color: #6b7280;
   color: #e0e0e0;
 }
 
 .dark .attachment-btn:hover {
-  background-color: #4a4a4a;
-  border-color: #666;
+  background-color: #6b7280;
+  border-color: #9ca3af;
 }
 
 .preview-btn:hover {
@@ -462,7 +560,6 @@
   border-color: #4caf50;
   color: #4caf50;
 }
-
 
 .mailview-topbar {
   display: flex;
@@ -481,6 +578,10 @@
   width: calc(100% - 32px); 
   transition: all 0.3s ease;
 }
+.dropdown-wrapper {
+  position: relative;
+  margin-right: 12px; /* או יותר לפי הצורך */
+}
 
 
 .mailview-topbar.dark {
@@ -488,20 +589,21 @@
   color: #f9fafb;
   border: none;
 }
-.mailview-subject {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0;
-  white-space: nowrap;
-}
+
 .back-arrow {
   background: transparent;
   border: none;
-  padding: 0.25rem;
+  padding: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.back-arrow:hover {
+  background-color: rgba(60, 64, 67, 0.08);
 }
 
 .main-content {
@@ -516,8 +618,9 @@
   flex-direction: column;
   overflow: hidden;
 }
+
 .standalone-back {
-  margin: 1rem;
+  margin: 0;
   background: none;
   border: none;
   color: inherit;
@@ -525,10 +628,11 @@
   font-size: 1.25rem;
   display: flex;
   align-items: center;
-  transition: opacity 0.2s ease;
+  transition: all 0.2s ease;
+  padding: 8px;
+  border-radius: 50%;
 }
 
 .standalone-back:hover {
-  opacity: 0.7;
-  background-color: transparent;
+  background-color: rgba(60, 64, 67, 0.08);
 }
