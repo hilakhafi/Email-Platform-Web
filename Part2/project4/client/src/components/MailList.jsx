@@ -343,64 +343,63 @@ function highlightSearch(text, searchTerm) {
         <div className="header-left">
           <h2 className="header-title">{selectedLabel || selectedCategory}</h2>
         </div>
-
+        
         {/* right side */}
         <div className="header-actions">
-          
-            <div className="bulk-actions-buttons">
-              {selectedLabel ? (
-                <button
-                  className="icon-button"
-                  onClick={() => {
-                    selectedMails.forEach((id) => {
-                      deleteMilFromLabel(id, selectedLabel); // מסיר את הלייבל הנוכחי
-                    });
-                    clearSelection();
-                  }}
-                  aria-label={`הסר תווית "${selectedLabel}"`}
-                  title={`הסר תווית "${selectedLabel}"`}
-                >
-                  <div style={{ position: 'relative', width: 18, height: 18 }}>
-                    <Tag size={18} />
-                    <Slash
-                      size={18}
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        opacity: 0.8,
-                      }}
-                    />
-                  </div>
-                </button>
-              ) : (
-                <div className="relative">
-                  <button
-                    className="icon-button"
-                    onClick={() => setShowBulkLabelDropdown(prev => !prev)}
-                    aria-label="ניהול תוויות"
-                    title="ניהול תוויות"
-                  >
-                    <Tag size={18} />
-                  </button>
-
-                  <LabelDropdown
-                    isOpen={showBulkLabelDropdown}
-                    onClose={() => setShowBulkLabelDropdown(false)}
-                    onAddToLabel={(labelname) => {
-                      selectedMails.forEach((id) => togglelabel(id, labelname));
-                      clearSelection();
+          <div className="bulk-actions-buttons">
+            {selectedLabel ? (
+              <button
+                className="icon-button"
+                onClick={() => {
+                  selectedMails.forEach((id) => {
+                    deleteMilFromLabel(id, selectedLabel); // מסיר את הלייבל הנוכחי
+                  });
+                  clearSelection();
+                }}
+                aria-label={`הסר תווית "${selectedLabel}"`}
+                title={`הסר תווית "${selectedLabel}"`}
+              >
+                <div style={{ position: 'relative', width: 18, height: 18 }}>
+                  <Tag size={18} />
+                  <Slash
+                    size={18}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      opacity: 0.8,
                     }}
-                    onRemoveFromLabel={(labelName) => {
-                      selectedMails.forEach((id) => deleteMilFromLabel(id, labelName));
-                      clearSelection();
-                    }}
-                    currentLabels={[]}
-                    position="bottom-left"
-                    darkMode={darkMode}
                   />
                 </div>
-              )}
+              </button>
+            ) : (
+              <div className="relative">
+                <button
+                  className="icon-button"
+                  onClick={() => setShowBulkLabelDropdown(prev => !prev)}
+                  aria-label="ניהול תוויות"
+                  title="ניהול תוויות"
+                >
+                  <Tag size={18} />
+                </button>
+
+                <LabelDropdown
+                  isOpen={showBulkLabelDropdown}
+                  onClose={() => setShowBulkLabelDropdown(false)}
+                  onAddToLabel={(labelname) => {
+                    selectedMails.forEach((id) => togglelabel(id, labelname));
+                    clearSelection();
+                  }}
+                  onRemoveFromLabel={(labelName) => {
+                    selectedMails.forEach((id) => deleteMilFromLabel(id, labelName));
+                    clearSelection();
+                  }}
+                  currentLabels={[]}
+                  position="bottom-left"
+                  darkMode={darkMode}
+                />
+              </div>
+            )}
 
 
               <button
@@ -447,17 +446,16 @@ function highlightSearch(text, searchTerm) {
               >
                 <Circle size={18} />
               </button>
-            </div>
-          
-
-          <button
-            className="icon-button"
-            onClick={onRefresh}
-            aria-label="רענן מיילים"
-            title="רענן מיילים"
-          >
-            <RefreshCw size={18} />
-          </button>
+            
+            <button
+              className="icon-button"
+              onClick={onRefresh}
+              aria-label="רענן מיילים"
+              title="רענן מיילים"
+            >
+              <RefreshCw size={18} />
+            </button>
+          </div>
           <div className="pagination-controls">
             <button
               onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
@@ -481,7 +479,6 @@ function highlightSearch(text, searchTerm) {
               <ChevronRight size={20} />
             </button>
           </div>
-
         </div>
       </div>
 
