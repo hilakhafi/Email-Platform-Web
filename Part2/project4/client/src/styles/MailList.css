@@ -58,8 +58,8 @@
 }
 
 .mail-list-header {
-  border-bottom: 1px solid;
-  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.75rem 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -75,16 +75,36 @@
 
 .header-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.5rem; /* רווח קטן יותר בין האייקונים */
+  align-items: center;
 }
 
 .icon-button {
-  padding: 0.5rem;
-  border: none;
-  border-radius: 9999px;
+  width: 32px;         /* או אפילו 28px אם רוצים קטן יותר */
+  height: 32px;
+  padding: 0;          /* הכי חשוב – מבטל ריווח פנימי */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
+  border: none;
+  border-radius: 9999px; /* עיגול */
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
+.icon-button:focus,
+.icon-button:active,
+.icon-button:hover {
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  color: inherit;
+}
+/* .icon-button svg {
+  color: inherit;
+  background: none;
+  border: none;
+} */
 
 .light .icon-button:hover {
   background-color: #b6c5e5;
@@ -552,16 +572,19 @@ mark {
 
 .bulk-actions-buttons {
   display: flex;
-  gap: 12px;
+  gap: 0px;
 }
 
 .icon-button {
-  background: none;
-  border: none;
+  all: unset; /* מנקה את כל הסגנונות הבסיסיים */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
-  padding: 4px;
+  border-radius: 50%;
   transition: background-color 0.2s ease;
-  border-radius: 6px;
 }
 
 .icon-button:hover {
@@ -571,30 +594,21 @@ mark {
   flex-shrink: 0;
 }
 
-/*Design butten to move page*/
-.page-arrow svg {
-  color: #c5cfdb; 
-  transition: transform 0.2s ease;
-}
-.page-arrow:hover svg {
-  color: #c5cfdb !important; /* מוודא שלא יוחלף בכחול */
-}
+
 .page-arrow {
-  background: transparent;
-  border: none;
+  all: unset; /* מנקה את כל הסגנונות הבסיסיים */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
-  padding: 0.25rem;
-  color: #c5cfdb; 
-  transition: transform 0.2s ease;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
 }
-
-.page-arrow:hover:not(:disabled) {
-  transform: scale(1.2);
-  color: #c5cfdb;
-}
-
-.page-arrow:disabled {
-  cursor: default;
+.page-arrow:hover {
+  color: #dadde3; 
+  background-color: transparent;
 }
 
 .page-indicator {
@@ -607,7 +621,11 @@ mark {
   line-height: 1;
   font-size: 16px; 
 }
-
+.page-arrow:focus {
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+}
 .dark .page-arrow,
 .dark .page-indicator {
   color: white;
@@ -616,13 +634,12 @@ mark {
 .pagination-controls {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  justify-content: flex-end;
+  gap: 0;
   color: #6b7280;
   font-size: 16px;
   height: 40px;   
 }
-
 
 .top-toolbar {
   display: flex;
