@@ -503,56 +503,62 @@ function highlightSearch(text, searchTerm) {
             >
               <div className="mail-item-content">
                 <div className="mail-item-meta">
-                  <input
-                    type="checkbox"
-                    checked={selectedMails.includes(mail.id)}
-                    onChange={(e) => {
-                      e.stopPropagation();
-                      toggleSelectMail(mail.id);
-                    }}
-                    onClick={(e) => e.stopPropagation()}
+                  <div className="mail-item-left">
+                    <div className="mail-controls">
 
-                    className="mail-checkbox"
-                  />
-                  {mail.category !== 'trash' && (
-                    <button
-                      className="star-button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleStar(mail.id, mail.isStarred);
-                      }}
-                    >
-                      <Star
-                        size={16}
-                        className={`star-icon ${mail.isStarred ? 'starred' : ''}`}
+                      <input
+                        type="checkbox"
+                        checked={selectedMails.includes(mail.id)}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          toggleSelectMail(mail.id);
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+
+                        className="mail-checkbox"
                       />
-                    </button>
-                  )}
-                  <span
-                    className={`mail-sender ${isUnread ? 'bold' : ''}`}
-                    dangerouslySetInnerHTML={{
-                      __html: highlightSearch(
-                        mail.category === 'inbox' ? (mail.fromMail || 'Unknown') : (mail.toMail || 'Unknown'),
-                        searchTerm
-                      ),
-                    }}
-                  ></span>
+                      {mail.category !== 'trash' && (
+                        <button
+                          className="star-button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleStar(mail.id, mail.isStarred);
+                          }}
+                        >
+                          <Star
+                            size={16}
+                            className={`star-icon ${mail.isStarred ? 'starred' : ''}`}
+                          />
+                        </button>
+                      )}
+                    </div>
+                    <span
+                      className={`mail-sender ${isUnread ? 'bold' : ''}`}
+                      dangerouslySetInnerHTML={{
+                        __html: highlightSearch(
+                          mail.category === 'inbox' ? (mail.fromMail || 'Unknown') : (mail.toMail || 'Unknown'),
+                          searchTerm
+                        ),
+                      }}
+                    ></span>
+                    <div className="mail-main-text">
+                      <span
+                        className={`mail-subject ${isUnread ? 'bold' : ''}`}
+                        dangerouslySetInnerHTML={{
+                          __html: highlightSearch(mail.subject, searchTerm),
+                        }}
+                      ></span>
 
-                  <span
-                    className={`mail-subject ${isUnread ? 'bold' : ''}`}
-                    dangerouslySetInnerHTML={{
-                      __html: highlightSearch(mail.subject, searchTerm),
-                    }}
-                  ></span>
+                      <span
+                        className="mail-preview"
+                        dangerouslySetInnerHTML={{
+                          __html: highlightSearch(mail.preview, searchTerm),
+                        }}
+                      ></span>
+                    </div>
+                  </div>
 
-                  <span
-                    className="mail-preview"
-                    dangerouslySetInnerHTML={{
-                      __html: highlightSearch(mail.preview, searchTerm),
-                    }}
-                  ></span>
-
-
+                <div className="mail-item-right">
                   <span
                     className="mail-date"
                     dangerouslySetInnerHTML={{
@@ -569,6 +575,7 @@ function highlightSearch(text, searchTerm) {
                 </div>
               </div>
               </div>
+            </div>
           );
         })}
       </div>
