@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Archive, Trash2, MoreHorizontal, AlertTriangle, Paperclip, Download, Eye, ArrowLeft } from 'lucide-react';
+import { 
+  FiMail, 
+  FiArchive, 
+  FiTrash2, 
+  FiMoreHorizontal, 
+  FiAlertTriangle, 
+  FiPaperclip, 
+  FiDownload, 
+  FiEye, 
+  FiArrowLeft 
+} from 'react-icons/fi';
 import ComposeModal from './ComposeModal';
 import '../styles/MailView.css';
 
@@ -256,7 +266,7 @@ const handlePreviewAttachment = (attachment) => {
     return (
       <div className={`mailview-empty ${darkMode ? 'dark' : 'light'}`}>
         <div className="empty-content">
-          <Mail size={48} className="empty-icon" />
+          <FiMail size={48} className="empty-icon" />
           <p className="empty-title">Select an email to view</p>
           <p className="empty-subtitle">Choose an email from the list to see the full content</p>
         </div>
@@ -273,53 +283,54 @@ const handlePreviewAttachment = (attachment) => {
         <div className="mailview-header-left">
           <div className="back-and-subject">
             <button className="back-arrow standalone-back" onClick={onClose}>
-              <ArrowLeft size={20} />
+              <FiArrowLeft size={20} />
             </button>
             <h1 className="mailview-subject">{mail.subject}</h1>
-          </div>
+            
           
-          <div className="dropdown-wrapper">
-            <button className="icon-btn" onClick={() => setShowMenu(prev => !prev)}>
-              <MoreHorizontal size={18} />
-            </button>
+            <div className="dropdown-wrapper">
+              <button className="icon-btn" onClick={() => setShowMenu(prev => !prev)}>
+                <FiMoreHorizontal size={18} />
+              </button>
 
-            {showMenu && (
-              <div className={`dropdown-menu ${darkMode ? 'dark' : 'light'}`}>
-                { mail.category !== 'spam' && (
-                  <button onClick={() => {
-                    moveToSpam(mail);
-                    setShowMenu(false);
-                    setSelectedMail(null);
-                  }}>Mark as Spam</button>
+              {showMenu && (
+                <div className={`dropdown-menu ${darkMode ? 'dark' : 'light'}`}>
+                  { mail.category !== 'spam' && (
+                    <button onClick={() => {
+                      moveToSpam(mail);
+                      setShowMenu(false);
+                      setSelectedMail(null);
+                    }}>Mark as Spam</button>
+                    )}
+                  {mail.category === 'spam' && (
+                    <button onClick={() => {
+                      removeFromSpam(mail);
+                      setShowMenu(false);
+                      setSelectedMail(null);
+                    }}>Remove from Spam</button>
                   )}
-                {mail.category === 'spam' && (
-                  <button onClick={() => {
-                    removeFromSpam(mail);
-                    setShowMenu(false);
-                    setSelectedMail(null);
-                  }}>Remove from Spam</button>
-                )}
-                <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
-                {selectedCategory === 'trash' && (
-                  <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>
-                )}
-                {selectedCategory === 'drafts' && (
-                  <>
-                    <button onClick={() => {handleResend(); setShowMenu(false);}}>Resend</button>
-                    <button 
-                      onClick={() => {
-                        // otomatically delete the draft after sending
-                        handlePermanentDelete(mail);
-                        setShowMenu(false);
-                      }}
-                      className="delete-draft-btn"
-                    >
-                      Delete Draft
-                    </button>
-                  </>
-                )}
+                  <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
+                  {selectedCategory === 'trash' && (
+                    <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>
+                  )}
+                  {selectedCategory === 'drafts' && (
+                    <>
+                      <button onClick={() => {handleResend(); setShowMenu(false);}}>Resend</button>
+                      <button 
+                        onClick={() => {
+                          // otomatically delete the draft after sending
+                          handlePermanentDelete(mail);
+                          setShowMenu(false);
+                        }}
+                        className="delete-draft-btn"
+                      >
+                        Delete Draft
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
               </div>
-            )}
           </div>
         </div>
 
@@ -349,7 +360,7 @@ const handlePreviewAttachment = (attachment) => {
 
       {mail.spam && (
         <div className="spam-warning">
-          <AlertTriangle size={18} className="spam-icon" />
+          <FiAlertTriangle size={18} className="spam-icon" />
           <span>This email has been marked as spam due to suspicious content.</span>
         </div>
       )}
@@ -361,7 +372,7 @@ const handlePreviewAttachment = (attachment) => {
         {mail.attachments && mail.attachments.length > 0 && (
           <div className="attachments-section">
             <div className="attachments-header">
-              <Paperclip size={16} />
+              <FiPaperclip size={16} />
               <span>{mail.attachments.length} attachment{mail.attachments.length > 1 ? 's' : ''}</span>
             </div>
             <div className="attachments-list">
@@ -384,14 +395,14 @@ const handlePreviewAttachment = (attachment) => {
                       onClick={() => handlePreviewAttachment(attachment)}
                       title="תצוגה מקדימה"
                     >
-                      <Eye size={24} />
+                      <FiEye size={24} />
                     </button>
                     <button
                       className="attachment-btn download-btn"
                       onClick={() => handleDownloadAttachment(attachment)}
                       title="הורד קובץ"
                     >
-                      <Download size={24} />
+                      <FiDownload size={24} />
                     </button>
                   </div>
                 </div>
