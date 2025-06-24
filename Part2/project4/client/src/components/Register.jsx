@@ -198,14 +198,27 @@ const generateDefaultProfileImage = (letter) => {
   
 return (
   <form className="register-form" onSubmit={handleSubmit}>
-    <h2>Register - Step {step}</h2>
+    <img
+      src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_light_2x_rtl_r5.png"
+      alt="Gmail Logo"
+      className="logo-image"
+      style={{
+        width: "200px",  // או גודל אחר שתרצה
+        height: "auto",
+        marginBottom: "1.5rem",
+        display: "block",
+        marginLeft: "auto",
+        marginRight: "auto"
+      }}
+    />
+    <h2>Create your account</h2>
 
     {step === 1 && (
       <>
         <div className="form-group">
-          <label>First Name</label>
           <input
             type="text"
+            placeholder="First Name"
             value={formData.first_name}
             onChange={(e) =>
               setFormData({ ...formData, first_name: e.target.value })
@@ -215,9 +228,9 @@ return (
         </div>
 
         <div className="form-group">
-          <label>Last Name</label>
           <input
             type="text"
+            placeholder="Last Name"
             value={formData.last_name}
             onChange={(e) =>
               setFormData({ ...formData, last_name: e.target.value })
@@ -227,9 +240,9 @@ return (
         </div>
 
         <div className="form-group">
-          <label>Username</label>
           <input
             type="text"
+            placeholder="Username"
             value={formData.username}
             onChange={(e) =>
               setFormData({ ...formData, username: e.target.value })
@@ -243,7 +256,6 @@ return (
     {step === 2 && (
       <>
         <div className="form-group">
-          <label>Birth Date</label>
           <input
             type="date"
             value={formData.birth_date}
@@ -255,7 +267,6 @@ return (
         </div>
 
         <div className="form-group">
-          <label>Gender</label>
           <select
             value={formData.gender}
             onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
@@ -272,9 +283,9 @@ return (
     {step === 3 && (
       <>
         <div className="form-group">
-          <label>Email</label>
           <input
             type="email"
+            placeholder="Email"
             value={formData.mail}
             onChange={(e) => setFormData({ ...formData, mail: e.target.value })}
           />
@@ -282,9 +293,9 @@ return (
         </div>
 
         <div className="form-group">
-          <label>Password</label>
           <input
             type="password"
+            placeholder="Password"
             value={formData.password}
             onChange={(e) =>
               setFormData({ ...formData, password: e.target.value })
@@ -294,9 +305,9 @@ return (
         </div>
 
         <div className="form-group">
-          <label>Confirm Password</label>
           <input
             type="password"
+            placeholder="Confirm Password"
             value={formData.reWritePass}
             onChange={(e) =>
               setFormData({ ...formData, reWritePass: e.target.value })
@@ -306,7 +317,7 @@ return (
         </div>
 
         <div className="form-group">
-          <label>Profile Image</label>
+          <label>Uploud Profile Image (optional)</label>
           <input
             type="file"
             accept="image/*"
