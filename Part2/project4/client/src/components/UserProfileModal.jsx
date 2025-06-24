@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { X, User, Mail, Calendar, Users, Camera, Save, AlertCircle } from 'lucide-react';
-import '../styles/UserProfileModal.css';
+import { 
+  FiX, 
+  FiUser, 
+  FiMail, 
+  FiCalendar, 
+  FiUsers, 
+  FiCamera, 
+  FiSave, 
+  FiAlertCircle 
+} from 'react-icons/fi';import '../styles/UserProfileModal.css';
 const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
   const [formData, setFormData] = useState({
     first_name: '',
@@ -136,7 +144,7 @@ useEffect(() => {
         <div className="modal-header">
           <h2>Edit profile</h2>
           <button onClick={onClose} className="close-btn">
-            <X size={20} />
+            <FiX size={20} />
           </button>
         </div>
 
@@ -152,7 +160,7 @@ useEffect(() => {
           <div className="image-section">
             
             <label className="image-upload-btn">
-              <Camera size={16} />
+              <FiCamera size={16} />
               <span>Change picture</span>
               <input
                 type="file"
@@ -226,7 +234,7 @@ useEffect(() => {
 
           {error && (
             <div className="error-message">
-              <AlertCircle size={16} />
+              <FiAlertCircle size={16} />
               <span>{error}</span>
             </div>
           )}
@@ -246,7 +254,7 @@ useEffect(() => {
                 <span>Save...</span>
               ) : (
                 <>
-                  <Save size={16} />
+                  <FiSave size={16} />
                   <span>Save changes</span>
                 </>
               )}

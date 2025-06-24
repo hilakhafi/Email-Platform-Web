@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Send, Paperclip } from 'lucide-react';
+import { FiX, FiSend, FiPaperclip } from 'react-icons/fi';
+
 import AttachmentsList from './AttachmentsList';
 import useFileUpload from '../hooks/useFileUpload';
 import '../styles/ComposeModal.css';
@@ -202,7 +203,7 @@ const moveToDraft = async (mailData) => {
           </div>
           <div className="compose-header-right">
             <button onClick={onClose} className="icon-button close-button">
-              <X size={20} />
+              <FiX size={20} />
             </button>
           </div>
         </div>
@@ -242,7 +243,7 @@ const moveToDraft = async (mailData) => {
         <div className="compose-footer">
           {/* button to upload file */}
           <label className="icon-button attach-button">
-            <Paperclip size={20} />
+            <FiPaperclip size={20} />
             <input
               type="file"
               multiple
@@ -264,7 +265,7 @@ const moveToDraft = async (mailData) => {
               className="send-button"
               disabled={sending}
             >
-              <Send size={16} />
+              <FiSend size={16} />
               {sending ? 'Sending...' : 'Send'}
               {(attachments.length > 0 || forwardAttachments.length > 0) && 
                 ` (${attachments.length + (forwardAttachments?.length || 0)} files)`}

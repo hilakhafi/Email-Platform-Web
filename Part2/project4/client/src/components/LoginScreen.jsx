@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/LoginScreen.css";
-import { Mail } from "lucide-react";
 
 export default function LoginScreen({ onLogin }) {
   const [mail, setMail] = useState("");

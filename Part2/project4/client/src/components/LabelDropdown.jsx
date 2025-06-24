@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Check } from 'lucide-react';
+import { FiX, FiCheck } from 'react-icons/fi';
 import '../styles/LabelDropdown.css';
 
 // This component displays a dropdown for selecting labels to apply to an email.
@@ -81,7 +81,7 @@ function LabelDropdown({
       <div className="label-dropdown-header">
       <span className="label-dropdown-title">Labels</span>
       <button onClick={onClose} className="label-dropdown-close">
-          <X size={16} />
+          <FiX size={16} />
         </button>
       </div>
 
@@ -105,7 +105,7 @@ function LabelDropdown({
                   style={{ backgroundColor: label.color }}
                 ></div>
               <span className="label-dropdown-label">{label.name}</span>
-              {isApplied && <Check size={16} className="label-dropdown-check" />}
+              {isApplied && <FiCheck size={16} className="label-dropdown-check" />}
               </button>
             );
           })

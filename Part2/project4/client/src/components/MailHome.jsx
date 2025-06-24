@@ -1,5 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Mail, Settings, Menu, Sun, Moon, Inbox, Star, SendHorizontal, FileText, AlertCircle, Trash2, User, LogOut, UserCircle } from 'lucide-react';
+import {
+  FiSearch,
+  FiMail,
+  FiSettings,
+  FiMenu,
+  FiSun,
+  FiMoon,
+  FiInbox,
+  FiStar,
+  FiSend,
+  FiFileText,
+  FiAlertCircle,
+  FiTrash2,
+  FiUser,
+  FiLogOut,
+  FiUserCheck
+} from 'react-icons/fi';
 import Sidebar from './Sidebar';
 import MailList from './MailList';
 import MailView from './MailView';
@@ -8,12 +24,12 @@ import UserProfileModal from './UserProfileModal';
 import '../styles/MailHome.css';
 
 const defaultCategories = [
-  { name: "inbox", icon: Inbox, color: "blue", count: 0 },
-  { name: "starred", icon: Star, color: "yellow", count: 0 },
-  { name: "sent", icon: SendHorizontal, color: "green", count: 0 },
-  { name: "drafts", icon: FileText, color: "gray", count: 0 },
-  { name: "spam", icon: AlertCircle, color: "orange", count: 0 },
-  { name: "trash", icon: Trash2, color: "red", count: 0 }
+  { name: "inbox", icon: FiInbox, color: "blue", count: 0 },
+  { name: "starred", icon: FiStar, color: "yellow", count: 0 },
+  { name: "sent", icon: FiSend, color: "green", count: 0 },
+  { name: "drafts", icon: FiFileText, color: "gray", count: 0 },
+  { name: "spam", icon: FiAlertCircle, color: "orange", count: 0 },
+  { name: "trash", icon: FiTrash2, color: "red", count: 0 }
 ];
 
 export default function MailHome() {
@@ -525,13 +541,12 @@ const handlePermanentDelete = async (mailsToDelete) => {
               className="menu-btn"
               aria-label="Toggle Sidebar"
             >
-              <Menu size={20} />
+              <FiMenu size={20} />
             </button>
             <div className="logo">
               <img
-                  src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_dark_1x_rtl_r5.png"
-                  srcSet="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_dark_2x_rtl_r5.png 2x, https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_dark_1x_rtl_r5.png 1x"
-                  alt="Gmail Logo"
+                  src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico"
+                  alt="Gmail Icon"
                   className="logo-image"
                 />              
               <span className="logo-text">Gmail</span>
@@ -544,7 +559,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
               className="search-icon-button" 
               aria-label="Search"
             >
-              <Search className="search-icon" size={20} />
+              <FiSearch className="search-icon" size={20} />
             </button>
             <input
               type="text"
@@ -566,7 +581,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
               className="icon-btn"
               aria-label="Toggle Dark Mode"
             >
-              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {darkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
             </button>
             
             
@@ -600,7 +615,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
                       onClick={handleEditProfile}
                       className="user-menu-item"
                     >
-                      <User size={16} />
+                      <FiUser size={16} />
                       <span>Edit profile</span>
                     </button>
                     
@@ -608,7 +623,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
                       onClick={handleLogout}
                       className="user-menu-item logout"
                     >
-                      <LogOut size={16} />
+                      <FiLogOut size={16} />
                       <span>Log out</span>
                     </button>
                   </div>

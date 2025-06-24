@@ -84,10 +84,11 @@
 }
 
 .logo-image {
-  width: 100px;
-  height: 100px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
   border-radius: 8px;
+  padding: 1rem;
 }
 
 .logo-text {

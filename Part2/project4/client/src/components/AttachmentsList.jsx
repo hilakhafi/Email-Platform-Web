@@ -1,5 +1,5 @@
 import React from 'react';
-import { File, Trash2 } from 'lucide-react';
+import { FiFile, FiTrash2 } from 'react-icons/fi';
 import '../styles/AttachmentsList.css';
 
 function AttachmentsList({ 
@@ -25,7 +25,7 @@ function AttachmentsList({
       <div className="attachments-list">
         {attachments.map((file, index) => (
           <div key={index} className="attachment-item">
-            <File size={16} />
+            <FiFile size={16} />
             <span className="attachment-name">{file.name}</span>
             <span className="attachment-size">({formatFileSize(file.size)})</span>
             <button 
@@ -34,7 +34,7 @@ function AttachmentsList({
               type="button"
               title="Remove attachment"
             >
-              <Trash2 size={14} />
+              <FiTrash2 size={14} />
             </button>
           </div>
         ))}

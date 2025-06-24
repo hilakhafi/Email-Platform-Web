@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Mail, Star, RefreshCw, MoreHorizontal, CircleSlash, 
-  Trash2, Paperclip, Circle, Tag, Slash } from 'lucide-react';
+import {
+  FiChevronLeft,
+  FiChevronRight,
+  FiMail,
+  FiStar,
+  FiRefreshCw,
+  FiMoreHorizontal,
+  FiXCircle,
+  FiTrash2,
+  FiPaperclip,
+  FiCircle,
+  FiTag,
+  FiSlash
+} from 'react-icons/fi';
+
 import '../styles/MailList.css';
 import LabelDropdown from './LabelDropdown';
 
@@ -67,7 +80,7 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode,
                 toggleStar(mail.id, mail.isStarred);
               }}
             >
-              <Star
+              <FiStar
                 size={16}
                 className={`star-icon ${mail.isStarred ? 'starred' : ''}`}
               />
@@ -83,7 +96,7 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode,
                 }}
                 title="Manage labels"
               >
-                <Tag size={16} />
+                <FiTag size={16} />
               </button>
               
               <LabelDropdown
@@ -98,13 +111,13 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode,
               moveToTrash(mail.id);
             }}
           >
-            <Trash2 size={20} />
+            <FiTrash2 size={20} />
           </button>
           )}
           {mail.isImportant && <div className="important-dot"></div>}
           {hasAttachments && (
             <div className="attachment-indicator" title={`${mail.attachments.length} attachment${mail.attachments.length > 1 ? 's' : ''}`}>
-              <Paperclip size={14} />
+              <FiPaperclip size={14} />
             </div>
           )}
         </div>
@@ -202,7 +215,7 @@ const clearSelection = () => setSelectedMails([]);
     return (
       <div className={`mail-list-wrapper center ${themeClass}`}>
         <div className="loading-message">
-          <RefreshCw className="spin" size={20} />
+          <FiRefreshCw className="Fispin" size={20} />
           <span>Loading emails...</span>
         </div>
       </div>
@@ -234,12 +247,12 @@ const clearSelection = () => setSelectedMails([]);
               onClick={onRefresh}
               aria-label="רענן מיילים"
             >
-              <RefreshCw size={18} />
+              <FiRefreshCw size={18} />
             </button>
           </div>
         </div>
         <div className="center empty-state">
-          <Mail size={48} className="empty-icon" />
+          <FiMail size={48} className="empty-icon" />
           <p className="empty-title">No emails in {selectedCategory.toLowerCase()}</p>
           <p className="empty-text">When you receive emails, they'll appear here</p>
         </div>
@@ -360,8 +373,8 @@ function highlightSearch(text, searchTerm) {
                 title={`הסר תווית "${selectedLabel}"`}
               >
                 <div style={{ position: 'relative', width: 18, height: 18 }}>
-                  <Tag size={18} />
-                  <Slash
+                  <FiTag size={18} />
+                  <FiSlash
                     size={18}
                     style={{
                       position: 'absolute',
@@ -380,7 +393,7 @@ function highlightSearch(text, searchTerm) {
                   aria-label="ניהול תוויות"
                   title="ניהול תוויות"
                 >
-                  <Tag size={18} />
+                  <FiTag size={18} />
                 </button>
 
                 <LabelDropdown
@@ -426,7 +439,7 @@ function highlightSearch(text, searchTerm) {
                 aria-label={selectedCategory === 'trash' ? "מחק לצמיתות" : "העבר לאשפה"}
                 title={selectedCategory === 'trash' ? "מחק לצמיתות" : "העבר לאשפה"}
               >
-                <Trash2 size={18} />
+                <FiTrash2 size={18} />
               </button>
 
               <button
@@ -435,7 +448,7 @@ function highlightSearch(text, searchTerm) {
                 aria-label="בטל בחירה"
                 title="בטל בחירה"
               >
-                <CircleSlash size={18} />
+                <FiXCircle size={18} />
               </button>
 
               <button
@@ -444,7 +457,7 @@ function highlightSearch(text, searchTerm) {
                 aria-label="בחר הכל"
                 title="בחר הכל"
               >
-                <Circle size={18} />
+                <FiCircle size={18} />
               </button>
             
             <button
@@ -453,7 +466,7 @@ function highlightSearch(text, searchTerm) {
               aria-label="רענן מיילים"
               title="רענן מיילים"
             >
-              <RefreshCw size={18} />
+              <FiRefreshCw size={18} />
             </button>
           </div>
           <div className="pagination-controls">
@@ -463,7 +476,7 @@ function highlightSearch(text, searchTerm) {
               className="page-arrow"
               title="עמוד קודם"
             >
-              <ChevronLeft size={20} />
+              <FiChevronLeft size={20} />
             </button>
 
             <span className="page-indicator">
@@ -476,7 +489,7 @@ function highlightSearch(text, searchTerm) {
               className="page-arrow"
               title="עמוד הבא"
             >
-              <ChevronRight size={20} />
+              <FiChevronRight size={20} />
             </button>
           </div>
         </div>
@@ -522,7 +535,7 @@ function highlightSearch(text, searchTerm) {
                             toggleStar(mail.id, mail.isStarred);
                           }}
                         >
-                          <Star
+                          <FiStar
                             size={16}
                             className={`star-icon ${mail.isStarred ? 'starred' : ''}`}
                           />

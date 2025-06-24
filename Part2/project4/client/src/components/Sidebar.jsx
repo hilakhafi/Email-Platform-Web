@@ -1,4 +1,4 @@
-import { Edit, Plus, Minus } from 'lucide-react';
+import { FiEdit, FiPlus, FiMinus } from 'react-icons/fi';
 import '../styles/Sidebar.css';
 import React, { useState, useEffect } from 'react';
 import LabelDropdown from './LabelDropdown';
@@ -140,7 +140,7 @@ const handleDeleteLabel = async (labelName) => {
       <div className={`sidebar ${darkMode ? 'dark' : 'light'}`}>
         <div className="compose-wrapper">
           <button onClick={onCompose} className="compose-btn">
-            <Edit size={18} />
+            <FiEdit size={18} />
             Compose
           </button>
         </div>
@@ -178,11 +178,11 @@ const handleDeleteLabel = async (labelName) => {
                     onClick={() => handleDeleteLabel(selectedLabel)}
                     title="Delete label"
                   >
-                    <Minus size={22} />
+                    <FiMinus size={22} />
                   </button>
                 )}
                 <button className="add-label-btn" onClick={handleAddLabel}>
-                  <Plus size={22} />
+                  <FiPlus size={22} />
                 </button>
               </div>
             {labels.map(label => {
