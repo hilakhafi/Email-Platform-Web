@@ -534,7 +534,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
                   alt="Gmail Logo"
                   className="logo-image"
                 />              
-              <span className="logo-text">Mailo</span>
+              <span className="logo-text">Gmail</span>
             </div>
           </div>
 
