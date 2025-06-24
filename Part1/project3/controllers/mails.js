@@ -179,7 +179,7 @@ exports.postMail = async (req, res) => {
       preview,
       isRead: false,
       category: category || (isSpam ? 'spam' : 'inbox'),
-      previousCategory: isSpam ? 'spam' : 'inbox',
+      previousCategory: 'inbox',
       isStarred: false,
       label: [],
     };
