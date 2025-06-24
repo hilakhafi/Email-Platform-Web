@@ -528,8 +528,13 @@ const handlePermanentDelete = async (mailsToDelete) => {
               <Menu size={20} />
             </button>
             <div className="logo">
-              <img src="/favicon.png" alt="Mailo logo" className="logo-image" />
-              <span className="logo-text">Mailo</span>
+              <img
+                  src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_dark_1x_rtl_r5.png"
+                  srcSet="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_dark_2x_rtl_r5.png 2x, https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_dark_1x_rtl_r5.png 1x"
+                  alt="Gmail Logo"
+                  className="logo-image"
+                />              
+              <span className="logo-text">Gmail</span>
             </div>
           </div>
 

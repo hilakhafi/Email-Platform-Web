@@ -147,14 +147,14 @@
 }
 
 .mail-item {
-  border-bottom: 1px solid #f3f4f6;
-  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0.4rem 1rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease;
 }
 
 .mail-item:hover {
-  background-color: #f9fafb;
+  background-color: #f1f3f4;
 }
 
 .dark .mail-item {
@@ -166,8 +166,7 @@
 }
 
 .mail-item.selected {
-  background-color: #eff6ff;
-  border-color: #bfdbfe;
+  background-color: #e8f0fe;
 }
 
 .dark .mail-item.selected {
@@ -183,24 +182,56 @@
   background-color: #2d3748;
 }
 
+.mail-item.unread .mail-sender,
+.mail-item.unread .mail-subject {
+  font-weight: bold;
+}
 .mail-item-content {
   display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1rem;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+.mail-item-content:hover {
+  background-color: #f1f5f9;
+}
+.mail-controls {
+  display: flex;
   align-items: center;
-  gap: 50rem; 
+  gap: 4px; 
 }
 
 .mail-item-meta {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
+  width: 100%;
+  height: 7px; /* גובה קבוע של 80px */
+}
+.mail-item-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  overflow: hidden;
+  flex: 1;
 }
 
+.mail-item-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
 .star-button {
-  padding: 0.25rem;
+  background: none;
   border: none;
-  background: transparent;
-  border-radius: 0.25rem;
-  width: 50px;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  height: 18px;
+  display: flex;
+  align-items: center;
 }
 
 .light .star-button:hover {
@@ -221,10 +252,11 @@
 }
 
 .important-dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  background-color: #facc15;
-  border-radius: 9999px;
+  width: 8px;
+  height: 8px;
+  background-color: #1e3a8a;
+  border-radius: 50%;
+  margin-inline-start: 4px;
 }
 
 .mail-details {
@@ -239,8 +271,12 @@
 }
 
 .mail-sender {
-  font-weight: 500;
-  width: 200px; 
+  width: 160px;
+  color: #202124;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  direction: ltr;
 }
 
 .dark .mail-sender {
@@ -252,9 +288,9 @@
 }
 
 .mail-date {
-  font-weight: 500;
-  color: #6b7280;
-  width: 200px; 
+  color: #5f6368;
+  direction: ltr;
+  white-space: nowrap;
 }
 
 .dark .mail-date {
@@ -264,16 +300,29 @@ mark {
   background-color: rgb(237, 237, 107);
   font-weight: bold;
 }
-
-
+.mail-main-text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;        /* רווח בין subject ל־preview */
+  overflow: hidden;
+  white-space: nowrap;
+  flex: 1;
+}
 .mail-subject {
-  font-weight: 500;
-  margin-bottom: 0.25rem;
-  width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;                 /* תופס את השטח האפשרי */
+  min-width: 60px;
 }
 
 .light .mail-subject {
-  color: #1f2937;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #202124;
 }
 
 .dark .mail-subject {
@@ -281,18 +330,21 @@ mark {
 }
 
 .mail-preview {
-  font-weight: 500;
-  color: #6b7280;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 400px; 
+  white-space: nowrap;
+  flex: 1;                 /* תופס את השטח האפשרי */
+  min-width: 60px;
 }
 
 .dark .mail-preview {
   color: #9ca3af;
 }
 
+.mail-subject, .mail-preview, .mail-date, .mail-sender {
+  font-size: 1rem; /* 14px */
+  font-family: 'Roboto', 'Arial', sans-serif;
+}
 
 .mail-category {
   margin-top: 0.5rem;
@@ -516,17 +568,17 @@ mark {
   background-color: rgba(0, 0, 0, 0.05);
 }
 .mail-checkbox {
-  margin: 0;
-  accent-color: #1a73e8; 
-  cursor: pointer;
-  width: 20px; 
+  flex-shrink: 0;
 }
 
 /*Design butten to move page*/
 .page-arrow svg {
   color: #c5cfdb; 
+  transition: transform 0.2s ease;
 }
-
+.page-arrow:hover svg {
+  color: #c5cfdb !important; /* מוודא שלא יוחלף בכחול */
+}
 .page-arrow {
   background: transparent;
   border: none;

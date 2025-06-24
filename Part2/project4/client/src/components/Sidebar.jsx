@@ -137,77 +137,77 @@ const handleDeleteLabel = async (labelName) => {
 
 
   return (
-    <div className={`sidebar ${darkMode ? 'dark' : 'light'}`}>
-      <div className="compose-wrapper">
-        <button onClick={onCompose} className="compose-btn">
-          <Edit size={18} />
-          Compose
-        </button>
-      </div>
+      <div className={`sidebar ${darkMode ? 'dark' : 'light'}`}>
+        <div className="compose-wrapper">
+          <button onClick={onCompose} className="compose-btn">
+            <Edit size={18} />
+            Compose
+          </button>
+        </div>
 
-      <div className="categories-wrapper">
-        <nav>
-          {categories.map(category => {
-            const IconComponent = category.icon;
-            const isSelected = selectedCategory === category.name;
-            return (
-              <button
-                key={category.name}
-                onClick={() => onCategorySelect(category.name)}
-                className={`category-btn ${isSelected ? 'selected' : ''}`}
-              >
-                <div className="category-info">
-                  <IconComponent size={18} className="category-icon" />
-                  <span className="category-name">{category.name}</span>
-                </div>
-                <span className={`count ${category.count > 0 ? 'has-count' : ''}`}>
-                  {category.count > 0 ? category.count : ''}
-                </span>
-              </button>
-            );
-          })}
-        </nav>
-
-        {labels.length >= 0 && (
-          <div className="labels-section">
-            <div className="labels-header">
-              <span className="labels-title">Labels</span>
-              {selectedLabel && (
+        <div className="categories-wrapper">
+          <nav>
+            {categories.map(category => {
+              const IconComponent = category.icon;
+              const isSelected = selectedCategory === category.name;
+              return (
                 <button
-                  className="delete-label-btn"
-                  onClick={() => handleDeleteLabel(selectedLabel)}
-                  title="Delete label"
+                  key={category.name}
+                  onClick={() => onCategorySelect(category.name)}
+                  className={`category-btn ${isSelected ? 'selected' : ''}`}
                 >
-                  <Minus size={22} />
+                  <div className="category-info">
+                    <IconComponent size={18} className="category-icon" />
+                    <span className="category-name">{category.name}</span>
+                  </div>
+                  <span className={`count ${category.count > 0 ? 'has-count' : ''}`}>
+                    {category.count > 0 ? category.count : ''}
+                  </span>
                 </button>
-              )}
-              <button className="add-label-btn" onClick={handleAddLabel}>
-                <Plus size={22} />
+              );
+            })}
+          </nav>
+
+          {labels.length >= 0 && (
+            <div className="labels-section">
+              <div className="labels-header">
+                <span className="labels-title">Labels</span>
+                {selectedLabel && (
+                  <button
+                    className="delete-label-btn"
+                    onClick={() => handleDeleteLabel(selectedLabel)}
+                    title="Delete label"
+                  >
+                    <Minus size={22} />
+                  </button>
+                )}
+                <button className="add-label-btn" onClick={handleAddLabel}>
+                  <Plus size={22} />
+                </button>
+              </div>
+            {labels.map(label => {
+              const isSelectedLabel = selectedLabel === label.name;
+              return (
+              <button
+                key={label.name}
+                onClick={() => {
+                  onCategorySelect(null);
+                  onLabelSelect(label.name);
+                }}
+                className={`label-item ${isSelectedLabel ? 'selected' : ''}`}
+              >
+                <div
+                  className="label-color"
+                  style={{ backgroundColor: label.color }}
+                ></div>
+                <span className="label-name">{label.name}</span>
               </button>
+              );
+            })}
             </div>
-          {labels.map(label => {
-            const isSelectedLabel = selectedLabel === label.name;
-            return (
-            <button
-              key={label.name}
-              onClick={() => {
-                onCategorySelect(null);
-                onLabelSelect(label.name);
-              }}
-              className={`label-item ${isSelectedLabel ? 'selected' : ''}`}
-            >
-              <div
-                className="label-color"
-                style={{ backgroundColor: label.color }}
-              ></div>
-              <span className="label-name">{label.name}</span>
-            </button>
-            );
-          })}
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
   );
 }
 

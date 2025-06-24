@@ -8,8 +8,9 @@
   z-index: 9999;
   backdrop-filter: blur(4px);
 }
-
 .compose-modal {
+  font-family: 'Inter', sans-serif;
+  color: #111827;
   border-radius: 0.75rem;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
   width: 100%;
@@ -18,10 +19,13 @@
   display: flex;
   flex-direction: column;
   transition: background-color 0.3s;
-  overflow: hidden;
-  position: relative; 
-  z-index: 10000; 
+  overflow-x: hidden; /* ✅ הסתרת גלילה אופקית */
+  overflow-y: auto;
+  position: relative;
+  z-index: 10000;
+  background-color: #fff;
 }
+
 
 .compose-modal.light {
   background-color: #fff;
@@ -31,13 +35,32 @@
   background-color: #232323;
 }
 
-.compose-header,
-.compose-footer {
+.compose-header{
+  font-family: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+  color: rgb(32, 33, 36);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.25rem;
+  padding: 1rem 1.5rem;
   border-bottom: 1px solid #e5e7eb;
+  font-size: 1rem;
+  font-weight: 300;
+  height: 15px; ;
+  background-color: #e4e3e3;
+}
+
+.compose-footer {
+  font-family: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+  color: rgb(32, 33, 36);
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 1rem;
+  font-weight: 500;
+  height: 20px; 
+  justify-content: flex-end;
 }
 
 .compose-modal.dark .compose-header,
@@ -46,9 +69,9 @@
 }
 
 .compose-title {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 500; 
   color: #111827;
 }
 
@@ -82,6 +105,7 @@
   flex-direction: column;
   gap: 1.25rem;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .compose-input,
@@ -127,18 +151,30 @@
   box-shadow: 0 0 8px rgba(37, 99, 235, 0.6);
 }
 
-.compose-footer {
-  border-top: 1px solid #e5e7eb;
-  padding: 1rem 1.25rem;
-}
-
-.compose-modal.dark .compose-footer {
-  border-color: #444c56;
-}
-
 .footer-buttons {
   display: flex;
   gap: 0.75rem;
+}
+/* .icon-button close-button{
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 10px;
+  height: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #5f6368;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+} */
+
+.compose-close-btn:hover {
+  background-color: #f1f3f4;
+  transform: scale(1.05);
 }
 
 .cancel-button {

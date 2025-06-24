@@ -267,83 +267,86 @@ const handlePreviewAttachment = (attachment) => {
   const fromName = user ? `${user.first_name} ${user.last_name}` : loadingUser ? 'Loading...' : errorUser ? 'Unknown' : 'Unknown';
 
   return (
-    
-    <div className="mailview-header">
-      <button className="back-arrow standalone-back" onClick={onClose}>
-        <ArrowLeft size={20} />
-      </button>
-      
+    <div className="mail-view">
+      <div className="mailview-header">
+        <div className="mailview-header-left">
 
-      <div className="mailview-actions-sender">
-        <div className="actions">
-          <h1 className="mailview-subject">{mail.subject}</h1>
-          
-          <div className="dropdown-wrapper">
-          <button className="icon-btn" onClick={() => setShowMenu(prev => !prev)}>
-            <MoreHorizontal size={18} />
+          <button className="back-arrow standalone-back" onClick={onClose}>
+            <ArrowLeft size={20} />
           </button>
-
-      {showMenu && (
-        <div className={`dropdown-menu ${darkMode ? 'dark' : 'light'}`}>
           
-          { mail.category !== 'spam' && (
-            <button onClick={() => {
-              moveToSpam(mail);
-              setShowMenu(false);
-              setSelectedMail(null);
-            }}>Mark as Spam</button>
-            )}
-          {mail.category === 'spam' && (
-            <button onClick={() => {
-              removeFromSpam(mail);
-              setShowMenu(false);
-              setSelectedMail(null);
-            }}>Remove from Spam</button>
-          )}
-          <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
-          {selectedCategory === 'trash' && (
-            <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>
-          )}
-          {selectedCategory === 'drafts' && (
-            <>
-              <button onClick={() => {handleResend(); setShowMenu(false);}}>Resend</button>
-              <button 
-                onClick={() => {
-                  // otomatically delete the draft after sending
-                  handlePermanentDelete(mail);
-                  setShowMenu(false);
-                }}
-                className="delete-draft-btn"
-              >
-                Delete Draft
+          <div className="mailview-actions-sender">
+            <div className="actions">
+              <h1 className="mailview-subject">{mail.subject}</h1>
+              
+              <div className="dropdown-wrapper">
+              <button className="icon-btn" onClick={() => setShowMenu(prev => !prev)}>
+                <MoreHorizontal size={18} />
               </button>
-            </>
-          )}
-        </div>
-      )}
-      </div>
 
-      <div className="sender-info">
-          <div className="sender-avatar">
-            {user?.profileImage ? (
-              <img
-                src={`http://localhost:4000/${user.profileImage.replace(/\\/g, '/')}`}
-                alt="avatar"
-              />
-            ) : (
-              fromName?.charAt(0).toUpperCase() || '?'
-            )}
-          </div>
-          <div className="sender-details">
-            <div className="sender-name">{fromName}</div>
-            <div className="send-time">
-              {new Date(mail.timestamp).toLocaleDateString()} at {new Date(mail.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          {showMenu && (
+            <div className={`dropdown-menu ${darkMode ? 'dark' : 'light'}`}>
+              
+              { mail.category !== 'spam' && (
+                <button onClick={() => {
+                  moveToSpam(mail);
+                  setShowMenu(false);
+                  setSelectedMail(null);
+                }}>Mark as Spam</button>
+                )}
+              {mail.category === 'spam' && (
+                <button onClick={() => {
+                  removeFromSpam(mail);
+                  setShowMenu(false);
+                  setSelectedMail(null);
+                }}>Remove from Spam</button>
+              )}
+              <button onClick={() => handleMarkAsUnread(mail.id)}>Mark as Unread</button>
+              {selectedCategory === 'trash' && (
+                <button onClick={() => restoreMail(mail.id, mail.previousCategory)}>Restore</button>
+              )}
+              {selectedCategory === 'drafts' && (
+                <>
+                  <button onClick={() => {handleResend(); setShowMenu(false);}}>Resend</button>
+                  <button 
+                    onClick={() => {
+                      // otomatically delete the draft after sending
+                      handlePermanentDelete(mail);
+                      setShowMenu(false);
+                    }}
+                    className="delete-draft-btn"
+                  >
+                    Delete Draft
+                  </button>
+                </>
+              )}
             </div>
-            <div className="sender-email">{user && user.mail ? `<${user.mail}>` : ''}</div>
+          )}
+          </div>
+      </div>
+        <div className="sender-info">
+            <div className="sender-avatar">
+              {user?.profileImage ? (
+                <img
+                  src={`http://localhost:4000/${user.profileImage.replace(/\\/g, '/')}`}
+                  alt="avatar"
+                />
+              ) : (
+                fromName?.charAt(0).toUpperCase() || '?'
+              )}
+            </div>
+            <div className="sender-details">
+              <div className="sender-name">{fromName}</div>
+              <div className="send-time">
+                {new Date(mail.timestamp).toLocaleDateString()} at {new Date(mail.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </div>
+              <div className="sender-email">{user && user.mail ? `<${user.mail}>` : ''}</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
 
         
 
