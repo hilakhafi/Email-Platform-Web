@@ -305,9 +305,9 @@ mark {
 }
 
 .mail-subject {
-  font-weight: 600;
-  white-space: nowrap;
-  margin-right: 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 12px;
 }
 
 .light .mail-subject {
