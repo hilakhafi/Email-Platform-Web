@@ -195,165 +195,135 @@ const generateDefaultProfileImage = (letter) => {
       setServerError(err.message);
     }
   };
-  
-return (
-  <form className="register-form" onSubmit={handleSubmit}>
-    <img
-      src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_light_2x_rtl_r5.png"
-      alt="Gmail Logo"
-      className="logo-image"
-      style={{
-        width: "200px",  // או גודל אחר שתרצה
-        height: "auto",
-        marginBottom: "1.5rem",
-        display: "block",
-        marginLeft: "auto",
-        marginRight: "auto"
-      }}
-    />
-    <h2>Create your account</h2>
 
-    {step === 1 && (
-      <>
-        <div className="form-group">
-          <input
-            type="text"
-            placeholder="First Name"
-            value={formData.first_name}
-            onChange={(e) =>
-              setFormData({ ...formData, first_name: e.target.value })
-            }
+  return (
+    <div className="google-register-page">
+      <div className="form-container">
+        {/* Side panel right */}
+        <div className="side-panel">
+          <img
+            src="https://www.gstatic.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+            alt="Google"
+            className="side-logo"
           />
-          {errors.first_name && <p className="error-text">{errors.first_name}</p>}
+          <h1>Create a Google Account</h1>
+          <p>Enter your information to get started</p>
         </div>
 
-        <div className="form-group">
-          <input
-            type="text"
-            placeholder="Last Name"
-            value={formData.last_name}
-            onChange={(e) =>
-              setFormData({ ...formData, last_name: e.target.value })
-            }
-          />
-          {errors.last_name && <p className="error-text">{errors.last_name}</p>}
-        </div>
-
-        <div className="form-group">
-          <input
-            type="text"
-            placeholder="Username"
-            value={formData.username}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
-          />
-          {errors.username && <p className="error-text">{errors.username}</p>}
-        </div>
-      </>
-    )}
-
-    {step === 2 && (
-      <>
-        <div className="form-group">
-          <input
-            type="date"
-            value={formData.birth_date}
-            onChange={(e) =>
-              setFormData({ ...formData, birth_date: e.target.value })
-            }
-          />
-          {errors.birth_date && <p className="error-text">{errors.birth_date}</p>}
-        </div>
-
-        <div className="form-group">
-          <select
-            value={formData.gender}
-            onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-          >
-            <option value="">Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-          {errors.gender && <p className="error-text">{errors.gender}</p>}
-        </div>
-      </>
-    )}
-
-    {step === 3 && (
-      <>
-        <div className="form-group">
-          <input
-            type="email"
-            placeholder="Email"
-            value={formData.mail}
-            onChange={(e) => setFormData({ ...formData, mail: e.target.value })}
-          />
-          {errors.mail && <p className="error-text">{errors.mail}</p>}
-        </div>
-
-        <div className="form-group">
-          <input
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-          />
-          {errors.password && <p className="error-text">{errors.password}</p>}
-        </div>
-
-        <div className="form-group">
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            value={formData.reWritePass}
-            onChange={(e) =>
-              setFormData({ ...formData, reWritePass: e.target.value })
-            }
-          />
-          {errors.reWritePass && <p className="error-text">{errors.reWritePass}</p>}
-        </div>
-
-        <div className="form-group">
-          <label>Uploud Profile Image (optional)</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files[0];
-              setFormData({ ...formData, profileImage: file });
-              setPreviewImage(file ? URL.createObjectURL(file) : null);
-            }}
-          />
-          {formData.profileImage && previewImage && (
-            <div className="image-preview">
-              <img
-                src={previewImage}
-                alt="Preview"
-                style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "10px" }}
+        {/* Form left */}
+        <form onSubmit={handleSubmit}>
+          {step === 1 && (
+            <>
+              <input
+                type="text"
+                placeholder="First name"
+                value={formData.first_name}
+                onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
               />
-            </div>
+              {errors.first_name && <p className="error-text">{errors.first_name}</p>}
+
+              <input
+                type="text"
+                placeholder="Last name"
+                value={formData.last_name}
+                onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+              />
+              {errors.last_name && <p className="error-text">{errors.last_name}</p>}
+
+              <input
+                type="text"
+                placeholder="Username"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              />
+              {errors.username && <p className="error-text">{errors.username}</p>}
+            </>
           )}
-        </div>
-      </>
-    )}
 
-    {/* כפתורי ניווט */}
-    <div className="buttons">
-  {step < 3 ? (
-    <button type="button" onClick={handleNext}>Next</button>
-  ) : (
-    <button type="submit">Register</button>
-  )}
-  {step > 1 && <button type="button" onClick={handleBack}>Back</button>}
-</div>
+           {step === 2 && (
+            <>
+              <input
+                type="date"
+                value={formData.birth_date}
+                onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
+              />
+              {errors.birth_date && <p className="error-text">{errors.birth_date}</p>}
 
-    {serverError && <div className="error-text">{serverError}</div>}
-  </form>
-);
+              <select
+                value={formData.gender}
+                onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+              {errors.gender && <p className="error-text">{errors.gender}</p>}
+            </>
+          )}
 
+          {step === 3 && (
+            <>
+              <input
+                type="email"
+                placeholder="Email"
+                value={formData.mail}
+                onChange={(e) => setFormData({ ...formData, mail: e.target.value })}
+              />
+              {errors.mail && <p className="error-text">{errors.mail}</p>}
+
+              <input
+                type="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              />
+              {errors.password && <p className="error-text">{errors.password}</p>}
+
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                value={formData.reWritePass}
+                onChange={(e) => setFormData({ ...formData, reWritePass: e.target.value })}
+              />
+              {errors.reWritePass && <p className="error-text">{errors.reWritePass}</p>}
+
+              <label>Upload Profile Image (optional)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setFormData({ ...formData, profileImage: file });
+                  setPreviewImage(file ? URL.createObjectURL(file) : null);
+                }}
+              />
+              {formData.profileImage && previewImage && (
+                <div className="image-preview">
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "10px" }}
+                  />
+                </div>
+              )}
+            </>
+          )}
+
+          <div className="buttons">
+            {step > 1 && <button type="button" onClick={handleBack}>Back</button>}
+            {step < 3 ? (
+              <button type="button" onClick={handleNext}>Next</button>
+            ) : (
+              <button type="submit">Register</button>
+            )}
+          </div>
+
+          {serverError && <div className="error-text">{serverError}</div>}
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default Register;
+
