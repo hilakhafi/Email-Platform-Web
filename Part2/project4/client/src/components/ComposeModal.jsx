@@ -197,10 +197,14 @@ const moveToDraft = async (mailData) => {
     <div className="compose-overlay">
       <div className={`compose-modal ${darkMode ? 'dark' : 'light'}`}>
         <div className="compose-header">
-          <h2 className="compose-title">{getModalTitle()}</h2>
-          <button onClick={onClose} className="icon-button close-button">
-            <X size={20} />
-          </button>
+          <div className="compose-header-left">
+            <h2 className="compose-title">{getModalTitle()}</h2>
+          </div>
+          <div className="compose-header-right">
+            <button onClick={onClose} className="icon-button close-button">
+              <X size={20} />
+            </button>
+          </div>
         </div>
 
         <div className="compose-body">

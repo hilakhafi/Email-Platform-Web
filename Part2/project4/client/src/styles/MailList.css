@@ -188,21 +188,26 @@
 }
 .mail-item-content {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  flex-direction: column;
+  padding: 0.75rem 1rem;
+  transition: background-color 0.2s;
+  cursor: pointer;
 }
-
+.mail-item-content:hover {
+  background-color: #f1f5f9;
+}
 .mail-controls {
   display: flex;
   align-items: center;
   gap: 4px; 
 }
+
 .mail-item-meta {
-   display: flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  height: 7px; /* גובה קבוע של 80px */
 }
 .mail-item-left {
   display: flex;
@@ -267,7 +272,6 @@
 
 .mail-sender {
   width: 160px;
-  font-weight: 500;
   color: #202124;
   overflow: hidden;
   white-space: nowrap;
@@ -284,7 +288,6 @@
 }
 
 .mail-date {
-  font-size: 0.8rem;
   color: #5f6368;
   direction: ltr;
   white-space: nowrap;
@@ -299,15 +302,19 @@ mark {
 }
 .mail-main-text {
   display: flex;
-  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;        /* רווח בין subject ל־preview */
   overflow: hidden;
   white-space: nowrap;
+  flex: 1;
 }
-
 .mail-subject {
-  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
-  margin-right: 1rem;
+  flex: 1;                 /* תופס את השטח האפשרי */
+  min-width: 60px;
 }
 
 .light .mail-subject {
@@ -323,16 +330,21 @@ mark {
 }
 
 .mail-preview {
-  color: #5f6368;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex: 1;                 /* תופס את השטח האפשרי */
+  min-width: 60px;
 }
 
 .dark .mail-preview {
   color: #9ca3af;
 }
 
+.mail-subject, .mail-preview, .mail-date, .mail-sender {
+  font-size: 1rem; /* 14px */
+  font-family: 'Roboto', 'Arial', sans-serif;
+}
 
 .mail-category {
   margin-top: 0.5rem;
