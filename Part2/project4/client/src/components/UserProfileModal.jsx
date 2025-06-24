@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  FiX, 
-  FiUser, 
-  FiMail, 
-  FiCalendar, 
-  FiUsers, 
-  FiCamera, 
-  FiSave, 
-  FiAlertCircle 
-} from 'react-icons/fi';import '../styles/UserProfileModal.css';
+
+import '../styles/UserProfileModal.css';
 const UserProfileModal = ({ onClose, darkMode, userInfo, onUserUpdate }) => {
   const [formData, setFormData] = useState({
     first_name: '',
@@ -144,7 +136,8 @@ useEffect(() => {
         <div className="modal-header">
           <h2>Edit profile</h2>
           <button onClick={onClose} className="close-btn">
-            <FiX size={20} />
+            <i className="bi bi-x" style={{ fontSize: '16px' }}></i>
+
           </button>
         </div>
 
@@ -160,7 +153,7 @@ useEffect(() => {
           <div className="image-section">
             
             <label className="image-upload-btn">
-              <FiCamera size={16} />
+              <i className="bi bi-camera" style={{ fontSize: '16px' }}></i>
               <span>Change picture</span>
               <input
                 type="file"
@@ -234,7 +227,7 @@ useEffect(() => {
 
           {error && (
             <div className="error-message">
-              <FiAlertCircle size={16} />
+              <i className="bi bi-exclamation-circle" style={{ fontSize: '16px' }}></i>
               <span>{error}</span>
             </div>
           )}
@@ -254,7 +247,7 @@ useEffect(() => {
                 <span>Save...</span>
               ) : (
                 <>
-                  <FiSave size={16} />
+              <i className="bi bi-save" style={{ fontSize: '16px' }}></i>
                   <span>Save changes</span>
                 </>
               )}

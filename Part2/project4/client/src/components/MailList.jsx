@@ -1,19 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import {
-  FiChevronLeft,
-  FiChevronRight,
-  FiMail,
-  FiStar,
-  FiRefreshCw,
-  FiMoreHorizontal,
-  FiXCircle,
-  FiTrash2,
-  FiPaperclip,
-  FiCircle,
-  FiTag,
-  FiSlash
-} from 'react-icons/fi';
-
+import { useState, useEffect } from 'react';
 import '../styles/MailList.css';
 import LabelDropdown from './LabelDropdown';
 
@@ -80,10 +65,10 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode,
                 toggleStar(mail.id, mail.isStarred);
               }}
             >
-              <FiStar
-                size={16}
-                className={`star-icon ${mail.isStarred ? 'starred' : ''}`}
-              />
+              <i
+                className={`bi ${mail.isStarred ? 'bi-star-fill' : 'bi-star'} star-icon`}
+                style={{ fontSize: '16px' }}
+              ></i>
             </button>
           )}
           {mail.category !== 'trash' && (
@@ -96,7 +81,7 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode,
                 }}
                 title="Manage labels"
               >
-                <FiTag size={16} />
+                <i className="bi bi-tag" style={{ fontSize: '16px' }}></i>
               </button>
               
               <LabelDropdown
@@ -111,13 +96,15 @@ function MailItemWithUser({ mail, selectedMail, onSelect, darkMode,
               moveToTrash(mail.id);
             }}
           >
-            <FiTrash2 size={20} />
+            <i className="bi bi-trash" style={{ fontSize: '20px' }}></i>
+
           </button>
           )}
           {mail.isImportant && <div className="important-dot"></div>}
           {hasAttachments && (
             <div className="attachment-indicator" title={`${mail.attachments.length} attachment${mail.attachments.length > 1 ? 's' : ''}`}>
-              <FiPaperclip size={14} />
+              <i className="bi bi-paperclip" style={{ fontSize: '14px' }}></i>
+
             </div>
           )}
         </div>
@@ -215,7 +202,8 @@ const clearSelection = () => setSelectedMails([]);
     return (
       <div className={`mail-list-wrapper center ${themeClass}`}>
         <div className="loading-message">
-          <FiRefreshCw className="Fispin" size={20} />
+          <i className="bi bi-arrow-repeat" style={{ fontSize: '20px' }}></i>
+
           <span>Loading emails...</span>
         </div>
       </div>
@@ -247,12 +235,12 @@ const clearSelection = () => setSelectedMails([]);
               onClick={onRefresh}
               aria-label="רענן מיילים"
             >
-              <FiRefreshCw size={18} />
+              <i className="bi bi-arrow-repeat" style={{ fontSize: '20px' }}></i>
             </button>
           </div>
         </div>
         <div className="center empty-state">
-          <FiMail size={48} className="empty-icon" />
+          <i className="bi bi-envelope" style={{ fontSize: '20px' }}></i>
           <p className="empty-title">No emails in {selectedCategory.toLowerCase()}</p>
           <p className="empty-text">When you receive emails, they'll appear here</p>
         </div>
@@ -373,16 +361,18 @@ function highlightSearch(text, searchTerm) {
                 title={`הסר תווית "${selectedLabel}"`}
               >
                 <div style={{ position: 'relative', width: 18, height: 18 }}>
-                  <FiTag size={18} />
-                  <FiSlash
-                    size={18}
+                  <i className="bi bi-tag" style={{ fontSize: '18px' }}></i>
+                  <i
+                    className="bi bi-slash"
                     style={{
                       position: 'absolute',
                       top: 0,
                       left: 0,
                       opacity: 0.8,
+                      fontSize: '18px'
                     }}
-                  />
+                  ></i>
+
                 </div>
               </button>
             ) : (
@@ -393,7 +383,8 @@ function highlightSearch(text, searchTerm) {
                   aria-label="ניהול תוויות"
                   title="ניהול תוויות"
                 >
-                  <FiTag size={18} />
+                  <i className="bi bi-tag" style={{ fontSize: '18px' }}></i>
+
                 </button>
 
                 <LabelDropdown
@@ -439,7 +430,8 @@ function highlightSearch(text, searchTerm) {
                 aria-label={selectedCategory === 'trash' ? "מחק לצמיתות" : "העבר לאשפה"}
                 title={selectedCategory === 'trash' ? "מחק לצמיתות" : "העבר לאשפה"}
               >
-                <FiTrash2 size={18} />
+                <i className="bi bi-trash" style={{ fontSize: '18px' }}></i>
+
               </button>
 
               <button
@@ -448,7 +440,8 @@ function highlightSearch(text, searchTerm) {
                 aria-label="בטל בחירה"
                 title="בטל בחירה"
               >
-                <FiXCircle size={18} />
+                <i className="bi bi-x-circle" style={{ fontSize: '18px' }}></i>
+
               </button>
 
               <button
@@ -457,7 +450,8 @@ function highlightSearch(text, searchTerm) {
                 aria-label="בחר הכל"
                 title="בחר הכל"
               >
-                <FiCircle size={18} />
+                <i className="bi bi-circle" style={{ fontSize: '18px' }}></i>
+
               </button>
             
             <button
@@ -466,7 +460,8 @@ function highlightSearch(text, searchTerm) {
               aria-label="רענן מיילים"
               title="רענן מיילים"
             >
-              <FiRefreshCw size={18} />
+              <i className="bi bi-arrow-repeat" style={{ fontSize: '18px' }}></i>
+
             </button>
           </div>
           <div className="pagination-controls">
@@ -476,7 +471,8 @@ function highlightSearch(text, searchTerm) {
               className="page-arrow"
               title="עמוד קודם"
             >
-              <FiChevronLeft size={20} />
+              <i className="bi bi-chevron-left" style={{ fontSize: '18px' }}></i>
+
             </button>
 
             <span className="page-indicator">
@@ -489,8 +485,7 @@ function highlightSearch(text, searchTerm) {
               className="page-arrow"
               title="עמוד הבא"
             >
-              <FiChevronRight size={20} />
-            </button>
+              <i className="bi bi-chevron-right" style={{ fontSize: '18px' }}></i>            </button>
           </div>
         </div>
       </div>
@@ -535,10 +530,11 @@ function highlightSearch(text, searchTerm) {
                             toggleStar(mail.id, mail.isStarred);
                           }}
                         >
-                          <FiStar
-                            size={16}
-                            className={`star-icon ${mail.isStarred ? 'starred' : ''}`}
-                          />
+                          <i
+                            className={`bi ${mail.isStarred ? 'bi-star-fill' : 'bi-star'} star-icon`}
+                            style={{ fontSize: '16px' }}
+                          ></i>
+
                         </button>
                       )}
                     </div>

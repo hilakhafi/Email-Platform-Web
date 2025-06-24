@@ -22,9 +22,8 @@
   color: black;
   margin-inline: 1rem;
   font-family: 'Inter', sans-serif;
-
-
 }
+
 /* center of the screen */
 .center {
   display: flex;
@@ -184,10 +183,10 @@
 .dark .mail-item:hover {
   background-color: #374151;
 }
-
+/* 
 .mail-item.selected {
   background-color: #e8f0fe;
-}
+} */
 
 .dark .mail-item.selected {
   background-color: #374151;
@@ -213,13 +212,12 @@
   transition: background-color 0.2s;
   cursor: pointer;
 }
-.mail-item-content:hover {
-  background-color: #f1f5f9;
-}
+
 .mail-controls {
   display: flex;
   align-items: center;
   gap: 4px; 
+  
 }
 
 .mail-item-meta {
@@ -250,20 +248,20 @@
   cursor: pointer;
   flex-shrink: 0;
   height: 18px;
-  display: flex;
+  /* display: flex; */
   align-items: center;
 }
 
 .light .star-button:hover {
-  background-color: #e5e7eb;
+  background-color:transparent;
 }
 
 .dark .star-button:hover {
-  background-color: #4b5563;
+  background-color:transparent;
 }
 
 .star-icon {
-  color: #9ca3af;
+  color: #facc15;
 }
 
 .star-icon.starred {

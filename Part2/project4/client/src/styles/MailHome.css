@@ -271,12 +271,12 @@
   display: flex;
   align-items: center;
 }
-
 .user-details {
   display: flex;
   flex-direction: column;
   margin-left: 0.75rem;
 }
+
 
 .user-details h3 {
   font-family: 'Inter', sans-serif;
@@ -289,8 +289,14 @@
 .user-details p {
   font-family: 'Inter', sans-serif;  
   font-size: 0.875rem;
-  color: #666;
+  color: #111;
   margin: 0.25rem 0 0;
+}
+.dark .user-details h3 {
+  color: #ffffff;
+}
+.dark .user-details p {
+  color: #ffffff;
 }
 
 .user-menu-items {

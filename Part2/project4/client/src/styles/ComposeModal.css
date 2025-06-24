@@ -49,6 +49,9 @@
   background-color: #e4e3e3;
 }
 
+.dark .compose-header {
+  background-color: #444c56;
+}
 .compose-footer {
   font-family: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
   color: rgb(32, 33, 36);

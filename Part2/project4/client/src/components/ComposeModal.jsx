@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { FiX, FiSend, FiPaperclip } from 'react-icons/fi';
-
+import { useState, useEffect } from 'react';
 import AttachmentsList from './AttachmentsList';
 import useFileUpload from '../hooks/useFileUpload';
 import '../styles/ComposeModal.css';
@@ -203,7 +201,7 @@ const moveToDraft = async (mailData) => {
           </div>
           <div className="compose-header-right">
             <button onClick={onClose} className="icon-button close-button">
-              <FiX size={20} />
+              <i className="bi bi-x" style={{ fontSize: '20px' }}></i>
             </button>
           </div>
         </div>
@@ -243,8 +241,7 @@ const moveToDraft = async (mailData) => {
         <div className="compose-footer">
           {/* button to upload file */}
           <label className="icon-button attach-button">
-            <FiPaperclip size={20} />
-            <input
+            <i className="bi bi-paperclip" style={{ fontSize: '20px' }}></i>            <input
               type="file"
               multiple
               onChange={handleFileUpload}
@@ -265,7 +262,7 @@ const moveToDraft = async (mailData) => {
               className="send-button"
               disabled={sending}
             >
-              <FiSend size={16} />
+              <i className="bi bi-send" style={{ fontSize: '16px' }}></i>
               {sending ? 'Sending...' : 'Send'}
               {(attachments.length > 0 || forwardAttachments.length > 0) && 
                 ` (${attachments.length + (forwardAttachments?.length || 0)} files)`}

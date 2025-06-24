@@ -1,21 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-  FiSearch,
-  FiMail,
-  FiSettings,
-  FiMenu,
-  FiSun,
-  FiMoon,
-  FiInbox,
-  FiStar,
-  FiSend,
-  FiFileText,
-  FiAlertCircle,
-  FiTrash2,
-  FiUser,
-  FiLogOut,
-  FiUserCheck
-} from 'react-icons/fi';
+import { useState, useEffect, useRef } from 'react';
 import Sidebar from './Sidebar';
 import MailList from './MailList';
 import MailView from './MailView';
@@ -24,12 +7,12 @@ import UserProfileModal from './UserProfileModal';
 import '../styles/MailHome.css';
 
 const defaultCategories = [
-  { name: "inbox", icon: FiInbox, color: "blue", count: 0 },
-  { name: "starred", icon: FiStar, color: "yellow", count: 0 },
-  { name: "sent", icon: FiSend, color: "green", count: 0 },
-  { name: "drafts", icon: FiFileText, color: "gray", count: 0 },
-  { name: "spam", icon: FiAlertCircle, color: "orange", count: 0 },
-  { name: "trash", icon: FiTrash2, color: "red", count: 0 }
+  { name: "inbox", iconClass: "bi-inbox", color: "blue", count: 0 },
+  { name: "starred", iconClass: "bi-star", color: "yellow", count: 0 },
+  { name: "sent", iconClass: "bi-send", color: "green", count: 0 },
+  { name: "drafts", iconClass: "bi-file-earmark-text", color: "gray", count: 0 },
+  { name: "spam", iconClass: "bi-exclamation-circle", color: "orange", count: 0 },
+  { name: "trash", iconClass: "bi-trash", color: "red", count: 0 }
 ];
 
 export default function MailHome() {
@@ -541,7 +524,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
               className="menu-btn"
               aria-label="Toggle Sidebar"
             >
-              <FiMenu size={20} />
+              <i className="bi bi-list" style={{ fontSize: '20px' }}></i>
             </button>
             <div className="logo">
               <img
@@ -559,7 +542,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
               className="search-icon-button" 
               aria-label="Search"
             >
-              <FiSearch className="search-icon" size={20} />
+              <i className="bi bi-search" style={{ fontSize: '20px' }}></i>
             </button>
             <input
               type="text"
@@ -581,7 +564,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
               className="icon-btn"
               aria-label="Toggle Dark Mode"
             >
-              {darkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
+              {darkMode ? <i className="bi bi-sun" style={{ fontSize: '20px' }}></i> : <i className="bi bi-moon" style={{ fontSize: '20px' }}></i>}
             </button>
             
             
@@ -615,7 +598,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
                       onClick={handleEditProfile}
                       className="user-menu-item"
                     >
-                      <FiUser size={16} />
+                      <i className="bi bi-person" style={{ fontSize: '16px' }}></i>
                       <span>Edit profile</span>
                     </button>
                     
@@ -623,7 +606,7 @@ const handlePermanentDelete = async (mailsToDelete) => {
                       onClick={handleLogout}
                       className="user-menu-item logout"
                     >
-                      <FiLogOut size={16} />
+                      <i className="bi bi-box-arrow-right" style={{ fontSize: '16px' }}></i>
                       <span>Log out</span>
                     </button>
                   </div>

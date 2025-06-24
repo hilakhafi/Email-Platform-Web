@@ -1,5 +1,3 @@
-import React from 'react';
-import { FiFile, FiTrash2 } from 'react-icons/fi';
 import '../styles/AttachmentsList.css';
 
 function AttachmentsList({ 
@@ -25,7 +23,7 @@ function AttachmentsList({
       <div className="attachments-list">
         {attachments.map((file, index) => (
           <div key={index} className="attachment-item">
-            <FiFile size={16} />
+            <i className="bi bi-file" style={{ fontSize: '16px' }}></i>
             <span className="attachment-name">{file.name}</span>
             <span className="attachment-size">({formatFileSize(file.size)})</span>
             <button 
@@ -34,7 +32,7 @@ function AttachmentsList({
               type="button"
               title="Remove attachment"
             >
-              <FiTrash2 size={14} />
+              <i className="bi bi-trash2" style={{ fontSize: '14px' }}></i>
             </button>
           </div>
         ))}

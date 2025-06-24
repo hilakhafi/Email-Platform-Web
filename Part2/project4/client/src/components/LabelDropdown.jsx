@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { FiX, FiCheck } from 'react-icons/fi';
+import { useState, useEffect, useRef } from 'react';
 import '../styles/LabelDropdown.css';
 
 // This component displays a dropdown for selecting labels to apply to an email.
@@ -81,7 +80,7 @@ function LabelDropdown({
       <div className="label-dropdown-header">
       <span className="label-dropdown-title">Labels</span>
       <button onClick={onClose} className="label-dropdown-close">
-          <FiX size={16} />
+          <i className="bi bi-x" style={{ fontSize: '16px' }}></i>
         </button>
       </div>
 
@@ -105,7 +104,7 @@ function LabelDropdown({
                   style={{ backgroundColor: label.color }}
                 ></div>
               <span className="label-dropdown-label">{label.name}</span>
-              {isApplied && <FiCheck size={16} className="label-dropdown-check" />}
+              {isApplied && <i className="bi bi-check" style={{ fontSize: '16px' }}></i>}
               </button>
             );
           })

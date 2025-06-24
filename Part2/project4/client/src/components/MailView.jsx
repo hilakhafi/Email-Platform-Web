@@ -282,7 +282,7 @@ const handlePreviewAttachment = (attachment) => {
         {/* השורה העליונה - חץ, נושא ותפריט */}
         <div className="mailview-header-left">
           <div className="back-and-subject">
-            <button className="back-arrow standalone-back" onClick={onClose}>
+            <button className="back-arrow" onClick={onClose}>
               <FiArrowLeft size={20} />
             </button>
             <h1 className="mailview-subject">{mail.subject}</h1>

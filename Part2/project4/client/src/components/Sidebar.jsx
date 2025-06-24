@@ -1,4 +1,3 @@
-import { FiEdit, FiPlus, FiMinus } from 'react-icons/fi';
 import '../styles/Sidebar.css';
 import React, { useState, useEffect } from 'react';
 import LabelDropdown from './LabelDropdown';
@@ -140,7 +139,8 @@ const handleDeleteLabel = async (labelName) => {
       <div className={`sidebar ${darkMode ? 'dark' : 'light'}`}>
         <div className="compose-wrapper">
           <button onClick={onCompose} className="compose-btn">
-            <FiEdit size={18} />
+            <i className="bi bi-pencil" style={{ fontSize: '18px' }}></i>
+
             Compose
           </button>
         </div>
@@ -148,7 +148,6 @@ const handleDeleteLabel = async (labelName) => {
         <div className="categories-wrapper">
           <nav>
             {categories.map(category => {
-              const IconComponent = category.icon;
               const isSelected = selectedCategory === category.name;
               return (
                 <button
@@ -157,7 +156,7 @@ const handleDeleteLabel = async (labelName) => {
                   className={`category-btn ${isSelected ? 'selected' : ''}`}
                 >
                   <div className="category-info">
-                    <IconComponent size={18} className="category-icon" />
+                   <i className={`bi ${category.iconClass} category-icon`} style={{ fontSize: '18px' }}></i>
                     <span className="category-name">{category.name}</span>
                   </div>
                   <span className={`count ${category.count > 0 ? 'has-count' : ''}`}>
@@ -178,11 +177,12 @@ const handleDeleteLabel = async (labelName) => {
                     onClick={() => handleDeleteLabel(selectedLabel)}
                     title="Delete label"
                   >
-                    <FiMinus size={22} />
+                    <i className="bi bi-dash" style={{ fontSize: '22px' }}></i>
+
                   </button>
                 )}
                 <button className="add-label-btn" onClick={handleAddLabel}>
-                  <FiPlus size={22} />
+                  <i className="bi bi-plus" style={{ fontSize: '22px' }}></i>
                 </button>
               </div>
             {labels.map(label => {

@@ -41,6 +41,11 @@
   width: 100%;
   margin: 0 auto;
 }
+.dark .mail-view {
+  color: #e5e5e5;
+  background-color: #1f2937;
+  border-color: #374151;
+}
 
 .mailview-empty.dark {
   background-color: #111827;
@@ -607,10 +612,13 @@
   justify-content: center;
   border-radius: 50%;
   transition: background-color 0.2s ease;
+  height: auto;
+  width: auto;
+  color:inherit;
 }
 
 .back-arrow:hover {
-  background-color: rgba(60, 64, 67, 0.08);
+  background-color: transparent;
 }
 
 .main-content {
@@ -643,3 +651,4 @@
 .standalone-back:hover {
   background-color: rgba(60, 64, 67, 0.08);
 }
+

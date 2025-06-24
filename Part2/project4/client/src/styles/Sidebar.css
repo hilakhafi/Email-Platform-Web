@@ -175,7 +175,7 @@
   font-size: 16px;
   color: #555;
 }
-.labels-title.dark {
+.dark .labels-title{
   color: #d1d5db; /* gray-300 */
 }
 .add-label-btn {
