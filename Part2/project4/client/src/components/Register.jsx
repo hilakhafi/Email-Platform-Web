@@ -62,8 +62,24 @@ function Register() {
     newErrors.username = "Username must be at least 3 characters long";
   }
     } else if (step === 2) {
-      if (!formData.birth_date) newErrors.birth_date = "Birth date is required";
-      if (!formData.gender) newErrors.gender = "Gender is required";
+      if (!formData.birth_date) { 
+        newErrors.birth_date = "Birth date is required";
+        } else {
+        const birthDate = new Date(formData.birth_date);
+        const today = new Date();
+        const age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        const dayDiff = today.getDate() - birthDate.getDate();
+        const isUnder18 = age < 18 || (age === 18 && (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)));
+        
+        if (isUnder18) {
+          newErrors.birth_date = "You must be at least 18 years old";
+        }
+      }
+
+      if (!formData.gender) { 
+      newErrors.gender = "Gender is required";
+      }
     } else if (step === 3) {
       if (!formData.mail) newErrors.mail = "Email is required";
       if (!formData.password) newErrors.password = "Password is required";
