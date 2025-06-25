@@ -315,11 +315,7 @@ const generateDefaultProfileImage = (letter) => {
               />
               {formData.profileImage && previewImage && (
                 <div className="image-preview">
-                  <img
-                    src={previewImage}
-                    alt="Preview"
-                    style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "10px" }}
-                  />
+                 <img src={previewImage} alt="Preview" /> 
                 </div>
               )}
             </>
