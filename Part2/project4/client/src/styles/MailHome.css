@@ -55,12 +55,12 @@
 }
 
 .dark .menu-btn {
-  color: #f9fafb; /* בהיר למצב כהה */
+  color: #f9fafb; 
 }
 
 .menu-btn:hover {
-  background-color: #f9fafb; /* רקע כמעט לבן בהובר */
-  border-color: #9ca3af; /* קצת יותר כהה בהובר */
+  background-color: #f9fafb; 
+  border-color: #9ca3af; 
 }
 
 .mail-home.dark .menu-btn {
@@ -75,7 +75,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: 'Poppins', sans-serif; /* אפשר גם לשנות לפונט אחר */
+  font-family: 'Poppins', sans-serif; 
   font-size: 1.8rem;
   font-weight: 600;
   color: #1a1a1a;
@@ -170,14 +170,14 @@
 }
 
 .icon-btn {
-  all: unset; /* מנקה את כל העיצוב המובנה של הכפתור */
+  all: unset; 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: auto;
   height: auto;
   border-radius: 9999px;
-  padding: 0.5rem; /* חשוב */
+  padding: 0.5rem; 
   margin: 0;
   background: transparent;
   cursor: pointer;
@@ -192,14 +192,14 @@
 }
 
 .user-avatar {
-  all: unset; /* מנקה את כל העיצוב המובנה של הכפתור */
+  all: unset;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: auto;
   height: auto;
   border-radius: 9999px;
-  padding: 0.5rem; /* חשוב */
+  padding: 0.5rem;
   margin: 0;
   background: transparent;
   cursor: pointer;
@@ -227,15 +227,15 @@
 }
 
 .search-icon-button {
- all: unset; /* מסיר עיצובים ברירת מחדל של כפתור */
+ all: unset; 
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px; /* מתאים לגודל של האייקון */
+  width: 24px; 
   height: 24px;
   cursor: pointer;
   position: absolute;
-  left: 0.5rem; /* התאמה לפי מיקום בשדה */
+  left: 0.5rem;
   top: 50%;
   transform: translateY(-50%);
   border-radius: 50%;

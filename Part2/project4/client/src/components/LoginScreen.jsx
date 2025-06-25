@@ -8,7 +8,7 @@ export default function LoginScreen({ onLogin }) {
   const [step, setStep] = useState("email"); // "email" or "password"
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [userProfile, setUserProfile] = useState(null); // לשמירת פרטי המשתמש
+  const [userProfile, setUserProfile] = useState(null);
   const navigate = useNavigate();
 
     // function to handle email submission, it sends the email to the server to verify if it exists
@@ -24,14 +24,12 @@ export default function LoginScreen({ onLogin }) {
       });
       
       if (res.ok) {
-        // אם יש מידע על המשתמש - נשמור אותו
         try {
           const userData = await res.json();
           if (userData && typeof userData === 'object') {
             setUserProfile(userData);
           }
         } catch (err) {
-          // אם אין מידע - לא נורא, נמשיך בלי
         }
         setStep("password");
       } else {
@@ -41,27 +39,6 @@ export default function LoginScreen({ onLogin }) {
       setError("Connection error");
     }
   };
-
-  // function to handle password submission, it sends the email and password to the server to get a token
-  // const handlePasswordSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setError("");
-    
-  //   const res = await fetch("http://localhost:4000/api/tokens", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ mail, password }),
-  //   });
-    
-  //   if (res.ok) {
-  //     const data = await res.json();
-  //     localStorage.setItem("token", data.token);
-  //     localStorage.setItem("userId", data.userId);
-  //     onLogin(data.userId);
-  //   } else {
-  //     setError("Incorrect password");
-  //   }
-  // };
 
   // function to handle password submission, it sends the email and password to the server to get a token
   const handlePasswordSubmit = async (e) => {
@@ -84,11 +61,9 @@ export default function LoginScreen({ onLogin }) {
     }
   };
 
-  // פונקציה לקבלת השם הנכון להצגה
   const getDisplayName = () => {
     if (!userProfile) return mail.split('@')[0];
     
-    // אם יש שם פרטי, השתמש בו, אחרת השתמש בשם משתמש או מייל
     if (userProfile.first_name) {
       return userProfile.first_name;
     } else if (userProfile.username) {
@@ -98,7 +73,6 @@ export default function LoginScreen({ onLogin }) {
     }
   };
 
-  // פונקציה לקבלת תמונת הפרופיל
   const getProfileImage = () => {
     if (userProfile && userProfile.avatar) {
       return `http://localhost:4000/${userProfile.avatar.replace(/\\/g, '/')}`;

@@ -40,8 +40,8 @@
   text-transform: none;
 }
 .compose-btn:hover {
-  background-color: #f1f3f4; /* רקע אפור בהיר */
-  color: rgb(95, 99, 104); /* שומר על צבע הטקסט הקיים */
+  background-color: #f1f3f4;
+  color: rgb(95, 99, 104);
 }
 /* Categories scroll container */
 .categories-wrapper {
@@ -54,7 +54,7 @@
 .category-btn {
   width: 100%;
   display: flex;
-  justify-content: space-between; /* האייקון + שם בצד אחד, המספר בצד שני */
+  justify-content: space-between; 
   align-items: center;
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;

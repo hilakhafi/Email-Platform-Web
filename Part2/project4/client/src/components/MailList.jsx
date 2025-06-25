@@ -353,7 +353,7 @@ function highlightSearch(text, searchTerm) {
                 className="icon-button"
                 onClick={() => {
                   selectedMails.forEach((id) => {
-                    deleteMilFromLabel(id, selectedLabel); // מסיר את הלייבל הנוכחי
+                    deleteMilFromLabel(id, selectedLabel);
                   });
                   clearSelection();
                 }}

@@ -74,20 +74,20 @@
 
 .header-actions {
   display: flex;
-  gap: 0.5rem; /* רווח קטן יותר בין האייקונים */
+  gap: 0.5rem; 
   align-items: center;
 }
 
 .icon-button {
-  width: 32px;         /* או אפילו 28px אם רוצים קטן יותר */
+  width: 32px;       
   height: 32px;
-  padding: 0;          /* הכי חשוב – מבטל ריווח פנימי */
+  padding: 0;         
   display: flex;
   align-items: center;
   justify-content: center;
   background: transparent;
   border: none;
-  border-radius: 9999px; /* עיגול */
+  border-radius: 9999px;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -99,11 +99,6 @@
   background: transparent;
   color: inherit;
 }
-/* .icon-button svg {
-  color: inherit;
-  background: none;
-  border: none;
-} */
 
 .light .icon-button:hover {
   background-color: #b6c5e5;
@@ -183,10 +178,6 @@
 .dark .mail-item:hover {
   background-color: #374151;
 }
-/* 
-.mail-item.selected {
-  background-color: #e8f0fe;
-} */
 
 .dark .mail-item.selected {
   background-color: #374151;
@@ -225,7 +216,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 7px; /* גובה קבוע של 80px */
+  height: 7px; 
 }
 .mail-item-left {
   display: flex;
@@ -248,7 +239,6 @@
   cursor: pointer;
   flex-shrink: 0;
   height: 18px;
-  /* display: flex; */
   align-items: center;
 }
 
@@ -298,7 +288,7 @@
 }
 
 .dark .mail-sender {
-  color: #f1f5f9; /* טקסט בהיר */
+  color: #f1f5f9; 
 }
 
 .bold {
@@ -322,7 +312,7 @@ mark {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.5rem;        /* רווח בין subject ל־preview */
+  gap: 0.5rem;        
   overflow: hidden;
   white-space: nowrap;
   flex: 1;
@@ -331,7 +321,7 @@ mark {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  flex: 1;                 /* תופס את השטח האפשרי */
+  flex: 1;                
   min-width: 60px;
 }
 
@@ -351,7 +341,7 @@ mark {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  flex: 1;                 /* תופס את השטח האפשרי */
+  flex: 1;                 
   min-width: 60px;
 }
 
@@ -360,7 +350,7 @@ mark {
 }
 
 .mail-subject, .mail-preview, .mail-date, .mail-sender {
-  font-size: 1rem; /* 14px */
+  font-size: 1rem; 
   font-family: 'Roboto', 'Arial', sans-serif;
 }
 
@@ -574,7 +564,7 @@ mark {
 }
 
 .icon-button {
-  all: unset; /* מנקה את כל הסגנונות הבסיסיים */
+  all: unset;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -594,7 +584,7 @@ mark {
 
 
 .page-arrow {
-  all: unset; /* מנקה את כל הסגנונות הבסיסיים */
+  all: unset; 
   display: inline-flex;
   align-items: center;
   justify-content: center;
