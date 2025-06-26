@@ -17,7 +17,7 @@
 }
 
 .modal-overlay.dark {
-  background: rgba(0, 0, 0, 0.7); /* כהה יותר מהרגיל */
+  background: rgba(0, 0, 0, 0.7); 
   backdrop-filter: blur(6px);
 }
 
@@ -46,7 +46,7 @@
 }
 
 .profile-modal.dark .profile-form {
-  background-color: transparent; /* או צבע כהה לפי טעמך */
+  background-color: transparent; 
 }
 
 
@@ -140,7 +140,7 @@
 .image-preview img {
   width: 100%;
   height: 100%;
-  object-fit: cover;   /* ממלא את כל העיגול בלי עיוות */
+  object-fit: cover; 
 }
 
 

@@ -19,7 +19,7 @@
   display: flex;
   flex-direction: column;
   transition: background-color 0.3s;
-  overflow-x: hidden; /* ✅ הסתרת גלילה אופקית */
+  overflow-x: hidden; 
   overflow-y: auto;
   position: relative;
   z-index: 10000;
@@ -57,7 +57,6 @@
   color: rgb(32, 33, 36);
   display: flex;
   align-items: center;
-  /* justify-content: space-between; */
   padding: 1.5rem 1.5rem 1.5rem 1.5rem;
   border-bottom: 1px solid #e5e7eb;
   font-size: 1rem;
@@ -158,22 +157,6 @@
   display: flex;
   gap: 0.75rem;
 }
-/* .icon-button close-button{
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  width: 10px;
-  height: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  color: #5f6368;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-} */
 
 .compose-close-btn:hover {
   background-color: #f1f3f4;

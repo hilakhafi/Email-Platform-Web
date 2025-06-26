@@ -36,7 +36,7 @@ function Register() {
     return data.isUnique;
   } catch (err) {
     console.error("Error checking username:", err);
-    return false; // נניח שזה לא ייחודי אם הייתה שגיאה
+    return false; 
   }
 };
 
@@ -108,13 +108,11 @@ function Register() {
   e.preventDefault();
   const validationErrors = validateStep();
 
-  // אם יש שגיאות ולידציה בסיסיות, עצור
   if (Object.keys(validationErrors).length > 0) {
     setErrors(validationErrors);
     return;
   }
 
-  // נניח ששם המשתמש נמצא ב-state בשם formData.username
   if (step === 1) {
     const isUnique = await checkUsernameUnique(formData.username);
     if (!isUnique) {

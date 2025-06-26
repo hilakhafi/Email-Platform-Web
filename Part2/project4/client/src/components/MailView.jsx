@@ -279,7 +279,6 @@ const handlePreviewAttachment = (attachment) => {
   return (
     <div className="mail-view">
       <div className="mailview-header">
-        {/* השורה העליונה - חץ, נושא ותפריט */}
         <div className="mailview-header-left">
           <div className="back-and-subject">
             <button className="back-arrow" onClick={onClose}>
@@ -334,7 +333,6 @@ const handlePreviewAttachment = (attachment) => {
           </div>
         </div>
 
-        {/* השורה התחתונה - פרטי השולח */}
         <div className="sender-info">
           <div className="sender-left">
             <div className="sender-avatar">

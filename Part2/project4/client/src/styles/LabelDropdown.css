@@ -17,15 +17,15 @@
 }
 
 .label-dropdown.dark .label-dropdown-empty {
-  color: #d1d5db; /* Tailwind gray-300 */
+  color: #d1d5db;
 }
 
 .label-dropdown.dark .label-dropdown-color {
-  border-color: #6b7280; /* Tailwind gray-500 - גבול בהיר יותר */
+  border-color: #6b7280;
 }
 
 .label-dropdown.dark .label-dropdown-item {
-  color: #e5e7eb; /* לוודא שהטקסט גם כהה */
+  color: #e5e7eb; 
 }
 
 .label-dropdown-empty {

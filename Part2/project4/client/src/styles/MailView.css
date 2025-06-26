@@ -77,7 +77,6 @@
   color: inherit;
 }
 
-/* Mail header - עיצוב חדש כמו Gmail */
 .mailview-header {
   display: flex;
   flex-direction: column;
@@ -90,7 +89,6 @@
   border-color: #374151;
 }
 
-/* השורה העליונה - חץ, נושא ותפריט */
 .mailview-header-left {
   display: flex;
   align-items: center;
@@ -98,7 +96,6 @@
   width: 100%;
 }
 
-/* קבוצת חץ ונושא */
 .back-and-subject {
   display: flex;
   align-items: center;
@@ -136,7 +133,7 @@
 
 /* Generic icon button */
 .icon-btn {
- padding: 4px; /* קטן יותר */
+ padding: 4px; 
   border-radius: 50%;
   background-color: transparent;
   border: none;
@@ -145,8 +142,8 @@
   color: inherit;
   display: flex;
   align-items: center;
-  justify-content: center; /* במקום flex-start */
-  width: 32px; /* מונע ממנו להתפרש */
+  justify-content: center; 
+  width: 32px;
   height: 32px;
   box-sizing: border-box;
 }
@@ -160,7 +157,6 @@
   background-color: #374151;
 }
 
-/* Sender info section - עיצוב חדש */
 .sender-info {
   display: flex;
   align-items: center;
@@ -169,14 +165,12 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* חלק שמאל - פרטי השולח */
 .sender-left {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-/* חלק ימין - מייל ותאריך */
 .sender-right {
   display: flex;
   flex-direction: column;
@@ -592,7 +586,7 @@
 }
 .dropdown-wrapper {
   position: relative;
-  margin-right: 12px; /* או יותר לפי הצורך */
+  margin-right: 12px; 
 }
 
 

@@ -148,9 +148,9 @@
 .show-password-inline {
   display: inline-flex;
   align-items: center;
-  gap: 8px; /* רווח בין התיבה לטקסט */
+  gap: 8px; 
   cursor: pointer;
-  user-select: none; /* כדי למנוע סימון הטקסט כשהמשתמש לוחץ */
+  user-select: none; 
 }
 
 .show-password-inline input[type="checkbox"] {
