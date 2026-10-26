@@ -1,6 +1,6 @@
-# Project4
+# Email platform web 
 
-# Advanced Email System – Project 4 (Client + Backend)
+# Advanced Email System – (Client + Backend)
 ## Advanced Systems Programming Course
 
 ---
